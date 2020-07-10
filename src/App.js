@@ -1,26 +1,105 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import './App.scss';
+import axios from 'axios'
+import {BrowserRouter, Switch, Route} from 'react-router-dom'
+import Home from './components/Home'
+import About from './components/About'
+import Tovolunteer from './components/Tovolunteer'
+import Needvolunteer from './components/Needvolunteer'
+import Contact from './components/Contact'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import Login from './components/registrations/Login'
+import Signup from './components/registrations/Signup'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoggedIn: false,
+      user: {}
+     };
+  }
+  componentDidMount() {
+      this.loginStatus()
+    }
+  loginStatus = () => {
+      axios.get('http://localhost:3001/logged_in', {withCredentials: true})
+      .then(response => {
+        if (response.data.logged_in) {
+          this.handleLogin(response)
+        } else {
+          this.handleLogout()
+        }
+      })
+      .catch(error => console.log('api errors:', error))
+    }
+  handleLogin = (data) => {
+      this.setState({
+        isLoggedIn: true,
+        user: data.user
+      })
+    }
+  handleLogout = () => {
+      this.setState({
+      isLoggedIn: false,
+      user: {}
+      })
+    }
+  render() {
+      return (
+        <div>
+          <BrowserRouter>
+            <Header />
+            <Switch>
+              <Route
+                exact path='/'
+                render={props => (
+                <Home {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
+                )}
+              />
+              <Route
+                exact path='/about'
+                render={props => (
+                <About {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
+                )}
+              />
+              />
+              <Route
+                exact path='/tovolunteer'
+                render={props => (
+                <Tovolunteer {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
+                )}
+              />
+              <Route
+                exact path='/needvolunteer'
+                render={props => (
+                <Needvolunteer {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
+                )}
+              />
+              <Route
+                exact path='/contact'
+                render={props => (
+                <Contact {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
+                )}
+              />
+              <Route
+                exact path='/login'
+                render={props => (
+                <Login {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
+                )}
+              />
+              <Route
+                exact path='/signup'
+                render={props => (
+                <Signup {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
+                )}
+              />
+            </Switch>
+            <Footer />
+          </BrowserRouter>
+        </div>
+      );
+    }
 }
-
 export default App;

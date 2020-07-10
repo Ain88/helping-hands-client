@@ -1,0 +1,210 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+@import "~bootstrap/scss/bootstrap";
+
+html,
+body {
+  font-family: 'PT Sans', 'Lato' !important;
+  overflow-x: initial !important;
+}
+
+h2 {
+  font-family: 'Oswald', 'Lato';
+}
+
+/************************ nav bar ********************/
+
+.new-line {
+  white-space: pre-line;
+}
+
+.container {
+  padding-top: 3rem;
+}
+
+hr{
+   padding: 0px !important;
+   margin: 0px !important;
+ }
+
+.container-header {
+  padding-top: 5px;
+  margin-right: auto;
+  margin-left: auto;
+  background-color: #ffffff  !important;
+}
+
+nav.navbar.navbar-expand-lg.navbar-light.bg-light {
+  background-color: #ffffff !important;
+}
+
+a.navbar-brand {
+  color:  #01112c !important;
+}
+
+a.nav-link {
+  color: #01112c !important;
+}
+
+/************************ jumbotron ********************/
+
+
+.carousel-item img{
+    height: 500px;
+    object-fit: cover;
+}
+
+.carousel-caption {
+  width: 70%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.carousel-caption h2 {
+  font-weight: 1000;
+  font-size: 3rem;
+  text-shadow: 2px 2px 4px #000000;
+}
+
+.carousel-caption h4 {
+  font-weight: 400;
+  font-size: 2rem;
+  text-shadow: 2px 2px 4px #000000;
+}
+
+.carousel-indicators li {
+    display: none;
+}
+
+
+/************************ pages ********************/
+.content {
+  padding-bottom: 3rem;
+}
+
+.center {
+  text-align: center;
+}
+
+.imgPreview {
+  text-align: center;
+  margin: 5px;
+  height: 200px;
+  width: 500px;
+  border-left: 1px solid gray;
+  border-right: 1px solid gray;
+  border-top: 5px solid gray;
+  border-bottom: 5px solid gray;
+}
+
+/************************ footer ********************/
+
+.footer-area {
+  background-color: #d6d6d6;
+  padding-top: 0;
+}
+
+.color-grey {
+  border-top: 1px solid #6b6b6b;
+}
+
+.bottom-padding {
+  padding-bottom: 1rem;
+}
+
+a .fa {
+  padding: 1rem;
+}
+
+.fa {
+  display: inline;
+  padding: 10px;
+  font-size: 20px;
+  width: 30px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+  border-radius: 50%;
+}
+
+.fa:hover {
+    opacity: 0.7;
+    text-decoration: none;
+    color: white;
+}
+
+.fa-twitter {
+  color: white;
+  background: #f6862c;
+}
+
+.fa-instagram  {
+  color: white;
+  background: #f6862c;
+}
+
+.fa-youtube {
+  color: white;
+  background: #f6862c;
+}
+
+.copyright {
+  color: #f57814;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 900px) {
+
+  .carousel-caption h2 {
+    font-weight: 1000;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px #000000;
+  }
+
+  .carousel-caption h4 {
+    font-weight: 400;
+    font-size: 1.5rem;
+    text-shadow: 2px 2px 4px #000000;
+  }
+}
+
+
+@media only screen and (max-width: 767px) {
+
+  .carousel-caption {
+    width: 80%;
+    position: relative;
+    right: 10%;
+    bottom: 20px;
+    left: 10% !important;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #fff;
+    text-align: center;
+  }
+
+  .carousel-caption h2 {
+    font-weight: 1000;
+    font-size: 2rem;
+    text-shadow: 2px 2px 4px #000000;
+  }
+
+  .carousel-caption h4 {
+    font-weight: 400;
+    font-size: 1.5rem;
+    text-shadow: 2px 2px 4px #000000;
+  }
+}
