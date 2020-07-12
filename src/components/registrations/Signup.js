@@ -26,6 +26,11 @@ class Signup extends Component {
   handleChange2 = (event) => {
     event.preventDefault();
 
+    const {name, value} = event.target
+    this.setState({
+      [name]: value
+    })
+
     let reader = new FileReader();
     let file = event.target.files[0];
 
