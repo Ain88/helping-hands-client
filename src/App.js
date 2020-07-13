@@ -50,7 +50,11 @@ class App extends Component {
       return (
         <div>
           <BrowserRouter>
-            <Header />
+          <Route
+            render={props => (
+            <Header {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
+            )}
+          />
             <Switch>
               <Route
                 exact path='/'
