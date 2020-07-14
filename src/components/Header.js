@@ -25,7 +25,7 @@ const handleClick = () => {
               <NavLink href="contact">Contact</NavLink>
               {
                 props.loggedInStatus ?
-                  <NavLink href="logout" onClick={handleClick}>Log Out</NavLink>:
+                  <NavLink href="/" onClick={handleClick}>Log Out</NavLink>:
 
                   <NavLink href="login">Log In</NavLink>
               }

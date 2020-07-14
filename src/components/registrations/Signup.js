@@ -24,24 +24,23 @@ class Signup extends Component {
     })
   };
   handleChange2 = (event) => {
-    event.preventDefault();
-
     const {name, value} = event.target
     this.setState({
       [name]: value
     })
 
-    let reader = new FileReader();
-    let file = event.target.files[0];
+  //   let reader = new FileReader();
+  //   let file = event.target.files[0];
+  //
+  //   reader.onloadend = () => {
+  //     this.setState({
+  //       file: file,
+  //       imagePreviewUrl: reader.result
+  //     });
+  // }
+  // reader.readAsDataURL(file)
+};
 
-    reader.onloadend = () => {
-      this.setState({
-        file: file,
-        imagePreviewUrl: reader.result
-      });
-  }
-  reader.readAsDataURL(file)
- }
   handleSubmit = (event) => {
     event.preventDefault()
     const {f_name, l_name, email, photo, password, password_confirmation} = this.state
@@ -93,27 +92,27 @@ class Signup extends Component {
       <Form onSubmit={this.handleSubmit}>
         <Form.Group controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" name="email" value={email} onChange={this.handleChange}/>
+        <Form.Control type="email" placeholder="Enter email" name="email" value={email} onChange={this.handleChange.bind(this)}/>
         </Form.Group>
 
         <Form.Group controlId="formFirstName">
         <Form.Label>First Name</Form.Label>
-        <Form.Control type="text" placeholder="Enter first name" name="f_name" value={f_name} onChange={this.handleChange}/>
+        <Form.Control type="text" placeholder="Enter first name" name="f_name" value={f_name} onChange={this.handleChange.bind(this)}/>
         </Form.Group>
 
         <Form.Group controlId="formLastName">
         <Form.Label>Last Name</Form.Label>
-        <Form.Control type="text" placeholder="Enter last name" name="l_name" value={l_name} onChange={this.handleChange}/>
+        <Form.Control type="text" placeholder="Enter last name" name="l_name" value={l_name} onChange={this.handleChange.bind(this)}/>
         </Form.Group>
 
         <Form.Group controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" name="password" value={password} onChange={this.handleChange}/>
+          <Form.Control type="password" placeholder="Password" name="password" value={password} onChange={this.handleChange.bind(this)}/>
         </Form.Group>
 
         <Form.Group controlId="formBasicPasswordConfirm">
           <Form.Label>Password Confirmation</Form.Label>
-          <Form.Control type="password" placeholder="Password confirmation" name="password_confirmation" value={password_confirmation} onChange={this.handleChange}/>
+          <Form.Control type="password" placeholder="Password confirmation" name="password_confirmation" value={password_confirmation} onChange={this.handleChange.bind(this)}/>
         </Form.Group>
 
 
@@ -124,7 +123,7 @@ class Signup extends Component {
           type="file"
           name= "photo"
           value={photo}
-          onChange={this.handleChange2}
+          onChange={this.handleChange2.bind(this)}
            />
         </Form.Group>
 
