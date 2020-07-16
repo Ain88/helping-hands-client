@@ -6,7 +6,6 @@ import Home from './components/Home'
 import About from './components/About'
 import Tovolunteer from './components/Tovolunteer'
 import Needvolunteer from './components/Needvolunteer'
-import Contact from './components/Contact'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Login from './components/registrations/Login'
@@ -79,12 +78,6 @@ class App extends Component {
                 exact path='/needvolunteer'
                 render={props => (
                 <Needvolunteer {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
-                )}
-              />
-              <Route
-                exact path='/contact'
-                render={props => (
-                <Contact {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
                 )}
               />
               <Route
