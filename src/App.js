@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import './App.scss';
 import axios from 'axios'
-import {BrowserRouter, Switch, Route} from 'react-router-dom'
+import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
 import Home from './components/Home'
-import About from './components/About'
 import Tovolunteer from './components/Tovolunteer'
 import Needvolunteer from './components/Needvolunteer'
 import Header from './components/Header'
@@ -60,13 +59,6 @@ class App extends Component {
                 render={props => (
                 <Home {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
                 )}
-              />
-              <Route
-                exact path='/about'
-                render={props => (
-                <About {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
-                )}
-              />
               />
               <Route
                 exact path='/tovolunteer'
