@@ -11,12 +11,11 @@ class Signup extends Component {
       f_name: '',
       l_name: '',
       email: '',
-      photo: '',
-      photo2: '',
+      photo: null,
+      preview: '',
       password: '',
       password_confirmation: '',
-      errors: '',
-      imagePreviewUrl: ''
+      errors: ''
      };
   }
   handleChange = (event) => {
@@ -27,48 +26,65 @@ class Signup extends Component {
   };
   handleChange2 = (event) => {
     this.setState({
-      photo: event.target.value,
-      photo2: event.target.files[0]
+      preview: event.target.value,
+      photo: event.target.files[0],
     })
 };
 
-  handleSubmit = (event) => {
-    event.preventDefault()
-    const {f_name, l_name, email, password, password_confirmation, photo2} = this.state
-    let user = {
-      f_name: f_name,
-      l_name: l_name,
-      email: email,
-      password: password,
-      password_confirmation: password_confirmation
-    }
-  axios.post('http://localhost:3001/users', {user}, {withCredentials: true})
-    .then(data => this.uploadFile(this.state.photo2, data))
-    .then(response => {
-      if (response.data.status === 'created') {
-        this.props.handleLogin(response.data)
-        this.redirect()
-      } else {
-        this.setState({
-          errors: response.data.errors
-        })
-      }
-    })
-    .catch(error => console.log('api errors:', error))
-  };
-  redirect = () => {
-    this.props.history.push('/')
-  }
-  uploadFile = (file, user) => {
-    const upload = new DirectUpload(file, 'http://localhost:3001/rails/active_storage/direct_uploads')
-    upload.create((error, blob)=> {
-      if(error) {
-        console.log(error)
-      } else {
-        console.log('success')
-      }
-    })
-  }
+handleSubmit = (event) => {
+  event.preventDefault();
+  const formData = new FormData();
+  formData.append('f_name', this.state.f_name);
+  formData.append('l_name', this.state.l_name);
+  formData.append('email', this.state.email);
+  formData.append('password', this.state.password);
+  formData.append('password_confirmation', this.state.password_confirmation);
+  formData.append('photo', this.state.photo);
+
+  fetch('http://localhost:3001/users', {
+    method: 'POST',
+    body: formData
+  })
+  .catch(error=>console.log(error));
+}
+
+  // handleSubmit = (event) => {
+  //   event.preventDefault()
+  //   const {f_name, l_name, email, password, password_confirmation, photo} = this.state
+  //   let user = {
+  //     f_name: f_name,
+  //     l_name: l_name,
+  //     email: email,
+  //     password: password,
+  //     password_confirmation: password_confirmation,
+  //     photo: photo
+  //   }
+  // axios.post('http://localhost:3001/users', {user}, {withCredentials: true})
+  //   .then(response => {
+  //     if (response.data.status === 'created') {
+  //       this.props.handleLogin(response.data)
+  //       this.redirect()
+  //     } else {
+  //       this.setState({
+  //         errors: response.data.errors
+  //       })
+  //     }
+  //   })
+  //   .catch(error => console.log('api errors:', error))
+  // };
+  // redirect = () => {
+  //   this.props.history.push('/')
+  // }
+  // // uploadFile = (file, user) => {
+  // //   const upload = new DirectUpload(file, 'http://localhost:3001/rails/active_storage/direct_uploads')
+  // //   upload.create((error, blob)=> {
+  // //     if(error) {
+  // //       console.log(error)
+  // //     } else {
+  // //       console.log('success')
+  // //     }
+  // //   })
+  // // }
   handleErrors = () => {
     return (
       <div>
@@ -79,7 +95,7 @@ class Signup extends Component {
     )
   }
   render() {
-    const {f_name, l_name, email, photo, photo2, password, password_confirmation} = this.state;
+    const {f_name, l_name, email, photo, preview, password, password_confirmation} = this.state;
 
     return (
       <div className= "container content">
@@ -115,8 +131,8 @@ class Signup extends Component {
           id="exampleFormControlFile1"
           label="Copy of a government-approved ID (approved formats: .jpg, .png, .pdf)"
           type="file"
-          name= "photo"
-          value={photo}
+          name= "preview"
+          value={preview}
           onChange={this.handleChange2}
            />
         </Form.Group>
