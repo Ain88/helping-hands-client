@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.scss';
 import axios from 'axios'
-import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
+import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import Home from './components/Home'
 import Tovolunteer from './components/Tovolunteer'
 import Needvolunteer from './components/Needvolunteer'

@@ -23,6 +23,9 @@ const zoom:number = 8;
 
 const Tovolunteer:React.FC = () => {
    return (
+     <div className="container content center">
+       <h1>To volunteer</h1><br />
+
      <Map id="mapId"
            center={defaultLatLng}
            zoom={zoom}>
@@ -31,6 +34,8 @@ const Tovolunteer:React.FC = () => {
           attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors">
        </TileLayer>
     </Map>
+
+    </div>
    )
 }
 

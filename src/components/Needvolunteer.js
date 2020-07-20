@@ -1,11 +1,10 @@
 import React from "react"
-import { Nav, Navbar } from 'react-bootstrap'
 
 class Needvolunteer extends React.Component {
   render () {
     return (
       <div className="container content center">
-        <h1>Needvolunteer</h1>
+        <h1>Need volunteer</h1>
       </div>
     );
   }

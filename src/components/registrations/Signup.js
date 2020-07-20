@@ -43,7 +43,8 @@ handleSubmit = (event) => {
 
   fetch('http://localhost:3001/users', {
     method: 'POST',
-    body: formData
+    body: formData,
+    withCredentials: true
   })
   .catch(error=>console.log(error));
 }
