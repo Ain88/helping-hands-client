@@ -33,6 +33,8 @@ class Signup extends Component {
 
 handleSubmit = (event) => {
   event.preventDefault();
+  const {f_name, l_name, email, password, password_confirmation, photo} = this.state
+
   const formData = new FormData();
   formData.append('f_name', this.state.f_name);
   formData.append('l_name', this.state.l_name);
@@ -45,7 +47,9 @@ handleSubmit = (event) => {
     method: 'POST',
     body: formData,
     withCredentials: true
-  })
+  }).then(response => response.json()).then(
+    json_response => console.log(json_response)
+  )
   .catch(error=>console.log(error));
 }
 
@@ -76,16 +80,6 @@ handleSubmit = (event) => {
   // redirect = () => {
   //   this.props.history.push('/')
   // }
-  // // uploadFile = (file, user) => {
-  // //   const upload = new DirectUpload(file, 'http://localhost:3001/rails/active_storage/direct_uploads')
-  // //   upload.create((error, blob)=> {
-  // //     if(error) {
-  // //       console.log(error)
-  // //     } else {
-  // //       console.log('success')
-  // //     }
-  // //   })
-  // // }
   handleErrors = () => {
     return (
       <div>
