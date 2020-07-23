@@ -48,11 +48,19 @@ handleSubmit = (event) => {
     body: formData,
     withCredentials: true
   }).then(response => response.json()).then(
-    json_response => console.log(json_response)
-  )
+    data => {
+          if (data.status === 'created') {
+            this.props.handleLogin(data)
+            this.redirect()
+          } else {
+            this.setState({
+              errors: data.errors
+            })
+      }}
+    )
   .catch(error=>console.log(error));
-}
-
+};
+  //console.log(json_response)
   // handleSubmit = (event) => {
   //   event.preventDefault()
   //   const {f_name, l_name, email, password, password_confirmation, photo} = this.state
@@ -77,9 +85,9 @@ handleSubmit = (event) => {
   //   })
   //   .catch(error => console.log('api errors:', error))
   // };
-  // redirect = () => {
-  //   this.props.history.push('/')
-  // }
+  redirect = () => {
+    this.props.history.push('/')
+  }
   handleErrors = () => {
     return (
       <div>
