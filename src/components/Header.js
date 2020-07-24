@@ -18,8 +18,8 @@ const handleClick = () => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ml-auto">
-              <NavLink href="tovolunteer">To Volunteer</NavLink>
-              <NavLink href="needvolunteer">Need Volunteer</NavLink>
+              <NavLink href="tovolunteer">Volunteer Today</NavLink>
+              <NavLink href="needvolunteer">Be Organizer</NavLink>
               {
                 props.loggedInStatus ?
                   <NavLink href="/" onClick={handleClick}>Log Out</NavLink>:

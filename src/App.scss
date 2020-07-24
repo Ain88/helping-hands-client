@@ -115,8 +115,13 @@ a.nav-link {
    }
 }
 
-#mapId {
-   height:100vh;
+// #mapId {
+//    height:100vh;
+// }
+//
+.map {
+    height: 100%;
+    width: 100vw;
 }
 
 /************************ footer ********************/
@@ -134,11 +139,7 @@ a.nav-link {
   padding-bottom: 1rem;
 }
 
-a .fa {
-  padding: 1rem;
-}
-
-.fa {
+.pad {
   display: inline;
   padding: 10px;
   font-size: 20px;

@@ -34,9 +34,9 @@ class Footer extends React.Component {
 
                       <h5 className="text-uppercase">Social Media Links</h5>
                       <p className="bottom-padding">Lets stay connected!</p>
-                      <a href="https://twitter.com/" className="fa fa-twitter"></a>&nbsp;
-                      <a href="https://youtube.com/" className="fa fa-youtube"></a>&nbsp;
-                      <a href="https://instagram.com/" className="fa fa-instagram"></a>
+                      <a href="https://twitter.com/" className="fa fa-twitter pad"></a>&nbsp;
+                      <a href="https://youtube.com/" className="fa fa-youtube pad"></a>&nbsp;
+                      <a href="https://instagram.com/" className="fa fa-instagram pad"></a>
                     </div>
 
                   </div>
