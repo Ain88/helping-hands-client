@@ -60,31 +60,7 @@ handleSubmit = (event) => {
     )
   .catch(error=>console.log(error));
 };
-  //console.log(json_response)
-  // handleSubmit = (event) => {
-  //   event.preventDefault()
-  //   const {f_name, l_name, email, password, password_confirmation, photo} = this.state
-  //   let user = {
-  //     f_name: f_name,
-  //     l_name: l_name,
-  //     email: email,
-  //     password: password,
-  //     password_confirmation: password_confirmation,
-  //     photo: photo
-  //   }
-  // axios.post('http://localhost:3001/users', {user}, {withCredentials: true})
-  //   .then(response => {
-  //     if (response.data.status === 'created') {
-  //       this.props.handleLogin(response.data)
-  //       this.redirect()
-  //     } else {
-  //       this.setState({
-  //         errors: response.data.errors
-  //       })
-  //     }
-  //   })
-  //   .catch(error => console.log('api errors:', error))
-  // };
+
   redirect = () => {
     this.props.history.push('/')
   }
@@ -102,7 +78,7 @@ handleSubmit = (event) => {
 
     return (
       <div className= "container content">
-      <h2 className= "center">Sign Up</h2><br />
+      <h3 className= "center">Sign Up</h3><br />
       <Form onSubmit={this.handleSubmit}>
         <Form.Group controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>

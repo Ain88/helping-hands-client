@@ -61,7 +61,7 @@ class Login extends Component {
     const {email, password} = this.state
     return (
       <div className= "container content">
-      <h2 className= "center">Log In</h2><br />
+      <h3 className= "center">Log In</h3><br />
       <Form onSubmit={this.handleSubmit}>
         <Form.Group controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
