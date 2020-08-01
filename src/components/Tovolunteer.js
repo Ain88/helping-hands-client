@@ -1,7 +1,5 @@
 import React from "react";
 import L from "leaflet";
-import Locate from "leaflet.locatecontrol";
-import { render } from 'react-dom'
 
 const mapStyle = {
     height: "500px"
@@ -32,12 +30,6 @@ class Tovolunteer extends React.Component {
         zoom: 15,
         zoomControl: true
     });
-    var lc = L.control.locate({
-      strings: {
-        title: "Show me where I am, yo!"
-      },
-      initialZoomLevel: 13
-    }).addTo(map);
     L.marker([49.2827, -123.1208]).addTo(map);
     L.marker([49.2827, -123.130]).addTo(map);
     L.marker([49.2837, -123.130], {icon: greenIcon}).addTo(map);

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import axios from 'axios'
 import {Link} from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
-import { DirectUpload } from 'activestorage';
 
 class Signup extends Component {
   constructor(props) {
@@ -33,7 +31,6 @@ class Signup extends Component {
 
 handleSubmit = (event) => {
   event.preventDefault();
-  const {f_name, l_name, email, password, password_confirmation, photo} = this.state
 
   const formData = new FormData();
   formData.append('f_name', this.state.f_name);
@@ -74,7 +71,7 @@ handleSubmit = (event) => {
     )
   }
   render() {
-    const {f_name, l_name, email, photo, preview, password, password_confirmation} = this.state;
+    const {f_name, l_name, email, preview, password, password_confirmation} = this.state;
 
     return (
       <div className= "container content">

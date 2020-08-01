@@ -124,6 +124,17 @@ a.nav-link {
     width: 100vw;
 }
 
+.geolookup__suggests--hidden {
+  max-height: 0;
+  overflow: hidden;
+  border-width: 0;
+}
+
+.geolookup__item--active {
+  background: #267dc0;
+  color: #fff;
+}
+
 /************************ footer ********************/
 
 .footer-area {
