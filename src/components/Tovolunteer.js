@@ -26,39 +26,58 @@ class Tovolunteer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      rerq_info: {}
+      req_info: []
     };
   }
 
-  componentDidMount() {
-    axios.get('http://localhost:3001/requests', {withCredentials: true})
-    .then(response => {
-      this.setState({
-        req_info: response.data
-      });
-      console.log(response.data)
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-
+  async componentDidMount() {
     var map = new L.Map('map', {
         layers: [mapbox],
         center: [49.2827, -123.1207],
         zoom: 15,
         zoomControl: true
     });
+
     L.marker([49.2827, -123.1208]).addTo(map);
     L.marker([49.2827, -123.130]).addTo(map);
     L.marker([49.2837, -123.130], {icon: greenIcon}).addTo(map);
 
+    var { data } = await axios.get('http://localhost:3001/requests')
+    this.setState({req_info: data, isLoading: false})
+
+    var jsonFeatures = [];
+    data.forEach(function(point){
+    var latlong =  point.location.split(',');
+    var lat = parseFloat(latlong[0]);
+    var long = parseFloat(latlong[1]);
+
+    var feature = {type: 'Feature',
+        properties: point,
+        geometry: {
+            type: 'Point',
+            coordinates: [lat,long]
+        }
+    };
+
+    jsonFeatures.push(feature);
+    });
+
+    var geoJson = { type: 'FeatureCollection', features: jsonFeatures };
+
+    L.geoJson(geoJson).addTo(map);
+
+    console.log(this.state.req_info)
+
+
   }
 
   render() {
+    const { req_info } = this.state;
     return (
       <div className="container content center">
         <h3>Volunteer Today!</h3><br />
           <div id="map" style={mapStyle} />
+
       </div>
     )
   }
