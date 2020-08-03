@@ -1,5 +1,6 @@
 import React from "react";
 import L from "leaflet";
+import axios from 'axios'
 
 const mapStyle = {
     height: "500px"
@@ -22,8 +23,25 @@ var greenIcon = new L.Icon({
 });
 
 class Tovolunteer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      rerq_info: {}
+    };
+  }
 
   componentDidMount() {
+    axios.get('http://localhost:3001/requests', {withCredentials: true})
+    .then(response => {
+      this.setState({
+        req_info: response.data
+      });
+      console.log(response.data)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
     var map = new L.Map('map', {
         layers: [mapbox],
         center: [49.2827, -123.1207],
@@ -33,6 +51,7 @@ class Tovolunteer extends React.Component {
     L.marker([49.2827, -123.1208]).addTo(map);
     L.marker([49.2827, -123.130]).addTo(map);
     L.marker([49.2837, -123.130], {icon: greenIcon}).addTo(map);
+
   }
 
   render() {
