@@ -18,31 +18,22 @@ class Needvolunteer extends React.Component {
       description: '',
       address_lat: '',
       address_lng: '',
-      user_id: '',
+      owner_id: '',
       errors: ''
     };
   }
-  //
-  // componentDidMount(){
-  //   axios.get('http://localhost:3001/logged_in')
-  //   .then(function (response) {
-  //   console.log(response);
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //   });
-  // }
-  // 
-  // componentDidMount(){
-  //   if(this.props.isLoggedIn == false){
-  //     console.log("not logged in")
-  //   }else {
-  //     this.setState({
-  //       user_id: this.props.user
-  //     })
-  //     console.log(user_id)
-  //   }
-  // }
+
+  componentDidMount(){
+    axios.get('http://localhost:3001/logged_in', {withCredentials: true})
+    .then(response => {
+          this.setState({
+            owner_id: response.data.user.id
+          });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
 
   handleChange = address => {
     this.setState({ address });
@@ -82,11 +73,13 @@ class Needvolunteer extends React.Component {
         title: this.state.title,
         description: this.state.description,
         location: this.state.address2,
-        owner: this.state.user_id
+        owner_id: this.state.owner_id
       })
     }).then(response => response.json()).then(
       data => {
             if (data.status === 'created') {
+              alert("Your request has been added!");
+              this.redirect()
             } else {
               this.setState({
                 errors: data.errors
@@ -95,6 +88,10 @@ class Needvolunteer extends React.Component {
       )
     .catch(error=>console.log(error));
   };
+
+  redirect = () => {
+    this.props.history.push('/')
+  }
     handleErrors = () => {
       return (
         <div>
@@ -106,7 +103,7 @@ class Needvolunteer extends React.Component {
     }
 
   render() {
-    const {typev, title, description, address, address2, user_id, errors} = this.state;
+    const {typev, title, description, address, address2, errors} = this.state;
     return (
       <div className="container content">
   <h3 className="center">Need volunteers? Be an Organizer!</h3>
