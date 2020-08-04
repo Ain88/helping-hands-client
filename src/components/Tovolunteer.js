@@ -1,6 +1,7 @@
 import React from "react";
 import L from "leaflet";
 import axios from 'axios'
+import { Container, Row, Col, Nav } from 'react-bootstrap'
 
 const mapStyle = {
     height: "500px"
@@ -34,40 +35,38 @@ class Tovolunteer extends React.Component {
     var map = new L.Map('map', {
         layers: [mapbox],
         center: [49.2827, -123.1207],
-        zoom: 15,
+        zoom: 9,
         zoomControl: true
     });
-
-    L.marker([49.2827, -123.1208]).addTo(map);
-    L.marker([49.2827, -123.130]).addTo(map);
-    L.marker([49.2837, -123.130], {icon: greenIcon}).addTo(map);
 
     var { data } = await axios.get('http://localhost:3001/requests')
     this.setState({req_info: data, isLoading: false})
 
     var jsonFeatures = [];
     data.forEach(function(point){
-    var latlong =  point.location.split(',');
-    var lat = parseFloat(latlong[0]);
-    var long = parseFloat(latlong[1]);
+      if(point.typev == "1"){
+        var eventType = "One time help"
+        var latlong =  point.location.split(',');
+        var lat = parseFloat(latlong[0]);
+        var long = parseFloat(latlong[1]);
+        var marker = L.marker([lat,long],{icon: greenIcon}).addTo(map);
+      }
+      else {
+        var eventType = "Material help"
+        var latlong =  point.location.split(',');
+        var lat = parseFloat(latlong[0]);
+        var long = parseFloat(latlong[1]);
+        var marker = L.marker([lat,long]).addTo(map);
+      }
+      marker.on('click', function () {
+      if (!this._popup) { // when maker dont have pop up, this will bind popup and and open it
+        this.bindPopup( "Type: " +eventType+"<br>"+
+                        "Title: " +point.title+"<br>"+
+                         "Description: " +point.description).openPopup();
+          }
+      });
 
-    var feature = {type: 'Feature',
-        properties: point,
-        geometry: {
-            type: 'Point',
-            coordinates: [lat,long]
-        }
-    };
-
-    jsonFeatures.push(feature);
     });
-
-    var geoJson = { type: 'FeatureCollection', features: jsonFeatures };
-
-    L.geoJson(geoJson).addTo(map);
-
-    console.log(this.state.req_info)
-
 
   }
 
@@ -75,9 +74,32 @@ class Tovolunteer extends React.Component {
     const { req_info } = this.state;
     return (
       <div className="container content center">
-        <h3>Volunteer Today!</h3><br />
+        <h3>Volunteer Today!</h3>
+        <Container>
+        <Row>
+        <Col xs={12} md={6}>
+        <Nav fill variant="tabs" defaultActiveKey="/home">
+          <Nav.Item>
+            <Nav.Link href="/home">Active</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="link-1">Loooonger NavLink</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="link-2">Link</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="disabled" disabled>
+              Disabled
+            </Nav.Link>
+          </Nav.Item>
+        </Nav>
+        </Col>
+        <Col xs={12} md={6}>
           <div id="map" style={mapStyle} />
-
+        </Col>
+        </Row>
+        </Container>
       </div>
     )
   }

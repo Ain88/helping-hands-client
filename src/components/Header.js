@@ -23,13 +23,7 @@ const handleClick = () => {
               {
                 props.loggedInStatus ?
                   <NavLink href="/" onClick={handleClick}>Log Out</NavLink>:
-
-                  <NavLink href="login">Log In</NavLink>
-              }
-              {
-                props.loggedInStatus ?
-                  null :
-                  <NavLink href="signup">Sign Up</NavLink>
+                  <><NavLink href="signup">Sign Up</NavLink><NavLink href="login">Log In</NavLink></>
               }
               </Nav>
             </Navbar.Collapse>

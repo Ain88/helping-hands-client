@@ -5,6 +5,8 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import Home from './components/Home'
 import Tovolunteer from './components/Tovolunteer'
 import Needvolunteer from './components/Needvolunteer'
+import Mypage from './components/Mypage'
+import Mymessage from './components/Mymessage'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Login from './components/registrations/Login'
@@ -70,6 +72,18 @@ class App extends Component {
                 exact path='/needvolunteer'
                 render={props => (
                 <Needvolunteer {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
+                )}
+              />
+              <Route
+                exact path='/mypage'
+                render={props => (
+                <Mypage {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
+                )}
+              />
+              <Route
+                exact path='/mymessage'
+                render={props => (
+                <Mymessage {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
                 )}
               />
               <Route
