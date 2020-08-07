@@ -135,9 +135,14 @@ a.nav-link {
   color: #fff;
 }
 
-.row {
-  border: 1px solid #cecece;
+.leaflet-container {
+  height: 500px;
+  width: 100%;
 }
+
+// .row {
+//   border: 1px solid #cecece;
+// }
 /************************ footer ********************/
 
 .footer-area {

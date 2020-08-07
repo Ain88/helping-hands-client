@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.scss';
 import axios from 'axios'
-import {BrowserRouter, Switch, Route} from 'react-router-dom'
+import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
 import Home from './components/Home'
 import Tovolunteer from './components/Tovolunteer'
 import Needvolunteer from './components/Needvolunteer'
@@ -17,7 +17,8 @@ class App extends Component {
     super(props);
     this.state = {
       isLoggedIn: false,
-      user: {}
+      user: {},
+      user_id : ""
      };
   }
   componentDidMount() {
@@ -27,6 +28,10 @@ class App extends Component {
       axios.get('http://localhost:3001/logged_in', {withCredentials: true})
       .then(response => {
         if (response.data.logged_in) {
+          console.log(response.data.user.id)
+          this.setState({
+            user_id: response.data.user.id
+          })
           this.handleLogin(response)
         } else {
           this.handleLogout()
@@ -34,11 +39,12 @@ class App extends Component {
       })
       .catch(error => console.log('api errors:', error))
     }
-  handleLogin = (data) => {
+  handleLogin = (response) => {
       this.setState({
         isLoggedIn: true,
-        user: data.user
+        user: response.user
       })
+
     }
   handleLogout = () => {
       this.setState({
@@ -52,38 +58,38 @@ class App extends Component {
           <BrowserRouter>
           <Route
             render={props => (
-            <Header {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
+            <Header {...props} loggedInStatus={this.state.isLoggedIn}/>
             )}
           />
             <Switch>
               <Route
                 exact path='/'
                 render={props => (
-                <Home {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
+                <Home {...props} loggedInStatus={this.state.isLoggedIn}/>
                 )}
               />
               <Route
-                exact path='/tovolunteer'
+                exact path='/Needvolunteer'
                 render={props => (
-                <Tovolunteer {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
+                <Needvolunteer {...props} loggedInStatus={this.state.isLoggedIn}/>
                 )}
               />
               <Route
-                exact path='/needvolunteer'
+                exact path='/Tovolunteer'
                 render={props => (
-                <Needvolunteer {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
+                <Tovolunteer {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn}/>
                 )}
               />
               <Route
                 exact path='/mypage'
                 render={props => (
-                <Mypage {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
+                <Mypage {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn}/>
                 )}
               />
               <Route
                 exact path='/mymessage'
                 render={props => (
-                <Mymessage {...props} handleLogout={this.handleLogout} loggedInStatus={this.state.isLoggedIn}/>
+                <Mymessage {...props} loggedInStatus={this.state.isLoggedIn}/>
                 )}
               />
               <Route

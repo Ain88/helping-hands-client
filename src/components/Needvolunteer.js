@@ -106,75 +106,75 @@ class Needvolunteer extends React.Component {
     const {typev, title, description, address, address2, errors} = this.state;
     return (
       <div className="container content">
-  <h3 className="center">Need volunteers? Be an Organizer!</h3>
-  <br />
+      <h6>In need of volunteers? Please submit the form below.</h6>
+      <br />
 
-  <Form onSubmit={this.handleSubmit}>
-    <Form.Group controlId="theType">
-    <Form.Label>Select type of volunteer</Form.Label>
-    <Form.Control as="select" name="typev" value={typev} onChange={this.handleChange2}>
-    <option value="">Select</option>
-    <option value="1">One time tasks</option>
-    <option value="2">Material need</option>
-    </Form.Control>
-    </Form.Group>
-    <Form.Group controlId="theTitle">
-      <Form.Label>Title</Form.Label>
-      <Form.Control type="text" name="title" value={title} onChange={this.handleChange2} />
-    </Form.Group>
-    <Form.Group controlId="theDescription">
-      <Form.Label>Description</Form.Label>
-      <Form.Control as="textarea" rows="3" name="description" value={description} onChange={this.handleChange2}/>
-    </Form.Group>
-    <Form.Group controlId="theLocation">
-      <Form.Label>Location</Form.Label>
-    <div>
-      <PlacesAutocomplete
-        value={this.state.address}
-        onChange={this.handleChange}
-        onSelect={this.handleSelect}
-      >
-        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div>
-            <input
-              {...getInputProps({
-                placeholder: 'Enter the address',
-                className: 'form-control'
-              })}
-            />
-            <div className="autocomplete-dropdown-container">
-              {loading && <div>Loading...</div>}
-              {suggestions.map((suggestion,index) => {
-                const className = suggestion.active
-                  ? 'suggestion-item--active'
-                  : 'suggestion-item';
-                // inline style for demonstration purpose
+      <Form onSubmit={this.handleSubmit}>
+        <Form.Group controlId="theType">
+        <Form.Label>Select type of volunteer</Form.Label>
+        <Form.Control as="select" name="typev" value={typev} onChange={this.handleChange2}>
+        <option value="">Select</option>
+        <option value="1">One time tasks</option>
+        <option value="2">Material need</option>
+        </Form.Control>
+        </Form.Group>
+        <Form.Group controlId="theTitle">
+          <Form.Label>Title</Form.Label>
+          <Form.Control type="text" name="title" value={title} onChange={this.handleChange2} />
+        </Form.Group>
+        <Form.Group controlId="theDescription">
+          <Form.Label>Description</Form.Label>
+          <Form.Control as="textarea" rows="3" name="description" value={description} onChange={this.handleChange2}/>
+        </Form.Group>
+        <Form.Group controlId="theLocation">
+          <Form.Label>Location</Form.Label>
+        <div>
+          <PlacesAutocomplete
+            value={this.state.address}
+            onChange={this.handleChange}
+            onSelect={this.handleSelect}
+          >
+            {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+              <div>
+                <input
+                  {...getInputProps({
+                    placeholder: 'Enter the address',
+                    className: 'form-control'
+                  })}
+                />
+                <div className="autocomplete-dropdown-container">
+                  {loading && <div>Loading...</div>}
+                  {suggestions.map((suggestion,index) => {
+                    const className = suggestion.active
+                      ? 'suggestion-item--active'
+                      : 'suggestion-item';
+                    // inline style for demonstration purpose
 
-                const style = suggestion.active
-                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                return (
-                  <div key={index}
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                      style,
-                    })}
-                  >
-                    <span>{suggestion.description}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </PlacesAutocomplete>
-      </div>
+                    const style = suggestion.active
+                      ? { backgroundColor: '#fafafa', cursor: 'pointer' }
+                      : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                    return (
+                      <div key={index}
+                        {...getSuggestionItemProps(suggestion, {
+                          className,
+                          style,
+                        })}
+                      >
+                        <span>{suggestion.description}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </PlacesAutocomplete>
+        </div>
       </Form.Group>
     <Button variant="primary" type="submit">
     Submit
     </Button>
   </Form>
-  <div>
+  <div><br />
    {
      this.state.errors ? this.handleErrors() : null
    }

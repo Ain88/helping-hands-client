@@ -1,7 +1,9 @@
 import React from "react";
 import L from "leaflet";
 import axios from 'axios'
-import { Container, Row, Col, Nav } from 'react-bootstrap'
+import { Container, Row, Col, Nav, Tabs, Tab } from 'react-bootstrap'
+import Needvolunteer from './Needvolunteer'
+import Mypage from './Mypage'
 
 const mapStyle = {
     height: "500px"
@@ -27,37 +29,49 @@ class Tovolunteer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      req_info: []
+      user_id: props.user_no
     };
   }
 
-  async componentDidMount() {
-    var map = new L.Map('map', {
+  componentDidMount(){
+    this.map = new L.Map('map', {
         layers: [mapbox],
         center: [49.2827, -123.1207],
         zoom: 9,
         zoomControl: true
     });
+  }
 
+  async componentDidUpdate() {
+    var map = this.map
     var { data } = await axios.get('http://localhost:3001/requests')
-    this.setState({req_info: data, isLoading: false})
 
     var jsonFeatures = [];
+    var user_id = this.props.user_no
+    console.log(user_id)
+
     data.forEach(function(point){
-      if(point.typev == "1"){
-        var eventType = "One time help"
-        var latlong =  point.location.split(',');
-        var lat = parseFloat(latlong[0]);
-        var long = parseFloat(latlong[1]);
-        var marker = L.marker([lat,long],{icon: greenIcon}).addTo(map);
-      }
-      else {
-        var eventType = "Material help"
-        var latlong =  point.location.split(',');
-        var lat = parseFloat(latlong[0]);
-        var long = parseFloat(latlong[1]);
-        var marker = L.marker([lat,long]).addTo(map);
-      }
+        if(point.owner_id != user_id && point.typev == "1"){
+          var eventType = "One time help"
+          var latlong =  point.location.split(',');
+          var lat = parseFloat(latlong[0]);
+          var long = parseFloat(latlong[1]);
+          var marker = L.marker([lat,long],{icon: greenIcon}).addTo(map);
+        }
+        else if (point.owner_id != user_id && point.typev == "2") {
+          var eventType = "Material help"
+          var latlong =  point.location.split(',');
+          var lat = parseFloat(latlong[0]);
+          var long = parseFloat(latlong[1]);
+          var marker = L.marker([lat,long]).addTo(map);
+        } else {
+          var eventType = "Owner's request"
+          var latlong =  point.location.split(',');
+          var lat = parseFloat(latlong[0]);
+          var long = parseFloat(latlong[1]);
+          var marker = L.marker([lat,long])
+        }
+
       marker.on('click', function () {
       if (!this._popup) { // when maker dont have pop up, this will bind popup and and open it
         this.bindPopup( "Type: " +eventType+"<br>"+
@@ -65,42 +79,36 @@ class Tovolunteer extends React.Component {
                          "Description: " +point.description).openPopup();
           }
       });
-
     });
-
   }
 
   render() {
-    const { req_info } = this.state;
+    const { user_id } = this.state;
     return (
-      <div className="container content center">
-        <h3>Volunteer Today!</h3>
         <Container>
         <Row>
         <Col xs={12} md={6}>
-        <Nav fill variant="tabs" defaultActiveKey="/home">
-          <Nav.Item>
-            <Nav.Link href="/home">Active</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="link-1">Loooonger NavLink</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="link-2">Link</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="disabled" disabled>
-              Disabled
-            </Nav.Link>
-          </Nav.Item>
-        </Nav>
+
+
+        <Tabs defaultActiveKey="mylist" transition={false} id="noanim-tab-example">
+          <Tab eventKey="mylist" title="My List">
+            <Mypage />
+          </Tab>
+          <Tab eventKey="request" title="Request Form">
+            <Needvolunteer />
+          </Tab>
+          <Tab eventKey="message" title="Message">
+            <p>{this.props.user_no}</p>
+            <p>{this.props.user_no}</p>
+          </Tab>
+        </Tabs>
         </Col>
         <Col xs={12} md={6}>
           <div id="map" style={mapStyle} />
         </Col>
-        </Row>
+        </Row><br />
         </Container>
-      </div>
+
     )
   }
 }

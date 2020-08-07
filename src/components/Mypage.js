@@ -1,40 +1,40 @@
 import React from 'react';
-import axios from 'axios'
+import axios from 'axios';
+import { Redirect } from 'react-router';
 
 class Mypage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user_id: ""
+      user_id: "",
+      owner_id: ""
     };
   }
-  componentDidMount(){
-    axios.get('http://localhost:3001/logged_in', {withCredentials: true})
+
+    componentDidMount(){
+
+    var user_id = this.props.user_no
+    console.log(user_id)
+
+    axios.get('http://localhost:3001/requests', {withCredentials: true})
     .then(response => {
-          this.setState({
-            user_id: response.data.logged_in
-          });
+        this.setState({
+        });
     })
     .catch(function (error) {
       console.log(error);
     });
-    console.log(this.props.loggedInStatus)
 
   }
 
   render() {
-    const { user_id } = this.state;
     return (
       <div className="container content">
-        <h3 className="center">My page</h3>
-        <br />
 
-        <h5>My volunteer list</h5>
-
-
+        <h6>My volunteer list</h6>
+        <p></p>
         <br /><hr /><br />
-        <h5>My request list</h5>
-        <p>{this.state.user_id}</p>
+        <h6>My request list</h6>
         <br />
       </div>
     );

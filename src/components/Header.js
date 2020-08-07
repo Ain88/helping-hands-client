@@ -19,7 +19,6 @@ const handleClick = () => {
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ml-auto">
               <NavLink href="tovolunteer">Volunteer Today</NavLink>
-              <NavLink href="needvolunteer">Be an Organizer</NavLink>
               {
                 props.loggedInStatus ?
                   <NavLink href="/" onClick={handleClick}>Log Out</NavLink>:
