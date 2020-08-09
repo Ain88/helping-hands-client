@@ -19,6 +19,7 @@ class Needvolunteer extends React.Component {
       address_lat: '',
       address_lng: '',
       owner_id: '',
+      counter: '',
       errors: ''
     };
   }
@@ -72,7 +73,11 @@ class Needvolunteer extends React.Component {
         typev: this.state.typev,
         title: this.state.title,
         description: this.state.description,
+        address: this.state.address,
         location: this.state.address2,
+        counter: this.state.counter,
+        cur_counter: 0,
+        is_active: 1,
         owner_id: this.state.owner_id
       })
     }).then(response => response.json()).then(
@@ -103,7 +108,7 @@ class Needvolunteer extends React.Component {
     }
 
   render() {
-    const {typev, title, description, address, address2, errors} = this.state;
+    const {typev, title, description, address, address2, counter, errors} = this.state;
     return (
       <div className="container content">
       <h6>In need of volunteers? Please submit the form below.</h6>
@@ -116,6 +121,17 @@ class Needvolunteer extends React.Component {
         <option value="">Select</option>
         <option value="1">One time tasks</option>
         <option value="2">Material need</option>
+        </Form.Control>
+        </Form.Group>
+        <Form.Group controlId="theCounter">
+        <Form.Label>How many volunteers do you need?</Form.Label>
+        <Form.Control as="select" name="counter" value={counter} onChange={this.handleChange2}>
+          <option value="">Select</option>
+          <option value='1'>1</option>
+          <option value='2'>2</option>
+          <option value='3'>3</option>
+          <option value='4'>4</option>
+          <option value='5'>5</option>
         </Form.Control>
         </Form.Group>
         <Form.Group controlId="theTitle">

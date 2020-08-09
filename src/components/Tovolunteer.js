@@ -1,9 +1,10 @@
 import React from "react";
 import L from "leaflet";
 import axios from 'axios'
-import { Container, Row, Col, Nav, Tabs, Tab } from 'react-bootstrap'
+import { Container, Row, Col, Nav, Tabs, Tab, Button } from 'react-bootstrap'
 import Needvolunteer from './Needvolunteer'
 import Mypage from './Mypage'
+import $ from 'jquery';
 
 const mapStyle = {
     height: "500px"
@@ -29,9 +30,12 @@ class Tovolunteer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user_id: props.user_no
     };
   }
+
+  submitHelp(){
+    console.log("hi");
+  };
 
   componentDidMount(){
     this.map = new L.Map('map', {
@@ -48,7 +52,6 @@ class Tovolunteer extends React.Component {
 
     var jsonFeatures = [];
     var user_id = this.props.user_no
-    console.log(user_id)
 
     data.forEach(function(point){
         if(point.owner_id != user_id && point.typev == "1"){
@@ -74,16 +77,31 @@ class Tovolunteer extends React.Component {
 
       marker.on('click', function () {
       if (!this._popup) { // when maker dont have pop up, this will bind popup and and open it
-        this.bindPopup( "Type: " +eventType+"<br>"+
-                        "Title: " +point.title+"<br>"+
-                         "Description: " +point.description).openPopup();
+        this.bindPopup( `
+        <form class="popup-form role="form" id="form" onsubmit="submitHelp()">
+          <div class="form-group">
+            Type: ${eventType} <br />
+            Title: ${point.title} <br />
+            Description: ${point.description} <br />
+          </div>
+          <div>
+            <button type="submit" class= "submit-button btn btn-outline-info btn-sm ml-auto">
+               I want to help
+            </button>
+          </div>
+        </form>
+        `).on("popupopen", () => {
+              $(".submit-button").on("click", e => {
+                e.preventDefault();
+                alert(`${point.title}`);
+              }); });
           }
       });
     });
   }
 
+
   render() {
-    const { user_id } = this.state;
     return (
         <Container>
         <Row>
@@ -92,14 +110,13 @@ class Tovolunteer extends React.Component {
 
         <Tabs defaultActiveKey="mylist" transition={false} id="noanim-tab-example">
           <Tab eventKey="mylist" title="My List">
-            <Mypage />
+            <Mypage user_no={this.props.user_no}/>
           </Tab>
           <Tab eventKey="request" title="Request Form">
             <Needvolunteer />
           </Tab>
           <Tab eventKey="message" title="Message">
-            <p>{this.props.user_no}</p>
-            <p>{this.props.user_no}</p>
+            {this.state.user_id}
           </Tab>
         </Tabs>
         </Col>

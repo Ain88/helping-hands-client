@@ -28,7 +28,6 @@ class App extends Component {
       axios.get('http://localhost:3001/logged_in', {withCredentials: true})
       .then(response => {
         if (response.data.logged_in) {
-          console.log(response.data.user.id)
           this.setState({
             user_id: response.data.user.id
           })
