@@ -6,6 +6,7 @@ import Home from './components/Home'
 import Tovolunteer from './components/Tovolunteer'
 import Needvolunteer from './components/Needvolunteer'
 import Mypage from './components/Mypage'
+import Myrequest from './components/Myrequest'
 import Mymessage from './components/Mymessage'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -57,7 +58,7 @@ class App extends Component {
           <BrowserRouter>
           <Route
             render={props => (
-            <Header {...props} loggedInStatus={this.state.isLoggedIn}/>
+            <Header {...props} showLoggedIn={this.state.showLoggedIn} loggedInStatus={this.state.isLoggedIn}/>
             )}
           />
             <Switch>
@@ -83,6 +84,12 @@ class App extends Component {
                 exact path='/mypage'
                 render={props => (
                 <Mypage {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn}/>
+                )}
+              />
+              <Route
+                exact path='/myrequest'
+                render={props => (
+                <Myrequest {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn}/>
                 )}
               />
               <Route

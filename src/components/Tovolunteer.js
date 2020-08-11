@@ -4,6 +4,7 @@ import axios from 'axios'
 import { Container, Row, Col, Nav, Tabs, Tab, Button } from 'react-bootstrap'
 import Needvolunteer from './Needvolunteer'
 import Mypage from './Mypage'
+import Myrequest from './Myrequest'
 import $ from 'jquery';
 
 const mapStyle = {
@@ -33,9 +34,9 @@ class Tovolunteer extends React.Component {
     };
   }
 
-  submitHelp(){
-    console.log("hi");
-  };
+  submitHelp = () => {
+    alert("hello")
+  }
 
   componentDidMount(){
     this.map = new L.Map('map', {
@@ -54,14 +55,16 @@ class Tovolunteer extends React.Component {
     var user_id = this.props.user_no
 
     data.forEach(function(point){
-        if(point.owner_id != user_id && point.typev == "1"){
+        if(point.owner_id != user_id && point.typev == "1" && point.is_active == "1" &&
+        point.counter-point.cur_counter > 0){
           var eventType = "One time help"
           var latlong =  point.location.split(',');
           var lat = parseFloat(latlong[0]);
           var long = parseFloat(latlong[1]);
           var marker = L.marker([lat,long],{icon: greenIcon}).addTo(map);
         }
-        else if (point.owner_id != user_id && point.typev == "2") {
+        else if (point.owner_id != user_id && point.typev == "2" && point.is_active == "1" &&
+        point.counter-point.cur_counter > 0) {
           var eventType = "Material help"
           var latlong =  point.location.split(',');
           var lat = parseFloat(latlong[0]);
@@ -78,39 +81,42 @@ class Tovolunteer extends React.Component {
       marker.on('click', function () {
       if (!this._popup) { // when maker dont have pop up, this will bind popup and and open it
         this.bindPopup( `
-        <form class="popup-form role="form" id="form" onsubmit="submitHelp()">
+        <form class="popup-form role="form" id="form" onsubmit="return submitHelp('hello');">
           <div class="form-group">
             Type: ${eventType} <br />
             Title: ${point.title} <br />
             Description: ${point.description} <br />
           </div>
-          <div>
-            <button type="submit" class= "submit-button btn btn-outline-info btn-sm ml-auto">
-               I want to help
-            </button>
+          <div class="text-center">
+            <input type="submit" value="I want to Help" class= "submit-button btn btn-outline-info btn-sm ml-auto">
+            </input>
           </div>
         </form>
         `).on("popupopen", () => {
               $(".submit-button").on("click", e => {
                 e.preventDefault();
-                alert(`${point.title}`);
+                if (window.confirm(`Are you sure you want to submit the request?`))
+                {
+
+                }
               }); });
           }
       });
     });
   }
 
-
   render() {
     return (
+      <div className ="center-col">
         <Container>
         <Row>
         <Col xs={12} md={6}>
-
-
-        <Tabs defaultActiveKey="mylist" transition={false} id="noanim-tab-example">
-          <Tab eventKey="mylist" title="My List">
+        <Tabs defaultActiveKey="myVolunteer" transition={false} id="noanim-tab-example">
+          <Tab eventKey="myVolunteer" title="My Volunteer">
             <Mypage user_no={this.props.user_no}/>
+          </Tab>
+          <Tab eventKey="myRequest" title="My Request">
+            <Myrequest user_no={this.props.user_no}/>
           </Tab>
           <Tab eventKey="request" title="Request Form">
             <Needvolunteer />
@@ -119,12 +125,14 @@ class Tovolunteer extends React.Component {
             {this.state.user_id}
           </Tab>
         </Tabs>
+
         </Col>
         <Col xs={12} md={6}>
           <div id="map" style={mapStyle} />
         </Col>
         </Row><br />
         </Container>
+        </div>
 
     )
   }
