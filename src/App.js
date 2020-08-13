@@ -19,7 +19,7 @@ class App extends Component {
     this.state = {
       isLoggedIn: false,
       user: {},
-      user_id : ""
+      user_id : "",
      };
   }
   componentDidMount() {
@@ -58,7 +58,7 @@ class App extends Component {
           <BrowserRouter>
           <Route
             render={props => (
-            <Header {...props} showLoggedIn={this.state.showLoggedIn} loggedInStatus={this.state.isLoggedIn}/>
+            <Header {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn}/>
             )}
           />
             <Switch>

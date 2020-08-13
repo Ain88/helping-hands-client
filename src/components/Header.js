@@ -11,6 +11,7 @@ const handleClick = () => {
     })
     .catch(error => console.log(error))
   }
+
     return ( <div className="container container-header">
         {
           <Navbar bg="light" expand="lg">
@@ -20,12 +21,12 @@ const handleClick = () => {
               <Nav className="ml-auto">
               <NavLink href="tovolunteer">Volunteer Today</NavLink>
               {
-                props.loggedInStatus && <NavLink href="/" onClick={handleClick}>Log Out</NavLink>}
+                props.user_no && <NavLink href="/" onClick={handleClick}>Log Out</NavLink>
+              }
               {
-                !props.loggedInStatus &&
+                !props.user_no &&
                 <><NavLink href="signup">Sign Up</NavLink><NavLink href="login">Log In</NavLink></>
               }
-
               </Nav>
             </Navbar.Collapse>
           </Navbar>

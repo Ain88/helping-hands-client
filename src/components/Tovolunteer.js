@@ -5,19 +5,17 @@ import { Container, Row, Col, Nav, Tabs, Tab, Button } from 'react-bootstrap'
 import Needvolunteer from './Needvolunteer'
 import Mypage from './Mypage'
 import Myrequest from './Myrequest'
+import Mymarker from './Mymarker'
 import $ from 'jquery';
+import { render } from 'react-dom'
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 
 const mapStyle = {
     height: "500px"
 };
-var token = 'pk.eyJ1IjoiYWluODgiLCJhIjoiY2tkMGhkcXVmMHRxdzJ0cXJucHZvc2tuciJ9.PgKhmGn1K8y9BEVK2JW-og';
-var mapboxUrl = 'https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/{z}/{x}/{y}@2x?access_token=' + token;
-var mapboxAttrib = 'Map data © <a href="http://osm.org/copyright">OpenStreetMap</a> contributors. Tiles from <a href="https://www.mapbox.com">Mapbox</a>.';
-var mapbox = new L.TileLayer(mapboxUrl, {
-  attribution: mapboxAttrib,
-  tileSize: 512,
-  zoomOffset: -1
-});
+
+const position = [49.2827, -123.1207]
+
 var greenIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -31,78 +29,49 @@ class Tovolunteer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      marker_data: [],
+      markers: [[49.2827, -123.1207], [49.2827, -123.1210]]
     };
   }
 
-  submitHelp = () => {
-    alert("hello")
+   componentDidMount(){
   }
 
-  componentDidMount(){
-    this.map = new L.Map('map', {
-        layers: [mapbox],
-        center: [49.2827, -123.1207],
-        zoom: 9,
-        zoomControl: true
-    });
-  }
+  renderMarkers() {
+   var user_id = this.props.user_no
 
-  async componentDidUpdate() {
-    var map = this.map
-    var { data } = await axios.get('http://localhost:3001/requests')
+   axios.get('http://localhost:3001/requests')
+   .then(response => {
+     this.data = response.data;
+     this.data.forEach(function(point){
+       if(point.owner_id != user_id && point.typev == "1" && point.is_active == "1" &&
+       point.counter-point.cur_counter > 0){
+         var eventType = "One time help"
+         var latlong =  point.location.split(',');
+         var lat = parseFloat(latlong[0]);
+         var long = parseFloat(latlong[1]);
+         // console.log("hello");
 
-    var jsonFeatures = [];
-    var user_id = this.props.user_no
+       }
+       else if (point.owner_id != user_id && point.typev == "2" && point.is_active == "1" &&
+       point.counter-point.cur_counter > 0) {
+         var eventType = "Material help"
+         var latlong =  point.location.split(',');
+         var lat = parseFloat(latlong[0]);
+         var long = parseFloat(latlong[1]);
+       } else {
+         var eventType = "Owner's request"
+         var latlong =  point.location.split(',');
+         var lat = parseFloat(latlong[0]);
+         var long = parseFloat(latlong[1]);
+       }
+     });
 
-    data.forEach(function(point){
-        if(point.owner_id != user_id && point.typev == "1" && point.is_active == "1" &&
-        point.counter-point.cur_counter > 0){
-          var eventType = "One time help"
-          var latlong =  point.location.split(',');
-          var lat = parseFloat(latlong[0]);
-          var long = parseFloat(latlong[1]);
-          var marker = L.marker([lat,long],{icon: greenIcon}).addTo(map);
-        }
-        else if (point.owner_id != user_id && point.typev == "2" && point.is_active == "1" &&
-        point.counter-point.cur_counter > 0) {
-          var eventType = "Material help"
-          var latlong =  point.location.split(',');
-          var lat = parseFloat(latlong[0]);
-          var long = parseFloat(latlong[1]);
-          var marker = L.marker([lat,long]).addTo(map);
-        } else {
-          var eventType = "Owner's request"
-          var latlong =  point.location.split(',');
-          var lat = parseFloat(latlong[0]);
-          var long = parseFloat(latlong[1]);
-          var marker = L.marker([lat,long])
-        }
+   })
+   .catch(function (error) {
+     console.log(error);
+   });
 
-      marker.on('click', function () {
-      if (!this._popup) { // when maker dont have pop up, this will bind popup and and open it
-        this.bindPopup( `
-        <form class="popup-form role="form" id="form" onsubmit="return submitHelp('hello');">
-          <div class="form-group">
-            Type: ${eventType} <br />
-            Title: ${point.title} <br />
-            Description: ${point.description} <br />
-          </div>
-          <div class="text-center">
-            <input type="submit" value="I want to Help" class= "submit-button btn btn-outline-info btn-sm ml-auto">
-            </input>
-          </div>
-        </form>
-        `).on("popupopen", () => {
-              $(".submit-button").on("click", e => {
-                e.preventDefault();
-                if (window.confirm(`Are you sure you want to submit the request?`))
-                {
-
-                }
-              }); });
-          }
-      });
-    });
   }
 
   render() {
@@ -128,7 +97,16 @@ class Tovolunteer extends React.Component {
 
         </Col>
         <Col xs={12} md={6}>
-          <div id="map" style={mapStyle} />
+        <Map
+          center={position}
+          zoom={10}>
+          <TileLayer
+            url='https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWluODgiLCJhIjoiY2tkMGhkcXVmMHRxdzJ0cXJucHZvc2tuciJ9.PgKhmGn1K8y9BEVK2JW-og'
+            attribution='Map data © <a href="http://osm.org/copyright">OpenStreetMap</a> contributors. Tiles from <a href="https://www.mapbox.com">Mapbox</a>.'
+          />
+          {this.renderMarkers()}
+        </Map>
+
         </Col>
         </Row><br />
         </Container>
