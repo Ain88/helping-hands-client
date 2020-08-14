@@ -25,6 +25,15 @@ var greenIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
+var blueIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
 class Tovolunteer extends React.Component {
   constructor(props) {
     super(props);
@@ -41,8 +50,33 @@ class Tovolunteer extends React.Component {
       .then(json => this.setState({ data: json }));
   }
 
-  render() {
+  renderMarkers() {
+    var user_id = this.props.user_no
 
+    {return this.state.data.map((item,i) => { return (
+       user_id != item.owner_id && item.typev == 1 ?
+       <Mymarker
+       icon={greenIcon}
+       key={item.id}
+       title={item.title}
+       description={item.description}
+       position={[item.location.split(',')[0],item.location.split(',')[1]]}
+       onClick={this.onMarkerClick}
+       /> : (user_id != item.owner_id && item.typev == 2 ?
+         <Mymarker
+         icon={blueIcon}
+         key={item.id}
+         title={item.title}
+         description={item.description}
+         position={[item.location.split(',')[0],item.location.split(',')[1]]}
+         onClick={this.onMarkerClick}
+         /> : null)
+     )}
+      )}
+  }
+
+  render() {
+    const { renderMarkers } = this.state
     return (
       <div className ="center-col">
         <Container>
@@ -59,7 +93,7 @@ class Tovolunteer extends React.Component {
             <Needvolunteer />
           </Tab>
           <Tab eventKey="message" title="Message">
-          
+
           </Tab>
         </Tabs>
 
@@ -72,7 +106,8 @@ class Tovolunteer extends React.Component {
             url='https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWluODgiLCJhIjoiY2tkMGhkcXVmMHRxdzJ0cXJucHZvc2tuciJ9.PgKhmGn1K8y9BEVK2JW-og'
             attribution='Map data © <a href="http://osm.org/copyright">OpenStreetMap</a> contributors. Tiles from <a href="https://www.mapbox.com">Mapbox</a>.'
           />
-          <Mymarker />
+          {this.renderMarkers()}
+
         </Map>
 
         </Col>

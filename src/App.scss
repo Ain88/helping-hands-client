@@ -90,7 +90,6 @@ a.nav-link {
     display: none;
 }
 
-
 /************************ pages ********************/
 .content {
   padding-bottom: 3rem;
@@ -142,6 +141,15 @@ a.nav-link {
 
 .text-center {
     text-align: center !important;
+    margin:auto;
+    display:block
+}
+
+.btn-sm, .btn-group-sm > .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    line-height: 1.1;
+    border-radius: 0.2rem;
 }
 
 /************************ footer ********************/
