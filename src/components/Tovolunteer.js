@@ -30,51 +30,19 @@ class Tovolunteer extends React.Component {
     super(props);
     this.state = {
       marker_data: [],
+      data: [],
       markers: [[49.2827, -123.1207], [49.2827, -123.1210]]
     };
   }
 
-   componentDidMount(){
-  }
-
-  renderMarkers() {
-   var user_id = this.props.user_no
-
-   axios.get('http://localhost:3001/requests')
-   .then(response => {
-     this.data = response.data;
-     this.data.forEach(function(point){
-       if(point.owner_id != user_id && point.typev == "1" && point.is_active == "1" &&
-       point.counter-point.cur_counter > 0){
-         var eventType = "One time help"
-         var latlong =  point.location.split(',');
-         var lat = parseFloat(latlong[0]);
-         var long = parseFloat(latlong[1]);
-         // console.log("hello");
-
-       }
-       else if (point.owner_id != user_id && point.typev == "2" && point.is_active == "1" &&
-       point.counter-point.cur_counter > 0) {
-         var eventType = "Material help"
-         var latlong =  point.location.split(',');
-         var lat = parseFloat(latlong[0]);
-         var long = parseFloat(latlong[1]);
-       } else {
-         var eventType = "Owner's request"
-         var latlong =  point.location.split(',');
-         var lat = parseFloat(latlong[0]);
-         var long = parseFloat(latlong[1]);
-       }
-     });
-
-   })
-   .catch(function (error) {
-     console.log(error);
-   });
-
+  componentDidMount() {
+    fetch(`http://localhost:3001/requests`)
+      .then(res => res.json())
+      .then(json => this.setState({ data: json }));
   }
 
   render() {
+
     return (
       <div className ="center-col">
         <Container>
@@ -91,7 +59,7 @@ class Tovolunteer extends React.Component {
             <Needvolunteer />
           </Tab>
           <Tab eventKey="message" title="Message">
-            {this.state.user_id}
+          
           </Tab>
         </Tabs>
 
@@ -104,7 +72,7 @@ class Tovolunteer extends React.Component {
             url='https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWluODgiLCJhIjoiY2tkMGhkcXVmMHRxdzJ0cXJucHZvc2tuciJ9.PgKhmGn1K8y9BEVK2JW-og'
             attribution='Map data © <a href="http://osm.org/copyright">OpenStreetMap</a> contributors. Tiles from <a href="https://www.mapbox.com">Mapbox</a>.'
           />
-          {this.renderMarkers()}
+          <Mymarker />
         </Map>
 
         </Col>
