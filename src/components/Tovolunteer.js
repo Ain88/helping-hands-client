@@ -6,6 +6,7 @@ import Needvolunteer from './Needvolunteer'
 import Mypage from './Mypage'
 import Myrequest from './Myrequest'
 import Mymarker from './Mymarker'
+import Header from './Header'
 import $ from 'jquery';
 import { render } from 'react-dom'
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
@@ -60,6 +61,9 @@ class Tovolunteer extends React.Component {
        key={item.id}
        title={item.title}
        description={item.description}
+       owner_id={item.owner_id}
+       req_id={item.id}
+       user_id={user_id}
        position={[item.location.split(',')[0],item.location.split(',')[1]]}
        onClick={this.onMarkerClick}
        /> : (user_id != item.owner_id && item.typev == 2 ?
@@ -67,6 +71,9 @@ class Tovolunteer extends React.Component {
          icon={blueIcon}
          key={item.id}
          title={item.title}
+         owner_id={item.owner_id}
+         req_id={item.id}
+        user_id={user_id}
          description={item.description}
          position={[item.location.split(',')[0],item.location.split(',')[1]]}
          onClick={this.onMarkerClick}

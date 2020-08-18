@@ -2,15 +2,24 @@ import React from "react"
 import { Nav, Navbar, NavLink } from 'react-bootstrap'
 import axios from 'axios'
 
-const Header = (props) => {
-const handleClick = () => {
+class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: ""
+    };
+  }
+
+  handleClick = () => {
     axios.delete('http://localhost:3001/logout', {withCredentials: true})
     .then(response => {
-      props.handleLogout()
-      props.history.push('/')
+      this.props.handleLogout()
+      this.props.history.push('/')
     })
     .catch(error => console.log(error))
   }
+
+  render () {
 
     return ( <div className="container container-header">
         {
@@ -20,11 +29,12 @@ const handleClick = () => {
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ml-auto">
               <NavLink href="tovolunteer">Volunteer Today</NavLink>
+
               {
-                props.user_no && <NavLink href="/" onClick={handleClick}>Log Out</NavLink>
+                this.props.user_no && <NavLink href="/" onClick={this.handleClick}>Log Out</NavLink>
               }
               {
-                !props.user_no &&
+                !this.props.user_no &&
                 <><NavLink href="signup">Sign Up</NavLink><NavLink href="login">Log In</NavLink></>
               }
               </Nav>
@@ -34,6 +44,7 @@ const handleClick = () => {
     <div><hr /></div></div>
     );
   }
+}
 
 
 export default Header

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Button } from 'react-bootstrap'
-import PlacesAutocomplete, {
+import PlacesAutocomplete from 'react-places-autocomplete';
+import {
   geocodeByAddress,
   geocodeByPlaceId,
   getLatLng,
@@ -160,7 +161,7 @@ class Needvolunteer extends React.Component {
                 />
                 <div className="autocomplete-dropdown-container">
                   {loading && <div>Loading...</div>}
-                  {suggestions.map((suggestion,index) => {
+                  {suggestions.map(suggestion => {
                     const className = suggestion.active
                       ? 'suggestion-item--active'
                       : 'suggestion-item';
@@ -170,7 +171,7 @@ class Needvolunteer extends React.Component {
                       ? { backgroundColor: '#fafafa', cursor: 'pointer' }
                       : { backgroundColor: '#ffffff', cursor: 'pointer' };
                     return (
-                      <div key={index}
+                      <div key={suggestion.id}
                         {...getSuggestionItemProps(suggestion, {
                           className,
                           style,

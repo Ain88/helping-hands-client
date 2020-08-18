@@ -6,6 +6,7 @@ import Home from './components/Home'
 import Tovolunteer from './components/Tovolunteer'
 import Needvolunteer from './components/Needvolunteer'
 import Mypage from './components/Mypage'
+import Mymarker from './components/Mymarker'
 import Myrequest from './components/Myrequest'
 import Mymessage from './components/Mymessage'
 import Header from './components/Header'
@@ -96,6 +97,12 @@ class App extends Component {
                 exact path='/mymessage'
                 render={props => (
                 <Mymessage {...props} loggedInStatus={this.state.isLoggedIn}/>
+                )}
+              />
+              <Route
+                exact path='/mymarker'
+                render={props => (
+                <Mymarker {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn}/>
                 )}
               />
               <Route

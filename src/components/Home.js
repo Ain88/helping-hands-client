@@ -4,6 +4,11 @@ import Img1 from '../img/bg1.jpg'
 import Img2 from '../img/bg2.jpg'
 
 class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+  }
   render () {
     return (
     <div>

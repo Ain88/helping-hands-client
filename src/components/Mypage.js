@@ -7,7 +7,8 @@ class Mypage extends React.Component {
     super(props);
     this.state = {
       user_id: props.user_no,
-      vol_list: []
+      vol_list: [],
+      data: []
     };
   }
 
@@ -21,6 +22,23 @@ class Mypage extends React.Component {
     .catch(function (error) {
       console.log(error);
     });
+
+    fetch(`http://localhost:3001/requests`)
+      .then(res => res.json())
+      .then(json => this.setState({ data: json }));
+  }
+
+  renderVolunteer(volunteer) {
+    var mywork = volunteer;
+    {return this.state.data.map((item,i) => { return (
+       mywork == item.id ?
+       <span key={item.id}>
+       Title: {item.title}<br/>
+       Description: {item.description}<br/></span>
+     : null
+     )}
+      )}
+
   }
 
   render() {
@@ -33,7 +51,7 @@ class Mypage extends React.Component {
         <br /><hr /><br />
         {vol_list.map((req, index) => {
             return <p key={req.id}>
-              Type: One time help<br />
+              {this.renderVolunteer(req.request_id)}<br />
             </p>
         })}
       </div>
