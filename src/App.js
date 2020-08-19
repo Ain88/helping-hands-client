@@ -23,9 +23,10 @@ class App extends Component {
       user_id : "",
      };
   }
-  componentDidMount() {
+  componentWillMount() {
       this.loginStatus()
     }
+
   loginStatus = () => {
       axios.get('http://localhost:3001/logged_in', {withCredentials: true})
       .then(response => {
@@ -60,49 +61,47 @@ class App extends Component {
           <Route
             render={props => (
             <Header {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn}/>
-            )}
-          />
-            <Switch>
+          )} />
               <Route
                 exact path='/'
                 render={props => (
-                <Home {...props} loggedInStatus={this.state.isLoggedIn}/>
+                <Home {...props} />
                 )}
               />
               <Route
                 exact path='/Needvolunteer'
                 render={props => (
-                <Needvolunteer {...props} loggedInStatus={this.state.isLoggedIn}/>
+                <Needvolunteer {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn}/>
                 )}
               />
               <Route
                 exact path='/Tovolunteer'
                 render={props => (
-                <Tovolunteer {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn}/>
+                <Tovolunteer {...props} user_no={this.state.user_id} />
                 )}
               />
               <Route
                 exact path='/mypage'
                 render={props => (
-                <Mypage {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn}/>
+                <Mypage {...props} user_no={this.state.user_id} />
                 )}
               />
               <Route
                 exact path='/myrequest'
                 render={props => (
-                <Myrequest {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn}/>
+                <Myrequest {...props} user_no={this.state.user_id} />
                 )}
               />
               <Route
                 exact path='/mymessage'
                 render={props => (
-                <Mymessage {...props} loggedInStatus={this.state.isLoggedIn}/>
+                <Mymessage {...props} />
                 )}
               />
               <Route
                 exact path='/mymarker'
                 render={props => (
-                <Mymarker {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn}/>
+                <Mymarker {...props} user_no={this.state.user_id} />
                 )}
               />
               <Route
@@ -117,7 +116,6 @@ class App extends Component {
                 <Signup {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
                 )}
               />
-            </Switch>
             <Footer />
           </BrowserRouter>
         </div>

@@ -6,7 +6,6 @@ import Needvolunteer from './Needvolunteer'
 import Mypage from './Mypage'
 import Myrequest from './Myrequest'
 import Mymarker from './Mymarker'
-import Header from './Header'
 import $ from 'jquery';
 import { render } from 'react-dom'
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
@@ -18,7 +17,7 @@ const mapStyle = {
 const position = [49.2827, -123.1207]
 
 var greenIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
@@ -27,7 +26,7 @@ var greenIcon = new L.Icon({
 });
 
 var blueIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
@@ -97,7 +96,7 @@ class Tovolunteer extends React.Component {
             <Myrequest user_no={this.props.user_no}/>
           </Tab>
           <Tab eventKey="request" title="Request Form">
-            <Needvolunteer />
+            <Needvolunteer user_no={this.props.user_no}/>
           </Tab>
           <Tab eventKey="message" title="Message">
 

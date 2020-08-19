@@ -13,7 +13,7 @@ class Myrequest extends React.Component {
 
   componentDidMount() {
 
-  axios.get(`http://localhost:3001/requests`)
+  axios.get(`http://localhost:3001/requests`, {withCredentials: true})
     .then(res => {
       const req_list = res.data;
       this.setState({ req_list });

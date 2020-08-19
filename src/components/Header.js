@@ -10,6 +10,10 @@ class Header extends React.Component {
     };
   }
 
+  componentWillMount(){
+    
+  }
+
   handleClick = () => {
     axios.delete('http://localhost:3001/logout', {withCredentials: true})
     .then(response => {
@@ -28,13 +32,14 @@ class Header extends React.Component {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ml-auto">
+
               <NavLink href="tovolunteer">Volunteer Today</NavLink>
 
               {
-                this.props.user_no && <NavLink href="/" onClick={this.handleClick}>Log Out</NavLink>
+                this.props.loggedInStatus && <NavLink href="/" onClick={this.handleClick}>Log Out</NavLink>
               }
               {
-                !this.props.user_no &&
+                !this.props.loggedInStatus &&
                 <><NavLink href="signup">Sign Up</NavLink><NavLink href="login">Log In</NavLink></>
               }
               </Nav>

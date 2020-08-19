@@ -1,7 +1,9 @@
 import React from 'react';
-import { Carousel } from 'react-bootstrap';
+import { Carousel, Button } from 'react-bootstrap';
 import Img1 from '../img/bg1.jpg'
 import Img2 from '../img/bg2.jpg'
+import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
+import Header from './Header';
 
 class Home extends React.Component {
   constructor(props) {
@@ -20,10 +22,10 @@ class Home extends React.Component {
           alt="First Slide"
         />
       <Carousel.Caption>
-          <h2>Helping Hands<br />
-          in Vancity</h2>
-          <h4>Helping Hands partners with individuals or<br />families and with groups, schools and companies</h4>
-      </Carousel.Caption>
+      <h2>Helping Hands in Vancity</h2>
+      <h5>Helping Hands partners with individuals or<br />families and with groups, schools and companies</h5>
+      <Button href="/tovolunteer" variant="info">Volunteer Today</Button>
+        </Carousel.Caption>
       </Carousel.Item>
       <Carousel.Item>
         <img
@@ -32,10 +34,10 @@ class Home extends React.Component {
           alt="Second Slide"
         />
       <Carousel.Caption>
-          <h2>Helping Hands<br />
-          in Vancity</h2>
-          <h4>Helping Hands partners with individuals or<br />families and with groups, schools and companies</h4>
-        </Carousel.Caption>
+          <h2>Helping Hands in Vancity</h2>
+          <h5>Helping Hands partners with individuals or<br />families and with groups, schools and companies</h5>
+          <Button href="/tovolunteer" variant="info">Volunteer Today</Button>
+      </Carousel.Caption>
       </Carousel.Item>
     </Carousel>
     </div>

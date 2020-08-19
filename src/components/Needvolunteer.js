@@ -24,19 +24,7 @@ class Needvolunteer extends React.Component {
       errors: ''
     };
   }
-
-  componentDidMount(){
-    axios.get('http://localhost:3001/logged_in', {withCredentials: true})
-    .then(response => {
-          this.setState({
-            owner_id: response.data.user.id
-          });
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
-
+  
   handleChange = address => {
     this.setState({ address });
   };
@@ -64,6 +52,7 @@ class Needvolunteer extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
+
     fetch('http://localhost:3001/requests', {
       method: 'POST',
       headers:  {
@@ -79,7 +68,7 @@ class Needvolunteer extends React.Component {
         counter: this.state.counter,
         cur_counter: 0,
         is_active: 1,
-        owner_id: this.state.owner_id
+        owner_id: this.props.user_no
       })
     }).then(response => response.json()).then(
       data => {

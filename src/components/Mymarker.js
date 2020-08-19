@@ -24,7 +24,7 @@ class Mymarker extends React.Component {
       finished: 0
     };
 
-    axios.post(`http://localhost:3001/enrollments`, { enrollment })
+    axios.post(`http://localhost:3001/enrollments`, { enrollment }, {withCredentials: true})
       .then(res => {
         console.log(res);
         console.log(res.data);

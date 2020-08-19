@@ -25,7 +25,10 @@ class Mypage extends React.Component {
 
     fetch(`http://localhost:3001/requests`)
       .then(res => res.json())
-      .then(json => this.setState({ data: json }));
+      .then(json => this.setState({ data: json }))
+      .catch(function (error) {
+        console.log(error);
+      });;
   }
 
   renderVolunteer(volunteer) {
