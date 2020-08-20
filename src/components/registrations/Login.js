@@ -9,7 +9,8 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      errors: ''
+      errors: '',
+      rememberMe: false
      };
   }
   componentWillMount() {
@@ -23,7 +24,8 @@ class Login extends Component {
   };
   handleSubmit = (event) => {
     event.preventDefault()
-    const {email, password} = this.state
+    const {email, password, rememberMe} = this.state
+    localStorage.setItem('rememberMe', true);
     let user = {
       email: email,
       password: password

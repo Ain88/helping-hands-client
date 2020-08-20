@@ -53,6 +53,7 @@ class App extends Component {
       isLoggedIn: false,
       user: {}
       })
+      localStorage.setItem('rememberMe', false);
     }
   render() {
       return (

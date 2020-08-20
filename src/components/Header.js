@@ -11,7 +11,7 @@ class Header extends React.Component {
   }
 
   componentWillMount(){
-    
+
   }
 
   handleClick = () => {
@@ -36,11 +36,11 @@ class Header extends React.Component {
               <NavLink href="tovolunteer">Volunteer Today</NavLink>
 
               {
-                this.props.loggedInStatus && <NavLink href="/" onClick={this.handleClick}>Log Out</NavLink>
+                localStorage.rememberMe == 'true' ? <NavLink href="/" onClick={this.handleClick}>Log Out</NavLink>: null
               }
               {
-                !this.props.loggedInStatus &&
-                <><NavLink href="signup">Sign Up</NavLink><NavLink href="login">Log In</NavLink></>
+                localStorage.rememberMe == 'false' ?
+                <><NavLink href="signup">Sign Up</NavLink><NavLink href="login">Log In</NavLink></> : null
               }
               </Nav>
             </Navbar.Collapse>
