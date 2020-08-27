@@ -6,6 +6,7 @@ import Needvolunteer from './Needvolunteer'
 import Mypage from './Mypage'
 import Myrequest from './Myrequest'
 import Mymarker from './Mymarker'
+import Mymessage from './Mymessage'
 import $ from 'jquery';
 import { render } from 'react-dom'
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
@@ -40,6 +41,7 @@ class Tovolunteer extends React.Component {
     this.state = {
       marker_data: [],
       data: [],
+      data2: [],
       markers: [[49.2827, -123.1207], [49.2827, -123.1210]]
     };
   }
@@ -48,35 +50,46 @@ class Tovolunteer extends React.Component {
     fetch(`http://localhost:3001/requests`)
       .then(res => res.json())
       .then(json => this.setState({ data: json }));
+
+    fetch(`http://localhost:3001/enrollments`)
+      .then(res => res.json())
+      .then(json => this.setState({ data2: json }));
+
   }
 
   renderMarkers() {
     var user_id = this.props.user_no
+    var time_diff = new Date().getTime() - (60 * 60 * 1000)
 
     {return this.state.data.map((item,i) => { return (
-       user_id != item.owner_id && item.typev == 1 ?
+      this.state.data2.map((item2,i) => { return (
+       item.id != item2.request_id && user_id != item.owner_id && item.typev == 1 && time_diff > new Date(item.created_at).getTime() ?
+
        <Mymarker
        icon={greenIcon}
        key={item.id}
        title={item.title}
        description={item.description}
+       created_at={time_diff}
        owner_id={item.owner_id}
        req_id={item.id}
        user_id={user_id}
        position={[item.location.split(',')[0],item.location.split(',')[1]]}
        onClick={this.onMarkerClick}
-       /> : (user_id != item.owner_id && item.typev == 2 ?
+       /> : (item.id != item2.request_id && user_id != item.owner_id && item.typev == 2 && time_diff > new Date(item.created_at).getTime() ?
          <Mymarker
          icon={blueIcon}
          key={item.id}
          title={item.title}
          owner_id={item.owner_id}
          req_id={item.id}
-        user_id={user_id}
+         user_id={user_id}
+         created_at={time_diff}
          description={item.description}
          position={[item.location.split(',')[0],item.location.split(',')[1]]}
          onClick={this.onMarkerClick}
          /> : null)
+       )})
      )}
       )}
   }
@@ -99,7 +112,7 @@ class Tovolunteer extends React.Component {
             <Needvolunteer user_no={this.props.user_no}/>
           </Tab>
           <Tab eventKey="message" title="Message">
-
+            <Mymessage user_no={this.props.user_no}/>
           </Tab>
         </Tabs>
 

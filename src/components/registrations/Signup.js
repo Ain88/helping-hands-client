@@ -47,6 +47,7 @@ handleSubmit = (event) => {
   }).then(response => response.json()).then(
     data => {
           if (data.status === 'created') {
+            alert("Signed up successfully");
             this.props.handleLogin(data)
             this.redirect()
           } else {

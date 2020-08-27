@@ -24,11 +24,24 @@ class Mymarker extends React.Component {
       finished: 0
     };
 
-    axios.post(`http://localhost:3001/enrollments`, { enrollment }, {withCredentials: true})
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-      })
+    const message = {
+      body: 'Thank you for volunteering, you can message me if you have questions',
+      requests_id: this.props.req_id,
+      sender_id: this.props.owner_id,
+      receiver_id: this.props.user_id
+    }
+
+    console.log(enrollment.request_id)
+
+    axios.all([
+      axios.post(`http://localhost:3001/enrollments`, { enrollment }, {withCredentials: true})
+    ])
+    .then(axios.spread((data1) => {
+        alert("Your enrollment has been added!");
+        console.log('data1', data1);
+        this.redirect()
+    })).catch(error=>console.log(error));
+
   }
 
   redirect = () => {

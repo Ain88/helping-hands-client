@@ -24,7 +24,7 @@ class Needvolunteer extends React.Component {
       errors: ''
     };
   }
-  
+
   handleChange = address => {
     this.setState({ address });
   };
@@ -151,20 +151,21 @@ class Needvolunteer extends React.Component {
                 <div className="autocomplete-dropdown-container">
                   {loading && <div>Loading...</div>}
                   {suggestions.map(suggestion => {
+                    const key = (new Date()).getTime()+suggestion.index
                     const className = suggestion.active
                       ? 'suggestion-item--active'
                       : 'suggestion-item';
                     // inline style for demonstration purpose
-
                     const style = suggestion.active
                       ? { backgroundColor: '#fafafa', cursor: 'pointer' }
                       : { backgroundColor: '#ffffff', cursor: 'pointer' };
                     return (
-                      <div key={suggestion.id}
+                      <div
                         {...getSuggestionItemProps(suggestion, {
                           className,
-                          style,
+                          style
                         })}
+                        key={key}
                       >
                         <span>{suggestion.description}</span>
                       </div>

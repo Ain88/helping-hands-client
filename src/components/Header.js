@@ -10,10 +10,6 @@ class Header extends React.Component {
     };
   }
 
-  componentWillMount(){
-
-  }
-
   handleClick = () => {
     axios.delete('http://localhost:3001/logout', {withCredentials: true})
     .then(response => {

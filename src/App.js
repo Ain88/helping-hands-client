@@ -46,15 +46,19 @@ class App extends Component {
         isLoggedIn: true,
         user: response.user
       })
-
     }
   handleLogout = () => {
+      localStorage.setItem('rememberMe', false);
       this.setState({
       isLoggedIn: false,
       user: {}
       })
-      localStorage.setItem('rememberMe', false);
+      this.redirect();
     }
+  redirect = () => {
+    this.props.history.push('/')
+  }
+
   render() {
       return (
         <div>
@@ -76,11 +80,17 @@ class App extends Component {
                 )}
               />
               <Route
-                exact path='/Tovolunteer'
+              exact path='/Tovolunteer'
                 render={props => (
+                  localStorage.rememberMe == 'true' ? (
                 <Tovolunteer {...props} user_no={this.state.user_id} />
+              ): (
+                window.confirm('Please login first'),
+                <Redirect to={{ pathname: '/login', state: 'Please sign in first'}} {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
+              )
                 )}
               />
+
               <Route
                 exact path='/mypage'
                 render={props => (

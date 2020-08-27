@@ -1,7 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import axios from 'axios'
 import {Link} from 'react-router-dom'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Alert } from 'react-bootstrap'
+
+function AlertDismissibleExample() {
+const [show, setShow] = useState(true);
+
+if (show) {
+  return (
+    <Alert variant="danger" onClose={() => setShow(false)} dismissible>
+      <p>
+      </p>
+    </Alert>
+  );
+}
+return '';
+}
 
 class Login extends Component {
   constructor(props) {
@@ -59,6 +73,7 @@ class Login extends Component {
       </div>
     )
   }
+
   render() {
     const {email, password} = this.state
     return (
