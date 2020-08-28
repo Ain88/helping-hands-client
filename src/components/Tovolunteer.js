@@ -42,7 +42,9 @@ class Tovolunteer extends React.Component {
       marker_data: [],
       data: [],
       data2: [],
-      markers: [[49.2827, -123.1207], [49.2827, -123.1210]]
+      check_count: '',
+      waiting: false,
+      check_req: []
     };
   }
 
@@ -53,8 +55,21 @@ class Tovolunteer extends React.Component {
 
     fetch(`http://localhost:3001/enrollments`)
       .then(res => res.json())
-      .then(json => this.setState({ data2: json }));
+      .then(json => { this.setState({ data2: json });
+      var arrayOfArrays = [];
 
+      Object.keys(json).forEach(function(k){
+        arrayOfArrays.push(json[k].request_id);
+      });
+        this.check_count = Object.keys(json).length;
+        this.state.check_req = arrayOfArrays
+        console.log(this.state.check_req)
+        this.checkWaiting()
+      });
+  }
+
+  checkWaiting(){
+    this.setState({ waiting: true})
   }
 
   renderMarkers() {
@@ -62,8 +77,7 @@ class Tovolunteer extends React.Component {
     var time_diff = new Date().getTime() - (60 * 60 * 1000)
 
     {return this.state.data.map((item,i) => { return (
-      this.state.data2.map((item2,i) => { return (
-       item.id != item2.request_id && user_id != item.owner_id && item.typev == 1 && time_diff > new Date(item.created_at).getTime() ?
+       this.state.check_req.indexOf(item.id) == -1 && user_id != item.owner_id && item.typev == 1 && time_diff > new Date(item.created_at).getTime() ?
 
        <Mymarker
        icon={greenIcon}
@@ -76,7 +90,7 @@ class Tovolunteer extends React.Component {
        user_id={user_id}
        position={[item.location.split(',')[0],item.location.split(',')[1]]}
        onClick={this.onMarkerClick}
-       /> : (item.id != item2.request_id && user_id != item.owner_id && item.typev == 2 && time_diff > new Date(item.created_at).getTime() ?
+       /> : (this.state.check_req.indexOf(item.id) == -1 && user_id != item.owner_id && item.typev == 2 && time_diff > new Date(item.created_at).getTime() ?
          <Mymarker
          icon={blueIcon}
          key={item.id}
@@ -89,13 +103,12 @@ class Tovolunteer extends React.Component {
          position={[item.location.split(',')[0],item.location.split(',')[1]]}
          onClick={this.onMarkerClick}
          /> : null)
-       )})
      )}
       )}
   }
 
   render() {
-    const { renderMarkers } = this.state
+    const { renderMarkers, waiting, check_req } = this.state
     return (
       <div className ="center-col">
         <Container>
@@ -125,7 +138,7 @@ class Tovolunteer extends React.Component {
             url='https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWluODgiLCJhIjoiY2tkMGhkcXVmMHRxdzJ0cXJucHZvc2tuciJ9.PgKhmGn1K8y9BEVK2JW-og'
             attribution='Map data © <a href="http://osm.org/copyright">OpenStreetMap</a> contributors. Tiles from <a href="https://www.mapbox.com">Mapbox</a>.'
           />
-          {this.renderMarkers()}
+          {this.state.waiting == true && this.renderMarkers()}
 
         </Map>
 

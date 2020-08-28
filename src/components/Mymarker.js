@@ -31,14 +31,13 @@ class Mymarker extends React.Component {
       receiver_id: this.props.user_id
     }
 
-    console.log(enrollment.request_id)
-
     axios.all([
-      axios.post(`http://localhost:3001/enrollments`, { enrollment }, {withCredentials: true})
+      axios.post(`http://localhost:3001/enrollments`, { enrollment }, {withCredentials: true}),
+      axios.post(`http://localhost:3001/messages`, { message }, {withCredentials: true})
     ])
-    .then(axios.spread((data1) => {
+    .then(axios.spread((data1, data2) => {
         alert("Your enrollment has been added!");
-        console.log('data1', data1);
+        console.log('data1', data1, 'data2', data2);
         this.redirect()
     })).catch(error=>console.log(error));
 
