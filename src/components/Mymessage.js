@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Container, Row, Col, Button } from 'react-bootstrap'
 class Mymessage extends React.Component {
 
   constructor(props) {
@@ -9,7 +10,6 @@ class Mymessage extends React.Component {
       mes_list: []
     };
   }
-
 
   componentDidMount() {
 
@@ -26,12 +26,20 @@ class Mymessage extends React.Component {
   render() {
     const { mes_list, user_id } = this.state;
     return (
-      <div className="container content">
+      <Container>
+      <Row>
+      <Col md={4}>
         {mes_list.map((mes, index) => {
             return <p key={mes.id}>
-              Message: {mes.body}<br /></p>
+              Message from Organizer: {mes.body}</p>
         })}
-      </div>
+      </Col>
+
+      <Col md={8}>
+      dfdfd
+      </Col>
+      </Row>
+      </Container>
     );
   }
 }

@@ -90,7 +90,7 @@ class Login extends Component {
           <Form.Control type="password" placeholder="Password" name="password" value={password} onChange={this.handleChange}/>
         </Form.Group>
 
-      <Button variant="primary" type="submit">
+      <Button variant="info" type="submit">
         Log In
       </Button>
       <div>

@@ -26,6 +26,23 @@ h2 {
   font-family: 'Oswald', 'Lato';
 }
 
+.footer-area {
+  h5 {
+    font-family: 'Dancing Script', cursive;
+  }
+  p {
+    font-family: 'Roboto'
+  }
+}
+
+.footer-copyright {
+  font-family: 'Roboto'
+}
+
+.padding-bottom {
+  padding-bottom: 1rem;
+}
+
 /************************ nav bar ********************/
 
 .new-line {
@@ -33,7 +50,7 @@ h2 {
 }
 
 .container {
-  padding-top: 3rem;
+  padding-top: 2rem;
 }
 
 hr{

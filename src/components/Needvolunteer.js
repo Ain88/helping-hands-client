@@ -177,7 +177,7 @@ class Needvolunteer extends React.Component {
           </PlacesAutocomplete>
         </div>
       </Form.Group>
-    <Button variant="primary" type="submit">
+    <Button variant="info" type="submit">
     Submit
     </Button>
   </Form>

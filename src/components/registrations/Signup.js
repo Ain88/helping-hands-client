@@ -114,7 +114,7 @@ handleSubmit = (event) => {
            />
         </Form.Group>
 
-      <Button variant="primary" type="submit">
+      <Button variant="info" type="submit">
         Sign Up
       </Button>
       <div>
