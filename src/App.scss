@@ -31,16 +31,16 @@ h2 {
     font-family: 'Dancing Script', cursive;
   }
   p {
-    font-family: 'Roboto'
+    font-size: 0.9rem;
   }
 }
 
 .footer-copyright {
-  font-family: 'Roboto'
+  font-size: 0.9rem;
 }
 
 .padding-bottom {
-  padding-bottom: 1rem;
+  padding-bottom: 0.5rem;
 }
 
 /************************ nav bar ********************/
@@ -217,7 +217,7 @@ a.nav-link {
 }
 
 .copyright {
-  color: #f57814;
+  color: #212529;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 900px) {

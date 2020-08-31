@@ -66,6 +66,7 @@ class Mymarker extends React.Component {
       user_id={this.props.user_id}
         <Popup>
           Title: {this.props.title}<br />
+          Type: {this.props.typev== 1 ? "One time help" : "Material help"}<br />
           Description: {this.props.description}<br /><br />
 
           <Button type="submit" className="text-center" variant="outline-info" size="sm" onClick={() =>

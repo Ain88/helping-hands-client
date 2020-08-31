@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Button } from 'react-bootstrap'
+import { Container, Row, Col, Button, Tab, ListGroup } from 'react-bootstrap'
 class Mymessage extends React.Component {
 
   constructor(props) {
@@ -26,20 +26,29 @@ class Mymessage extends React.Component {
   render() {
     const { mes_list, user_id } = this.state;
     return (
-      <Container>
+      <div className="container content">
+      <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
       <Row>
-      <Col md={4}>
-        {mes_list.map((mes, index) => {
-            return <p key={mes.id}>
-              Message from Organizer: {mes.body}</p>
-        })}
-      </Col>
+        <Col sm={4}>
+          <ListGroup>
+            {mes_list.map((mes, index) => {
+              return
+              <div>
+              <ListGroup.Item action href={`/posts/${mes.id}`}>
+              Message from Organizer: {mes.body}
+              </ListGroup.Item></div>
+           })}
+          </ListGroup>
+        </Col>
+        <Col sm={8}>
+          <Tab.Content>
 
-      <Col md={8}>
-      dfdfd
-      </Col>
+          </Tab.Content>
+        </Col>
       </Row>
-      </Container>
+      </Tab.Container>
+      </div>
+
     );
   }
 }

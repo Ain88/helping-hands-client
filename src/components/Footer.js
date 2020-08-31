@@ -41,7 +41,7 @@ class Footer extends React.Component {
 
                 </div>
                 <hr className="color-grey"/>
-                <div className="footer-copyright text-center py-3">© 2020 Copyright @
+                <div className="footer-copyright text-center py-3">Copyright © 2020 by
                   <a className="copyright" href="https://ain88.github.io/portfolio"> Helping Hands in Vancity</a>
                 </div>
                 </footer></div>

@@ -101,7 +101,7 @@ class Needvolunteer extends React.Component {
     const {typev, title, description, address, address2, counter, errors} = this.state;
     return (
       <div className="container content">
-      <h6>In need of volunteers? Please submit the form below.</h6>
+      <h6><b>In need of volunteers? Please submit the form below.</b></h6>
       <br />
 
       <Form onSubmit={this.handleSubmit}>

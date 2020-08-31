@@ -83,6 +83,7 @@ class Tovolunteer extends React.Component {
        icon={greenIcon}
        key={item.id}
        title={item.title}
+       type={item.typev}
        description={item.description}
        created_at={time_diff}
        owner_id={item.owner_id}
@@ -94,6 +95,7 @@ class Tovolunteer extends React.Component {
          <Mymarker
          icon={blueIcon}
          key={item.id}
+         type={item.typev}
          title={item.title}
          owner_id={item.owner_id}
          req_id={item.id}

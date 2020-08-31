@@ -29,19 +29,19 @@ class Myrequest extends React.Component {
     return (
       <div className="container content">
 
-        <h6>My request list</h6>
+        <h6><b>My request list</b></h6>
         <br /><hr /><br />
         {req_list.map((req, index) => {
           if(req.typev == 1 && req.owner_id == this.props.user_no){
             return <p key={req.id}>
-              Type: One time help<br />
               Title: {req.title}<br />
+              Type: One time help<br />
               Description: {req.description}<br />
             </p>
           } else if(req.typev == 2 && req.owner_id == this.props.user_no){
             return <p key={req.id}>
-              Type: Material help<br />
               Title: {req.title}<br />
+              Type: Material help<br />
               Description: {req.description}<br />
             </p>
           } else {

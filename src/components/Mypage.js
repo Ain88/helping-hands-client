@@ -34,11 +34,17 @@ class Mypage extends React.Component {
   renderVolunteer(volunteer) {
     var mywork = volunteer;
     {return this.state.data.map((item,i) => { return (
-       mywork == item.id ?
+       mywork == item.id && item.typev == 1 ?
        <span key={item.id}>
        Title: {item.title}<br/>
+       Type: One time help<br />
        Description: {item.description}<br/></span>
-     : null
+     : (mywork == item.id && item.typev == 2 ?
+       <span key={item.id}>
+       Title: {item.title}<br/>
+       Type: Material need<br />
+       Description: {item.description}<br/></span>
+      : null)
      )}
       )}
 
@@ -50,7 +56,7 @@ class Mypage extends React.Component {
     return (
       <div className="container content">
 
-        <h6>My volunteer list</h6>
+        <h6><b>My volunteer list</b></h6>
         <br /><hr /><br />
         {vol_list.map((req, index) => {
             return <p key={req.id}>
