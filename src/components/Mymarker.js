@@ -25,7 +25,7 @@ class Mymarker extends React.Component {
     };
 
     const message = {
-      body: 'Thank you for volunteering, you can message me if you have questions',
+      body: 'You are volunteering for [' +this.props.title + ']: Thank you for volunteering, you can message me if you have questions',
       requests_id: this.props.req_id,
       sender_id: this.props.owner_id,
       receiver_id: this.props.user_id
@@ -68,7 +68,6 @@ class Mymarker extends React.Component {
           Title: {this.props.title}<br />
           Type: {this.props.typev== 1 ? "One time help" : "Material help"}<br />
           Description: {this.props.description}<br /><br />
-
           <Button type="submit" className="text-center" variant="outline-info" size="sm" onClick={() =>
             { if (window.confirm('Are you sure you wish to submit the request?'))
             this.onMarkerClick() } }>Submit The Request

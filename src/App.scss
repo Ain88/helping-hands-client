@@ -169,6 +169,15 @@ a.nav-link {
     border-radius: 0.2rem;
 }
 
+.navlink-custom{
+  border: 1px solid #ddd;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: rgba(23,162,184,.8)
+}
+
 /************************ footer ********************/
 
 .footer-area {

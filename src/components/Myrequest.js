@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router';
+import { Button } from 'react-bootstrap'
 
 class Myrequest extends React.Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class Myrequest extends React.Component {
 
   render() {
     const { req_list, user_id } = this.state;
+    var time_diff = new Date().getTime() - (60 * 60 * 1000)
 
     return (
       <div className="container content">
@@ -32,17 +34,13 @@ class Myrequest extends React.Component {
         <h6><b>My request list</b></h6>
         <br /><hr /><br />
         {req_list.map((req, index) => {
-          if(req.typev == 1 && req.owner_id == this.props.user_no){
+          if(req.owner_id == this.props.user_no){
             return <p key={req.id}>
               Title: {req.title}<br />
-              Type: One time help<br />
-              Description: {req.description}<br />
-            </p>
-          } else if(req.typev == 2 && req.owner_id == this.props.user_no){
-            return <p key={req.id}>
-              Title: {req.title}<br />
-              Type: Material help<br />
-              Description: {req.description}<br />
+              {req.typev == 1 ? 'Type: One time help': 'Type: Material need'}<br />
+              Description: {req.description}&nbsp;&nbsp;
+              { time_diff > new Date(req.created_at).getTime() ?
+                <Button type="submit" variant="info" size="sm">Republish</Button> : null }
             </p>
           } else {
           }
