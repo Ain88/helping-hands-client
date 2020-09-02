@@ -24,13 +24,27 @@ class Myrequest extends React.Component {
     });
   }
 
+  submitRepublish(req){
+    var req_id = req
+    console.log(req_id)
+    const updated = {
+        updated_at: new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString()
+    }
+    axios.put(`http://localhost:3001/requests/${req}`, updated)
+      .then(function (response) {
+        alert("Your request has been added!");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   render() {
     const { req_list, user_id } = this.state;
     var time_diff = new Date().getTime() - (60 * 60 * 1000)
 
     return (
       <div className="container content">
-
         <h6><b>My request list</b></h6>
         <br /><hr /><br />
         {req_list.map((req, index) => {
@@ -40,7 +54,8 @@ class Myrequest extends React.Component {
               {req.typev == 1 ? 'Type: One time help': 'Type: Material need'}<br />
               Description: {req.description}&nbsp;&nbsp;
               { time_diff > new Date(req.created_at).getTime() ?
-                <Button type="submit" variant="info" size="sm">Republish</Button> : null }
+                <Button type="submit" variant="info" size="sm"
+                onClick={this.submitRepublish.bind(this, req.id)}>Republish</Button> : null }
             </p>
           } else {
           }
