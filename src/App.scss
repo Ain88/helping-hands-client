@@ -131,10 +131,6 @@ a.nav-link {
    }
 }
 
-// #mapId {
-//    height:100vh;
-// }
-//
 .map {
     height: 100%;
     width: 100vw;
@@ -175,7 +171,19 @@ a.nav-link {
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: #fff;
-    background-color: rgba(23,162,184,.8)
+    background-color: rgb(176, 224, 230)
+}
+
+.no-padding {
+  padding-top: 0;
+}
+
+.first-cap {
+  text-transform: capitalize;
+}
+
+.nav-pills .nav-link {
+    border-radius: 0
 }
 
 /************************ footer ********************/

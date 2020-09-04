@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import L from "leaflet";
 import axios from 'axios'
 import { Container, Row, Col, Nav, Tabs, Tab, Button } from 'react-bootstrap'
@@ -7,6 +7,7 @@ import Mypage from './Mypage'
 import Myrequest from './Myrequest'
 import Mymarker from './Mymarker'
 import Mymessage from './Mymessage'
+import Mystat from './Mystat'
 import $ from 'jquery';
 import { render } from 'react-dom'
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
@@ -44,7 +45,8 @@ class Tovolunteer extends React.Component {
       data2: [],
       check_count: '',
       waiting: false,
-      check_req: []
+      check_req: [],
+      total_count: ''
     };
   }
 
@@ -66,11 +68,43 @@ class Tovolunteer extends React.Component {
         console.log(this.state.check_req)
         this.checkWaiting()
       });
+    this.interval = setInterval(() => this.setState({ total_count: this.renderStat() }), 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   checkWaiting(){
     this.setState({ waiting: true})
   }
+
+  renderStat(){
+    var total_default = 0
+    var total_cur = 0
+    var total_need = ''
+    var ment = ' requests need to be fulfilled'
+    {this.state.data.map((cou,i) => {
+      if (i == this.state.data.length - 1) {
+        return total_default += cou.counter,total_cur += cou.cur_counter,
+        total_need = total_default-total_cur
+      }
+      return total_default += cou.counter,total_cur += cou.cur_counter
+    }
+    )}
+    return this.renderStat2(total_need)
+  }
+
+  renderStat2(total){
+
+    return <span>{total}</span>
+  }
+
+  //
+  // this.state.data.length-1 == i ?
+  //   <span>"hi"</span> :
+  // total_default += cou.counter,
+  // total_cur += cou.cur_counter
 
   renderMarkers() {
     var user_id = this.props.user_no
@@ -78,41 +112,28 @@ class Tovolunteer extends React.Component {
 
     {return this.state.data.map((item,i) => { return (
        this.state.check_req.indexOf(item.id) == -1 && user_id != item.owner_id &&
-       item.typev == 1 && item.counter - item.cur_counter > 0 && time_diff > new Date(item.created_at).getTime() ?
+       item.counter - item.cur_counter > 0 && time_diff > new Date(item.created_at).getTime() ?
 
        <Mymarker
        icon={greenIcon}
        key={item.id}
        title={item.title}
-       type={item.typev}
+       type={item.typev== 1 ? "One time help" : "Material help"}
        description={item.description}
        created_at={time_diff}
        owner_id={item.owner_id}
+       address={item.address}
        req_id={item.id}
        user_id={user_id}
        position={[item.location.split(',')[0],item.location.split(',')[1]]}
        onClick={this.onMarkerClick}
-       /> : (this.state.check_req.indexOf(item.id) == -1 && user_id != item.owner_id &&
-       item.typev == 2 && item.counter - item.cur_counter > 0 && time_diff > new Date(item.created_at).getTime() ?
-         <Mymarker
-         icon={blueIcon}
-         key={item.id}
-         type={item.typev}
-         title={item.title}
-         owner_id={item.owner_id}
-         req_id={item.id}
-         user_id={user_id}
-         created_at={time_diff}
-         description={item.description}
-         position={[item.location.split(',')[0],item.location.split(',')[1]]}
-         onClick={this.onMarkerClick}
-         /> : null)
+       /> : null
      )}
       )}
   }
 
   render() {
-    const { renderMarkers, waiting, check_req } = this.state
+    const { renderMarkers, waiting, check_req, total_count } = this.state
     return (
       <div className ="center-col">
         <Container>
@@ -143,8 +164,9 @@ class Tovolunteer extends React.Component {
             attribution='Map data © <a href="http://osm.org/copyright">OpenStreetMap</a> contributors. Tiles from <a href="https://www.mapbox.com">Mapbox</a>.'
           />
           {this.state.waiting == true && this.renderMarkers()}
-
         </Map>
+        <h6>✨ Stat: {total_count}</h6>
+        <Mystat />
 
         </Col>
         </Row><br />

@@ -49,14 +49,25 @@ class Myrequest extends React.Component {
         <br /><hr /><br />
         {req_list.map((req, index) => {
           if(req.owner_id == this.props.user_no){
-            return <p key={req.id}>
+            return <div key={req.id}>
               Title: {req.title}<br />
               {req.typev == 1 ? 'Type: One time help': 'Type: Material need'}<br />
               Description: {req.description}&nbsp;&nbsp;
               { time_diff > new Date(req.created_at).getTime() ?
                 <Button type="submit" variant="info" size="sm"
                 onClick={this.submitRepublish.bind(this, req.id)}>Republish</Button> : null }
-            </p>
+              <div className='custom-control custom-switch'>
+              <input
+                type='checkbox'
+                className='custom-control-input'
+                id='customSwitches'
+                readOnly
+              />
+              <label className='custom-control-label' htmlFor='customSwitchesChecked'>
+                Toggle this switch once fulfilled
+              </label>
+              </div>
+            </div>
           } else {
           }
         })}
