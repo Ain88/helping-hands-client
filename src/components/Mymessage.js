@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import _ from 'lodash';
 import { Container, Row, Col, Button, Tab, Nav, Form } from 'react-bootstrap'
 class Mymessage extends React.Component {
 
@@ -11,20 +12,45 @@ class Mymessage extends React.Component {
       showing: false,
       body: '',
       errors: "",
-      cur_id: ''
+      cur_id: '',
+      check_rec: [],
     };
   }
 
   componentDidMount() {
 
-  axios.get(`http://localhost:3001/messages`)
-    .then(res => {
-      const mes_list = res.data;
-      this.setState({ mes_list });
-    })
-    .catch(function (error) {
-      console.log(error);
+    fetch(`http://localhost:3001/messages`)
+      .then(res => res.json())
+      .then(json => { this.setState({ mes_list: json });
+
+    var arrayOfArrays = [];
+
+    Object.keys(json).forEach(function(k){
+      arrayOfArrays.push(json[k].sender);
     });
+
+    this.setState({ check_rec: this.getUnique(arrayOfArrays, 'id') })
+    // this.state.check_rec = this.getUnique(arrayOfArrays, 'id')
+    // console.log(this.getUnique(arrayOfArrays, 'id'));
+    console.log(this.state.check_rec);
+    // const namesArr = arrayOfArrays.filter((val, id) => {
+    //   return arrayOfArrays.indexOf(val) == id;  // this just returns true
+    // });
+    //   this.state.check_rec = namesArr
+    //   console.log(this.state.check_rec)
+    });
+  }
+
+  getUnique(array, key) {
+    if (typeof key !== 'function') {
+      const property = key;
+      key = function(item) { return item[property]; };
+    }
+    return Array.from(array.reduce(function(map, item) {
+      const k = key(item);
+      if (!map.has(k)) map.set(k, item);
+      return map;
+    }, new Map()).values());
   }
 
   handleMessage = (event) => {
@@ -71,49 +97,32 @@ class Mymessage extends React.Component {
   }
 
   render() {
-    const { mes_list, user_id, showing, body, cur_id } = this.state;
+    const { mes_list, user_id, showing, body, cur_id, check_rec } = this.state;
     return (
       <div className="container content">
       <h6><b>Click to view messages.</b></h6>
       <Tab.Container id="left-tabs-vol">
         <Row>
-          <Col sm={12}>
-            <Nav variant="pills" className="flex-column">
-              {mes_list.map((mes, index) => {
-                  if(mes.receiver_id == this.props.user_no || mes.sender_id == this.props.user_no){
-                  return <Nav.Item key={mes.id} className="navlink-custom" onClick={() => this.setState({ showing: false })}>
-                  <Nav.Link eventKey={mes.id}>
-                  <Container className="no-padding">
-                  <Row className="no-margin">
-                    <Col className="first-cap" xs={3}>{mes.sender.f_name}&nbsp;{mes.sender.l_name}</Col>
-                    <Col xs={9}>{mes.requests.title}</Col>
-                  </Row>
-                  </Container>
-                  </Nav.Link>
-                  </Nav.Item>}
-                  else {
-                  }
-              })}
-            </Nav>
-          </Col>
-          <Col sm={12}><br />
-            <Tab.Content>
-            {mes_list.map((mes, index) => {
-              if(mes.receiver_id == this.props.user_no){
-              return <Tab.Pane key={index} eventKey={mes.id}>
-              { showing
-                  ? this.showForm(cur_id, mes.sender_id, mes.sender.f_name, mes.sender.l_name, this.state.showing)
-                  : <div>Message from <span className="first-cap">{mes.sender.f_name}&nbsp;{mes.sender.l_name}</span> <br />
-                    {mes.body}&nbsp;&nbsp;
-
-                    <Button type="submit" variant="outline-info" size="sm"
-                     onClick={() => this.setState({ showing: !showing, cur_id: mes.requests_id })}>Reply
-                    </Button><hr /><br /></div>
-              }
-              </Tab.Pane>}
-              else {
-              }
+          <Col sm={3}>
+          <Nav variant="pills" className="flex-column">
+            {check_rec.map((mes, index) => {
+                if(mes.id != this.props.user_no){
+                return <Nav.Item key={mes.id} className="navlink-custom" onClick={() => this.setState({ showing: false })}>
+                <Nav.Link eventKey={mes.id}>
+                <Container className="no-padding">
+                <Row className="no-margin">
+                  <Col className="first-cap">{mes.f_name}&nbsp;{mes.l_name}</Col>
+                </Row>
+                </Container>
+                </Nav.Link>
+                </Nav.Item>}
+                else {
+                }
             })}
+          </Nav>
+          </Col>
+          <Col sm={9}><br />
+            <Tab.Content>
             </Tab.Content>
           </Col>
         </Row>
