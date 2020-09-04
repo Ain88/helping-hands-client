@@ -7,7 +7,6 @@ import Mypage from './Mypage'
 import Myrequest from './Myrequest'
 import Mymarker from './Mymarker'
 import Mymessage from './Mymessage'
-import Mystat from './Mystat'
 import $ from 'jquery';
 import { render } from 'react-dom'
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
@@ -68,7 +67,7 @@ class Tovolunteer extends React.Component {
         console.log(this.state.check_req)
         this.checkWaiting()
       });
-    this.interval = setInterval(() => this.setState({ total_count: this.renderStat() }), 1000);
+    this.interval = setInterval(() => this.setState({ total_count: this.renderStat() }), 5000);
   }
 
   componentWillUnmount() {
@@ -96,15 +95,8 @@ class Tovolunteer extends React.Component {
   }
 
   renderStat2(total){
-
     return <span>{total}</span>
   }
-
-  //
-  // this.state.data.length-1 == i ?
-  //   <span>"hi"</span> :
-  // total_default += cou.counter,
-  // total_cur += cou.cur_counter
 
   renderMarkers() {
     var user_id = this.props.user_no
@@ -165,8 +157,7 @@ class Tovolunteer extends React.Component {
           />
           {this.state.waiting == true && this.renderMarkers()}
         </Map>
-        <h6>✨ Stat: {total_count}</h6>
-        <Mystat />
+        <h6>✨ Stat: {total_count} requests are unfulfilled</h6>
 
         </Col>
         </Row><br />
