@@ -182,8 +182,60 @@ a.nav-link {
   text-transform: capitalize;
 }
 
+.nav-tabs {
+  text-transform: capitalize;
+}
+
 .nav-pills .nav-link {
     border-radius: 0
+}
+
+.message {
+  font-size: 0.9rem;
+}
+
+.chat {
+  list-style-type: none;
+  width: 20em;
+  font-size: 0.9rem;
+}
+
+.chat-right {
+  float: right;
+}
+
+.chat__bubble {
+  margin-bottom: 3px;
+  padding: 5px 10px;
+  clear: both;
+  border-radius: 10px 10px 2px 2px ;
+}
+
+.chat__bubble--rcvd {
+  background: #f2f2f2;
+  color: black;
+  float: left;
+  border-bottom-right-radius: 10px;
+}
+
+.chat__bubble--sent {
+  background: #f2f2f2;
+  color: black;
+  float: right;
+  border-bottom-right-radius: 10px;
+}
+
+.chat__bubble--sent + .chat__bubble--sent {
+  border-top-right-radius: 2px;
+}
+
+.chat__bubble--rcvd + .chat__bubble--rcvd {
+  border-top-left-radius: 2px;
+}
+
+.chat__bubble--stop {
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 
 /************************ footer ********************/

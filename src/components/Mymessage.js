@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import _ from 'lodash';
-import { Container, Row, Col, Button, Tab, Nav, Form } from 'react-bootstrap'
+import { Container, Row, Col, Button, Tab, Nav, Form, Tabs } from 'react-bootstrap'
 class Mymessage extends React.Component {
 
   constructor(props) {
@@ -30,14 +30,7 @@ class Mymessage extends React.Component {
     });
 
     this.setState({ check_rec: this.getUnique(arrayOfArrays, 'id') })
-    // this.state.check_rec = this.getUnique(arrayOfArrays, 'id')
-    // console.log(this.getUnique(arrayOfArrays, 'id'));
     console.log(this.state.check_rec);
-    // const namesArr = arrayOfArrays.filter((val, id) => {
-    //   return arrayOfArrays.indexOf(val) == id;  // this just returns true
-    // });
-    //   this.state.check_rec = namesArr
-    //   console.log(this.state.check_rec)
     });
   }
 
@@ -96,37 +89,46 @@ class Mymessage extends React.Component {
     )
   }
 
+  Sonnet(id, rid){
+    return (
+      this.state.mes_list.map(function(mes, i){
+      if(mes.sender_id == id && mes.receiver_id == rid || mes.sender_id == rid && mes.receiver_id == id){
+      return <ui className="chat" key={i}>
+      {mes.sender_id == rid ? <li className="chat__bubble chat__bubble--sent"><b>Me</b><br/>{mes.body}</li> :
+        <li className="chat__bubble chat__bubble--rcvd chat__bubble--stop"><b>{mes.sender.f_name} {mes.sender.l_name}</b><br />{mes.body}</li>
+       }
+       </ui>
+      } else {
+      }
+    }
+    )
+    )
+    return (<Form>
+    </Form>
+    )
+  }
+
   render() {
     const { mes_list, user_id, showing, body, cur_id, check_rec } = this.state;
     return (
       <div className="container content">
-      <h6><b>Click to view messages.</b></h6>
-      <Tab.Container id="left-tabs-vol">
-        <Row>
-          <Col sm={3}>
-          <Nav variant="pills" className="flex-column">
-            {check_rec.map((mes, index) => {
-                if(mes.id != this.props.user_no){
-                return <Nav.Item key={mes.id} className="navlink-custom" onClick={() => this.setState({ showing: false })}>
-                <Nav.Link eventKey={mes.id}>
-                <Container className="no-padding">
-                <Row className="no-margin">
-                  <Col className="first-cap">{mes.f_name}&nbsp;{mes.l_name}</Col>
-                </Row>
-                </Container>
-                </Nav.Link>
-                </Nav.Item>}
-                else {
+      <h6><b>Click user name to view messages.</b></h6>
+
+      <Tabs activeKey={this.state.check_rec.id}>
+              {
+              this.state.check_rec.map((rec) => {
+                if(rec.id != this.props.user_no){
+                   return <Tab key={rec.id} eventKey={rec.id}
+                   title={rec.f_name + ' '+ rec.l_name}>
+                   <br />{this.Sonnet(rec.id, this.props.user_no)}</Tab>
                 }
-            })}
-          </Nav>
-          </Col>
-          <Col sm={9}><br />
-            <Tab.Content>
-            </Tab.Content>
-          </Col>
-        </Row>
-      </Tab.Container>
+                else {
+
+                }
+              })
+              }
+      </Tabs>
+
       </div>
 
     );
