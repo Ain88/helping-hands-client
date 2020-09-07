@@ -195,8 +195,6 @@ a.nav-link {
 }
 
 .chat {
-  list-style-type: none;
-  width: 20em;
   font-size: 0.9rem;
 }
 
@@ -237,6 +235,24 @@ a.nav-link {
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
 }
+
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}
+
+.font-08 {
+  font-size: 0.8rem;
+  color: #333333;
+}
+
+.custom-select {
+  margin-top: 1rem;
+}
+
 
 /************************ footer ********************/
 

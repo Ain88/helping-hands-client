@@ -23,7 +23,8 @@ class App extends Component {
       user_id : "",
      };
   }
-  componentWillMount() {
+
+  UNSAFE_componentWillMount() {
       this.loginStatus()
     }
 
@@ -106,7 +107,7 @@ class App extends Component {
               <Route
                 exact path='/mymessage'
                 render={props => (
-                <Mymessage {...props} />
+                <Mymessage {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn} />
                 )}
               />
               <Route
