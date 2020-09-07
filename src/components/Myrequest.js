@@ -1,13 +1,14 @@
 import React from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router';
-import { Button } from 'react-bootstrap'
+import { Button, Form } from 'react-bootstrap'
 
 class Myrequest extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       user_id: props.user_no,
+      enr_list: [],
       req_list: []
     };
   }
@@ -22,13 +23,22 @@ class Myrequest extends React.Component {
     .catch(function (error) {
       console.log(error);
     });
+
+    axios.get(`http://localhost:3001/enrollments`, {withCredentials: true})
+      .then(res => {
+        const enr_list = res.data;
+        this.setState({ enr_list });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   submitRepublish(req){
     var req_id = req
     console.log(req_id)
     const updated = {
-        updated_at: new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString()
+        rep_date: new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString()
     }
     axios.put(`http://localhost:3001/requests/${req}`, updated)
       .then(function (response) {
@@ -39,9 +49,34 @@ class Myrequest extends React.Component {
       });
   }
 
+  checkChange(req, check){
+    var change = ''
+    {check == 0 ? change = 1 : change = 0}
+    console.log(check)
+    console.log(change)
+    const updated = {
+        check_mark: change
+    }
+
+    axios.put(`http://localhost:3001/requests/${req}`, updated)
+      .then(function (response) {
+        setTimeout(() => {
+          alert("Your request has been added!");
+        }, 100)
+        this.redirect()
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  redirect = () => {
+    this.props.history.push('/')
+  }
+
   render() {
-    const { req_list, user_id } = this.state;
-    var time_diff = new Date().getTime() - (60 * 60 * 1000)
+    const { req_list, user_id, enr_list } = this.state;
+    var time_diff = new Date().getTime() - (7 * 24 * 60 * 60 * 1000)
 
     return (
       <div className="container content">
@@ -53,20 +88,13 @@ class Myrequest extends React.Component {
               Title: {req.title}<br />
               {req.typev == 1 ? 'Type: One time help': 'Type: Material need'}<br />
               Description: {req.description}&nbsp;&nbsp;
-              { time_diff > new Date(req.created_at).getTime() ?
+              { time_diff > new Date(req.rep_date).getTime() ?
                 <Button type="submit" variant="info" size="sm"
                 onClick={this.submitRepublish.bind(this, req.id)}>Republish</Button> : null }
-              <div className='custom-control custom-switch'>
-              <input
-                type='checkbox'
-                className='custom-control-input'
-                id='customSwitches'
-                readOnly
-              />
-              <label className='custom-control-label' htmlFor='customSwitchesChecked'>
-                Toggle this switch once fulfilled
-              </label>
-              </div>
+                <Form.Group controlId="formBasicCheckbox">
+                  <Form.Check type="checkbox" checked={req.check_mark == 1 ? true : false} label="Check once fulfilled"
+                  onChange={this.checkChange.bind(this, req.id, req.check_mark)} />
+                </Form.Group>
             </div>
           } else {
           }

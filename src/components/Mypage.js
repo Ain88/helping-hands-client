@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Redirect } from 'react-router';
+import { Form } from 'react-bootstrap'
 
 class Mypage extends React.Component {
   constructor(props) {
@@ -38,19 +39,10 @@ class Mypage extends React.Component {
        <span key={item.id}>
        Title: {item.title}<br/>
        Type: {item.typev== 1 ? "One time help" : "Material help"}<br />
-       Description: {item.description}<br/>
-
-       <div className='custom-control custom-switch'>
-       <input
-         type='checkbox'
-         className='custom-control-input'
-         id='customSwitches'
-         readOnly
-       />
-       <label className='custom-control-label' htmlFor='customSwitchesChecked'>
-         Toggle this switch once fulfilled
-       </label>
-       </div>
+       Description: {item.description}
+       <Form.Group controlId="formBasicCheckbox">
+         <Form.Check type="checkbox" label="Check once fulfilled" />
+       </Form.Group>
        </span>
      : null
      )}

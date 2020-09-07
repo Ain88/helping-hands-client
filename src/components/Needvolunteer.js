@@ -68,7 +68,8 @@ class Needvolunteer extends React.Component {
         counter: this.state.counter,
         cur_counter: 0,
         is_active: 1,
-        owner_id: this.props.user_no
+        owner_id: this.props.user_no,
+        rep_date: new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString()
       })
     }).then(response => response.json()).then(
       data => {

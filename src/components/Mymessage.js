@@ -14,8 +14,11 @@ class Mymessage extends React.Component {
       body: '',
       errors: "",
       cur_id: '',
+      send_id: '',
+      rec_id: '',
       check_rec: [],
       check_rec2: [],
+      errors: ''
     };
   }
 
@@ -81,20 +84,80 @@ class Mymessage extends React.Component {
     })
   };
 
-  submitMessage(req_id, rec_id) {
-    axios.post(`http://localhost:3001/messages`, {
-          requests_id: req_id,
-          body: this.state.body,
-          sender_id: this.props.user_no,
-          receiver_id: rec_id },
-      {withCredentials: true})
-      .then(function (response) {
-        alert("Your message has been sent");
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+  handleMessage2 = (event) => {
+    const {name, value} = event.target
+    this.setState({
+      [name]: value
+    })
+    this.functionTwo(value)
+  };
+
+
+  functionTwo(name) {
+    var myvalue = name;
+    {return this.state.check_rec2.map((check,i) => { return (
+       myvalue == check.id ? this.setState({ rec_id : check.owner_id }) : null
+     )}
+      )}
   }
+
+
+  handleSubmit = event => {
+  event.preventDefault();
+
+  axios.post(`http://localhost:3001/messages`, {
+      requests_id: this.state.send_id,
+      body: this.state.body,
+      sender_id: this.props.user_no,
+      receiver_id: this.state.rec_id })
+    .then(res => {
+      if (res.data.status === 'created') {
+        console.log(res.data);
+        alert("Your message has been sent!");
+        this.redirect()
+      } else {
+        this.setState({
+          errors: res.data.errors
+        })
+      }
+    })
+    .catch(error => console.log('api errors:', error))
+  }
+  redirect = () => {
+    this.props.history.push('/')
+  }
+  handleErrors = () => {
+    return (
+      <div>
+        <ul>{this.state.errors.map((error) => {
+          return <li key={error}>{error}</li>
+        })}</ul>
+      </div>
+    )
+  }
+
+    submitMessage(req_id, rec_id) {
+
+      axios.post(`http://localhost:3001/messages`, {
+            requests_id: req_id,
+            body: this.state.body,
+            sender_id: this.props.user_no,
+            receiver_id: rec_id },
+        {withCredentials: true})
+        .then(response => {
+          if (response.data.status === 'created') {
+            console.log(response.data);
+            alert("Your request has been added!");
+            this.redirect()
+          } else {
+            this.setState({
+              errors: response.data.errors
+            })
+          }
+        })
+        .catch(error => console.log('api errors:', error))
+    }
+
 
   Sonnet(id, rid, showing, cur_id){
     return (
@@ -102,10 +165,12 @@ class Mymessage extends React.Component {
       if(mes.sender_id == id && mes.receiver_id == rid || mes.sender_id == rid && mes.receiver_id == id){
       return <span className="chat" key={i}>
       {mes.sender_id == rid ?
-        <div className="chat__bubble chat__bubble--sent"><b>Me</b><br/>{mes.body}<br/>
+        <div className="chat__bubble chat__bubble--sent"><b>Me</b><br/>
+        <span className="font-08">[{mes.requests.title}]</span><br/>{mes.body}<br/>
         <span className="font-08">Sent at {moment(mes.created_at).format('MMMM Do YYYY, h:mm:ss a')}</span></div> :
         <div className="chat__bubble chat__bubble--rcvd chat__bubble--stop clearfix">
-        <div><b>{mes.sender.f_name} {mes.sender.l_name}</b><br />{mes.body}<br/>
+        <div><b>{mes.sender.f_name} {mes.sender.l_name}</b><br/>
+        <span className="font-08">[{mes.requests.title}]</span><br />{mes.body}<br/>
         <span className="font-08">Sent at {moment(mes.created_at).format('MMMM Do YYYY, h:mm:ss a')}</span></div>
         </div>
       }
@@ -115,25 +180,8 @@ class Mymessage extends React.Component {
     }))
   }
 
-  Sonnet2(id, rid, showing, cur_id){
-      return (<Form className="chat">
-          <Form.Group controlId="exampleForm.ControlSelect">
-          <hr />
-            <Form.Control className="chat" as="select" custom>
-              <option className="chat" key={0}>Choose a message topic</option>
-              {this.state.check_rec2.map((check, i) =>
-                <option key={i+1}>{check.title}</option>
-              )}
-            </Form.Control>
-          </Form.Group>
-          <Form.Group controlId="exampleForm.ControlTextarea1">
-            <Form.Control className="chat" as="textarea" rows="3" />
-          </Form.Group>
-        </Form>)
-  }
-
   render() {
-    const { mes_list, user_id, showing, body, cur_id, check_rec, check_rec2 } = this.state;
+    const { mes_list, user_id, showing, body, cur_id, check_rec, check_rec2, send_id, errors } = this.state;
     return (
       <div className="container content">
       <h6><b>Click user name to view messages.</b></h6>
@@ -145,7 +193,31 @@ class Mymessage extends React.Component {
                    return <Tab key={rec.id} eventKey={rec.id}
                    title={<span>{rec.f_name + ' '+ rec.l_name} <i className="far fa-comment" /> </span>}>
                    <br /><div>{this.Sonnet(rec.id, this.props.user_no, this.state.showing, this.state.cur_id)}</div>
-                   <div>{this.Sonnet2(rec.id, this.props.user_no, this.state.showing, this.state.cur_id)}</div>
+                   <div>
+
+                   <Form className="chat" onSubmit={this.handleSubmit}>
+                       <Form.Group controlId="exampleForm.ControlSelect">
+                       <hr />
+                         <Form.Control className="chat" as="select" name="send_id" value={send_id} onChange={this.handleMessage2} custom>
+                           <option className="chat" key={0}>Choose a message topic</option>
+                           {this.state.check_rec2.map((check, i) =>
+                             <option key={i+1} value={check.id} onChange={this.handleMessage2}>{check.title}</option>
+                           )}
+                         </Form.Control>
+                       </Form.Group>
+                       <Form.Group className="messageForm">
+                         <Form.Control className="chat" as="textarea" rows="3" name="body" value={this.state.body} onChange={this.handleMessage} />
+                       </Form.Group>
+                       <Button className="chat-right" type="submit" variant="info" size="sm">Send
+                       </Button>
+                    </Form>
+
+                  </div>
+                 <div><br />
+                    {
+                      this.state.errors ? this.handleErrors() : null
+                    }
+                  </div>
                    </Tab>
                 }
                 else {

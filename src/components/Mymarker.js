@@ -21,11 +21,12 @@ class Mymarker extends React.Component {
     const enrollment = {
       request_id: this.props.req_id,
       user_id: this.props.user_id,
-      finished: 0
+      finished: 0,
+      check_mark: 0
     };
 
     const message = {
-      body: 'You are volunteering for [' +this.props.title + ']: Thank you for volunteering, you can message me if you have questions',
+      body: 'Thank you for volunteering for [' +this.props.title + ']: Please reply to this message to confirm your attendance',
       requests_id: this.props.req_id,
       sender_id: this.props.owner_id,
       receiver_id: this.props.user_id
@@ -66,7 +67,7 @@ class Mymarker extends React.Component {
       user_id={this.props.user_id}
         <Popup>
           Title: {this.props.title}<br />
-          Type: {this.props.typev== 1 ? "One time help" : "Material help"}<br />
+          Type: {this.props.typev == 1 ? "One time help" : "Material help"}<br />
           Description: {this.props.description}<br />
           Location: {this.props.address}<br /><br />
           <Button type="submit" className="text-center" variant="outline-info" size="sm" onClick={() =>

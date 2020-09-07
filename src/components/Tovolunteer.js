@@ -15,7 +15,7 @@ const mapStyle = {
     height: "500px"
 };
 
-const position = [49.2827, -123.1207]
+const position = [49.2527, -122.9805]
 
 var greenIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
@@ -100,17 +100,17 @@ class Tovolunteer extends React.Component {
 
   renderMarkers() {
     var user_id = this.props.user_no
-    var time_diff = new Date().getTime() - (60 * 60 * 1000)
+    var time_diff = new Date().getTime() - (30 * 24 *60 * 60 * 1000)
 
     {return this.state.data.map((item,i) => { return (
        this.state.check_req.indexOf(item.id) == -1 && user_id != item.owner_id &&
-       item.counter - item.cur_counter > 0 && time_diff > new Date(item.created_at).getTime() ?
+       item.counter - item.cur_counter > 0 && time_diff < new Date(item.rep_date).getTime() ?
 
        <Mymarker
-       icon={greenIcon}
+       icon={item.typev == 1 ? blueIcon : greenIcon}
        key={item.id}
        title={item.title}
-       type={item.typev== 1 ? "One time help" : "Material help"}
+       typev={item.typev}
        description={item.description}
        created_at={time_diff}
        owner_id={item.owner_id}
@@ -131,23 +131,6 @@ class Tovolunteer extends React.Component {
         <Container>
         <Row>
         <Col xs={12} md={6}>
-        <Tabs defaultActiveKey="myVolunteer" transition={false} id="noanim-tab-example">
-          <Tab eventKey="myVolunteer" title="My Volunteer">
-            <Mypage user_no={this.props.user_no}/>
-          </Tab>
-          <Tab eventKey="myRequest" title="My Request">
-            <Myrequest user_no={this.props.user_no}/>
-          </Tab>
-          <Tab eventKey="request" title="Request Form">
-            <Needvolunteer user_no={this.props.user_no}/>
-          </Tab>
-          <Tab eventKey="message" title="Message">
-            <Mymessage user_no={this.props.user_no}/>
-          </Tab>
-        </Tabs>
-
-        </Col>
-        <Col xs={12} md={6}>
         <Map
           center={position}
           zoom={10}>
@@ -158,6 +141,24 @@ class Tovolunteer extends React.Component {
           {this.state.waiting == true && this.renderMarkers()}
         </Map>
         <h6>✨ Stat: {total_count} requests are unfulfilled</h6>
+
+        </Col>
+
+        <Col xs={12} md={6}>
+        <Tabs defaultActiveKey="myVolunteer" transition={false} id="noanim-tab-example">
+          <Tab eventKey="myVolunteer" title="My Volunteer">
+            <Mypage user_no={this.props.user_no}/>
+          </Tab>
+          <Tab eventKey={'/myRequest'} title="My Request">
+            <Myrequest user_no={this.props.user_no}/>
+          </Tab>
+          <Tab eventKey="request" title="Request Form">
+            <Needvolunteer user_no={this.props.user_no}/>
+          </Tab>
+          <Tab eventKey="message" title="Message">
+            <Mymessage user_no={this.props.user_no}/>
+          </Tab>
+        </Tabs>
 
         </Col>
         </Row><br />
