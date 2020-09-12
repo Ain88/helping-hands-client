@@ -23,11 +23,28 @@ class Myrequest extends React.Component {
     .catch(function (error) {
       console.log(error);
     });
+  }
 
-    axios.get(`http://localhost:3001/enrollments`, {withCredentials: true})
-      .then(res => {
-        const enr_list = res.data;
-        this.setState({ enr_list });
+  onAddingItem = (i, ch) => (event) => {
+  this.setState((state, props) => {
+    state.req_list[i-1].check_mark = !state.req_list[i-1].check_mark;
+    return {
+      req_list: state.req_list
+    }
+    })
+    var change = ''
+    {ch == 0 ? change = 1 : change = 0}
+    console.log(ch)
+    console.log(change)
+    const updated = {
+        check_mark: change
+    }
+
+    axios.put(`http://localhost:3001/requests/${i}`, updated)
+      .then(function (response) {
+        setTimeout(() => {
+          alert("Your request mark has been changed");
+        }, 100)
       })
       .catch(function (error) {
         console.log(error);
@@ -49,34 +66,13 @@ class Myrequest extends React.Component {
       });
   }
 
-  checkChange(req, check){
-    var change = ''
-    {check == 0 ? change = 1 : change = 0}
-    console.log(check)
-    console.log(change)
-    const updated = {
-        check_mark: change
-    }
-
-    axios.put(`http://localhost:3001/requests/${req}`, updated)
-      .then(function (response) {
-        setTimeout(() => {
-          alert("Your request has been added!");
-        }, 100)
-        this.redirect()
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-
   redirect = () => {
     this.props.history.push('/')
   }
 
   render() {
     const { req_list, user_id, enr_list } = this.state;
-    var time_diff = new Date().getTime() - (7 * 24 * 60 * 60 * 1000)
+    var time_diff = new Date().getTime() - (30 * 24 * 60 * 60 * 1000)
 
     return (
       <div className="container content">
@@ -89,11 +85,11 @@ class Myrequest extends React.Component {
               {req.typev == 1 ? 'Type: One time help': 'Type: Material need'}<br />
               Description: {req.description}&nbsp;&nbsp;
               { time_diff > new Date(req.rep_date).getTime() ?
-                <Button type="submit" variant="info" size="sm"
+                <Button type="submit" variant="outline-info" size="sm"
                 onClick={this.submitRepublish.bind(this, req.id)}>Republish</Button> : null }
                 <Form.Group controlId="formBasicCheckbox">
                   <Form.Check type="checkbox" checked={req.check_mark == 1 ? true : false} label="Check once fulfilled"
-                  onChange={this.checkChange.bind(this, req.id, req.check_mark)} />
+                  onChange={this.onAddingItem(req.id, req.check_mark)} />
                 </Form.Group>
             </div>
           } else {

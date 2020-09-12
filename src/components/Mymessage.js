@@ -191,7 +191,7 @@ class Mymessage extends React.Component {
               this.state.check_rec.map((rec) => {
                 if(rec.id != this.props.user_no){
                    return <Tab key={rec.id} eventKey={rec.id}
-                   title={<span>{rec.f_name + ' '+ rec.l_name} <i className="far fa-comment" /> </span>}>
+                   title={<span>{rec.f_name + ' '+ rec.l_name} <i className="far fa-comment"></i> </span>}>
                    <br /><div>{this.Sonnet(rec.id, this.props.user_no, this.state.showing, this.state.cur_id)}</div>
                    <div>
 

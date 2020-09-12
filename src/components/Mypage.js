@@ -32,6 +32,32 @@ class Mypage extends React.Component {
       });;
   }
 
+  onAddingItem = (i, ch) => (event) => {
+  this.setState((state, props) => {
+    state.vol_list[i-1].check_mark = !state.vol_list[i-1].check_mark;
+    return {
+      vol_list: state.vol_list
+    }
+    })
+    var change = ''
+    {ch == 0 ? change = 1 : change = 0}
+    console.log(ch)
+    console.log(change)
+    const updated = {
+        check_mark: change
+    }
+
+    axios.put(`http://localhost:3001/enrollments/${i}`, updated)
+      .then(function (response) {
+        setTimeout(() => {
+          alert("Your fulfillment status has been changed");
+        }, 100)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   renderVolunteer(volunteer) {
     var mywork = volunteer;
     {return this.state.data.map((item,i) => { return (
@@ -40,9 +66,6 @@ class Mypage extends React.Component {
        Title: {item.title}<br/>
        Type: {item.typev== 1 ? "One time help" : "Material help"}<br />
        Description: {item.description}
-       <Form.Group controlId="formBasicCheckbox">
-         <Form.Check type="checkbox" label="Check once fulfilled" />
-       </Form.Group>
        </span>
      : null
      )}
@@ -59,9 +82,13 @@ class Mypage extends React.Component {
         <h6><b>My volunteer list</b></h6>
         <br /><hr /><br />
         {vol_list.map((req, index) => {
-            return <div key={req.id}>
-              {this.renderVolunteer(req.request_id)}<br />
-            </div>
+            return <span key={req.id}>
+              {req.user_id == this.props.user_no ? this.renderVolunteer(req.requests_id) : null}
+              {req.user_id == this.props.user_no ? <Form.Group controlId="formBasicCheckbox">
+                <Form.Check type="checkbox" checked={req.check_mark == 1 ? true : false}
+                label="Check once fulfilled"
+                onChange={this.onAddingItem(req.id, req.check_mark)} /></Form.Group> : null}
+            </span>
         })}
       </div>
     );

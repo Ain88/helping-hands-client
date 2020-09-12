@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import L from "leaflet";
-import axios from 'axios'
-import { Container, Row, Col, Nav, Tabs, Tab, Button } from 'react-bootstrap'
+import { Container, Row, Col, Tabs, Tab } from 'react-bootstrap'
 import Needvolunteer from './Needvolunteer'
 import Mypage from './Mypage'
 import Myrequest from './Myrequest'
 import Mymarker from './Mymarker'
 import Mymessage from './Mymessage'
-import $ from 'jquery';
-import { render } from 'react-dom'
-import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
-
-const mapStyle = {
-    height: "500px"
-};
+import Stat from './Stat'
+import { Map, TileLayer, Marker } from 'react-leaflet';
 
 const position = [49.2527, -122.9805]
 
@@ -35,6 +29,10 @@ var blueIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
+function groupBy(xs, f) {
+  return xs.reduce((r, v, i, a, k = f(v)) => ((r[k] || (r[k] = [])).push(v), r), {});
+}
+
 class Tovolunteer extends React.Component {
   constructor(props) {
     super(props);
@@ -45,6 +43,7 @@ class Tovolunteer extends React.Component {
       check_count: '',
       waiting: false,
       check_req: [],
+      result: [],
       total_count: ''
     };
   }
@@ -60,42 +59,19 @@ class Tovolunteer extends React.Component {
       var arrayOfArrays = [];
 
       Object.keys(json).forEach(function(k){
-        arrayOfArrays.push(json[k].request_id);
+        arrayOfArrays.push(json[k]);
       });
+      this.state.result = groupBy(arrayOfArrays, (c) => c.requests_id);
+      console.log(this.state.result);
         this.check_count = Object.keys(json).length;
         this.state.check_req = arrayOfArrays
         console.log(this.state.check_req)
         this.checkWaiting()
       });
-    this.interval = setInterval(() => this.setState({ total_count: this.renderStat() }), 5000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
   }
 
   checkWaiting(){
     this.setState({ waiting: true})
-  }
-
-  renderStat(){
-    var total_default = 0
-    var total_cur = 0
-    var total_need = ''
-    var ment = ' requests need to be fulfilled'
-    {this.state.data.map((cou,i) => {
-      if (i == this.state.data.length - 1) {
-        return total_default += cou.counter,total_cur += cou.cur_counter,
-        total_need = total_default-total_cur
-      }
-      return total_default += cou.counter,total_cur += cou.cur_counter
-    }
-    )}
-    return this.renderStat2(total_need)
-  }
-
-  renderStat2(total){
-    return <span>{total}</span>
   }
 
   renderMarkers() {
@@ -103,8 +79,7 @@ class Tovolunteer extends React.Component {
     var time_diff = new Date().getTime() - (30 * 24 *60 * 60 * 1000)
 
     {return this.state.data.map((item,i) => { return (
-       this.state.check_req.indexOf(item.id) == -1 && user_id != item.owner_id &&
-       item.counter - item.cur_counter > 0 && time_diff < new Date(item.rep_date).getTime() ?
+       user_id != item.owner_id && time_diff < new Date(item.rep_date).getTime() ?
 
        <Mymarker
        icon={item.typev == 1 ? blueIcon : greenIcon}
@@ -140,7 +115,8 @@ class Tovolunteer extends React.Component {
           />
           {this.state.waiting == true && this.renderMarkers()}
         </Map>
-        <h6>✨ Stat: {total_count} requests are unfulfilled</h6>
+        <h6>✨ Stat ✨</h6>
+        <Stat />
 
         </Col>
 
