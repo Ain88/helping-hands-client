@@ -13,8 +13,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import Login from './components/registrations/Login'
 import Signup from './components/registrations/Signup'
-import RoomShow from './components/RoomShow'
-
+import Stat from './components/Stat'
 
 class App extends Component {
   constructor(props) {
@@ -79,13 +78,10 @@ class App extends Component {
               />
               <Route
               exact path='/Stat'
-              render={props =>
-                (<Stat
-                  {...props}
-                  stat={this.state.stat}
-                 />
-               )
-             } />
+              render={props => (
+                <Stat {...props} stat={this.state.stat} user_no={this.state.user_id}/>
+               )}
+              />
               <Route
                 exact path='/Needvolunteer'
                 render={props => (
