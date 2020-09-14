@@ -9,6 +9,7 @@ class Mymessage extends React.Component {
     super(props);
     this.state = {
       mes_list: [],
+      enr_list: [],
       cur_user: '',
       showing: false,
       body: '',
@@ -18,6 +19,8 @@ class Mymessage extends React.Component {
       rec_id: '',
       check_rec: [],
       check_rec2: [],
+      check_rec3: [],
+      cur_sender: '',
       errors: ''
     };
   }
@@ -34,6 +37,10 @@ class Mymessage extends React.Component {
       }
     })
     .catch(error => console.log('api errors:', error))
+
+    fetch(`http://localhost:3001/enrollments`)
+      .then(res => res.json())
+      .then(json => { this.setState({ enr_list: json }); })
 
   }
 
@@ -53,12 +60,12 @@ class Mymessage extends React.Component {
 
     Object.keys(json).forEach(function(k){
       if(json[k].receiver_id == cur_userr){
-      arrayOfArrays2.push(json[k].requests);
+      arrayOfArrays2.push(json[k]);
     }else{}
     })
 
     this.setState({ check_rec: this.getUnique(arrayOfArrays, 'id') })
-    this.setState({ check_rec2: this.getUnique(arrayOfArrays2, 'id') })
+    this.setState({ check_rec2: this.getUnique(arrayOfArrays2, 'requests_id') })
     console.log(this.state.check_rec);
     console.log(this.state.check_rec2);
     });
@@ -92,7 +99,6 @@ class Mymessage extends React.Component {
     this.functionTwo(value)
   };
 
-
   functionTwo(name) {
     var myvalue = name;
     {return this.state.check_rec2.map((check,i) => { return (
@@ -101,7 +107,6 @@ class Mymessage extends React.Component {
       )}
   }
 
-
   handleSubmit = event => {
   event.preventDefault();
 
@@ -109,7 +114,7 @@ class Mymessage extends React.Component {
       requests_id: this.state.send_id,
       body: this.state.body,
       sender_id: this.props.user_no,
-      receiver_id: this.state.rec_id })
+      receiver_id: this.state.cur_sender })
     .then(res => {
       if (res.data.status === 'created') {
         console.log(res.data);
@@ -136,28 +141,11 @@ class Mymessage extends React.Component {
     )
   }
 
-    submitMessage(req_id, rec_id) {
-
-      axios.post(`http://localhost:3001/messages`, {
-            requests_id: req_id,
-            body: this.state.body,
-            sender_id: this.props.user_no,
-            receiver_id: rec_id },
-        {withCredentials: true})
-        .then(response => {
-          if (response.data.status === 'created') {
-            console.log(response.data);
-            alert("Your request has been added!");
-            this.redirect()
-          } else {
-            this.setState({
-              errors: response.data.errors
-            })
-          }
-        })
-        .catch(error => console.log('api errors:', error))
-    }
-
+  handleSelect = (key) => {
+    this.setState({
+      cur_sender: key
+    })
+  }
 
   Sonnet(id, rid, showing, cur_id){
     return (
@@ -186,7 +174,7 @@ class Mymessage extends React.Component {
       <div className="container content">
       <h6><b>Click user name to view messages.</b></h6>
 
-      <Tabs activeKey={this.state.check_rec.id}>
+      <Tabs defaultActiveKey="" activeKey={this.state.check_rec.id} onSelect={this.handleSelect}>
               {
               this.state.check_rec.map((rec) => {
                 if(rec.id != this.props.user_no){
@@ -196,13 +184,16 @@ class Mymessage extends React.Component {
                    <div>
 
                    <Form className="chat" onSubmit={this.handleSubmit}>
-                       <Form.Group controlId="exampleForm.ControlSelect">
+                       <Form.Group className="exampleForm.ControlSelect">
                        <hr />
                          <Form.Control className="chat" as="select" name="send_id" value={send_id} onChange={this.handleMessage2} custom>
                            <option className="chat" key={0}>Choose a message topic</option>
-                           {this.state.check_rec2.map((check, i) =>
-                             <option key={i+1} value={check.id} onChange={this.handleMessage2}>{check.title}</option>
-                           )}
+                           {this.state.check_rec2.map((check, i) => {
+                             if(check.sender_id == rec.id || check.sender_id == rec.id){
+                              return (<option key={i+1} value={check.requests_id} onChange={this.handleMessage2}>{check.requests.title}</option>
+                            )}
+                            return null;
+                          })}
                          </Form.Control>
                        </Form.Group>
                        <Form.Group className="messageForm">

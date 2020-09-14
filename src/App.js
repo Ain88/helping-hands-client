@@ -23,12 +23,7 @@ class App extends Component {
       isLoggedIn: false,
       user: {},
       user_id : "",
-      allRequests: [],
-      currnetReq:{
-        request: {},
-        req_check: '',
-        req_count: ''
-      }
+      stat: ""
      };
   }
 
@@ -82,13 +77,12 @@ class App extends Component {
                 <Home {...props} />
                 )}
               />
-              <Route exact path='/rooms/:id' render={props =>
-                (<RoomShow
+              <Route
+              exact path='/Stat'
+              render={props =>
+                (<Stat
                   {...props}
-                  cableApp={this.props.cableApp}
-                  updateApp={this.updateAppStateRoom}
-                  getRoomData={this.getRoomData}
-                  roomData={this.state.currnetReq}
+                  stat={this.state.stat}
                  />
                )
              } />
