@@ -8,19 +8,20 @@ class Stat extends React.Component {
     this.state = {
       req_list: [],
       text: "",
-      mes: ""
+      mes: "",
+      stat: this.props.stat
     };
   }
   componentDidMount() {
-  //   axios.get(`http://localhost:3001/requests`, {withCredentials: true})
-  //     .then(res => {
-  //       const req_list = res.data;
-  //       this.setState({ req_list });
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  //
+    axios.get(`http://localhost:3001/requests`, {withCredentials: true})
+      .then(res => {
+        const req_list = res.data;
+        this.setState({ req_list });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
     window.fetch('http://localhost:3001/notes/1', {headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
@@ -32,7 +33,8 @@ class Stat extends React.Component {
   const cable = ActionCable.createConsumer('ws://localhost:3001/cable')
   this.sub = cable.subscriptions.create('NotesChannel', {
     connected: function() {
-      this.send({ id: 1, text: new Date() });
+      // this.send({ id: 1, text: new Date() });
+      this.update()
     },
 
     disconnected: function() {
@@ -40,17 +42,22 @@ class Stat extends React.Component {
       console.log('Notification Channel disconnected.');
     },
 
-    received: function(data) {
-       console.log('received!')
-       console.log(data);
-    }
+    received: (data) => {
+       console.log(data)
+       this.updateApp(data)
+    },
+
+    update() {
+      this.perform("away")
+    },
+
   })
   }
 
-  handleReceiveNewText (text) {
-    if (text !== this.state.text) {
-      this.setState({ text })
-    }
+  updateApp = (data) => {
+    this.setState({
+      text: data
+    })
   }
 
   componentWillUnmount() {
