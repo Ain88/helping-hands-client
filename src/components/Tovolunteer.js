@@ -6,6 +6,7 @@ import Mypage from './Mypage'
 import Myrequest from './Myrequest'
 import Mymarker from './Mymarker'
 import Mymessage from './Mymessage'
+import Stat from './Stat'
 import { Map, TileLayer, Marker } from 'react-leaflet';
 
 const position = [49.2527, -122.9805]
@@ -91,6 +92,7 @@ class Tovolunteer extends React.Component {
        address={item.address}
        req_id={item.id}
        user_id={user_id}
+       status={item.fulfilled}
        position={[item.location.split(',')[0],item.location.split(',')[1]]}
        onClick={this.onMarkerClick}
        /> : null
@@ -115,6 +117,7 @@ class Tovolunteer extends React.Component {
           {this.state.waiting == true && this.renderMarkers()}
         </Map>
         <h6>✨ Stat ✨</h6>
+        <Stat />
 
         </Col>
 

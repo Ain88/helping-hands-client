@@ -9,14 +9,21 @@ class Stat extends React.Component {
       req_list: [],
       text: "",
       mes: "",
-      stat: this.props.stat
+      stat: this.props.stat,
+      countComment: ""
     };
   }
   componentDidMount() {
     axios.get(`http://localhost:3001/requests`, {withCredentials: true})
       .then(res => {
-        const req_list = res.data;
-        this.setState({ req_list });
+        let commentCount = 0
+        res.data.forEach(data => {
+          commentCount += 1
+        })
+        this.setState({
+          req_list: res.data,
+          countComment: commentCount
+        });
       })
       .catch(function (error) {
         console.log(error);
@@ -56,7 +63,8 @@ class Stat extends React.Component {
 
   updateApp = (data) => {
     this.setState({
-      text: data
+      text: data,
+      mes: this.state.countComment
     })
   }
 
@@ -64,10 +72,9 @@ class Stat extends React.Component {
   }
 
   render() {
-    const { text, req_list, mes } = this.state
+    const { text, req_list, mes, countComment } = this.state
     return (<div>
-      <h1>{this.state.text}</h1>
-      <h1>{this.state.mes}</h1>
+      <h6>Total request: {this.state.countComment} (Fulfilled: {this.state.text}, Unfulfilled: {this.state.countComment-this.state.text} )</h6>
       </div>
     )
   }

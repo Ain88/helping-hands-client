@@ -22,13 +22,26 @@ class App extends Component {
       isLoggedIn: false,
       user: {},
       user_id : "",
-      stat: ""
+      stat: "",
+      req_list: [],
+      req: ""
      };
   }
 
   UNSAFE_componentWillMount() {
       this.loginStatus()
     }
+
+  componentDidMount(){
+    axios.get(`http://localhost:3001/requests`, {withCredentials: true})
+      .then(res => {
+        const req_list = res.data;
+        this.setState({ req_list });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   loginStatus = () => {
       axios.get('http://localhost:3001/logged_in', {withCredentials: true})
@@ -79,7 +92,7 @@ class App extends Component {
               <Route
               exact path='/Stat'
               render={props => (
-                <Stat {...props} stat={this.state.stat} user_no={this.state.user_id}/>
+                <Stat {...props} stat={this.state.stat} user_no={this.state.user_id} req={this.state.req_list.count}/>
                )}
               />
               <Route

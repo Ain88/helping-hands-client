@@ -69,7 +69,8 @@ class Mymarker extends React.Component {
           Title: {this.props.title}<br />
           Type: {this.props.typev == 1 ? "One time help" : "Material help"}<br />
           Description: {this.props.description}<br />
-          Location: {this.props.address}<br /><br />
+          Location: {this.props.address}<br />
+          Status: {this.props.status == 1 ? "Status: Fulfilled" : "Status: Unfulfilled"}<br /><br />
           <Button type="submit" className="text-center" variant="outline-info" size="sm" onClick={() =>
             { if (window.confirm('Are you sure you wish to submit the request?'))
             this.onMarkerClick() } }>Submit The Request
