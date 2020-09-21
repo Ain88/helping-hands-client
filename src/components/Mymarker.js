@@ -1,7 +1,6 @@
 import React from 'react';
-import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { Marker, Popup } from 'react-leaflet';
 import { Button } from 'react-bootstrap'
-import Tovolunteer from './Tovolunteer'
 import axios from 'axios'
 
 class Mymarker extends React.Component {
@@ -58,7 +57,6 @@ class Mymarker extends React.Component {
     }
 
   render() {
-    const { req_id, user_id } = this.state
     return (
       <Marker
       icon={this.props.icon}
@@ -67,10 +65,10 @@ class Mymarker extends React.Component {
       user_id={this.props.user_id}
         <Popup>
           Title: {this.props.title}<br />
-          Type: {this.props.typev == 1 ? "One time help" : "Material help"}<br />
+          Type: {this.props.typev === "1" ? "One time help" : "Material help"}<br />
           Description: {this.props.description}<br />
           Location: {this.props.address}<br />
-          Status: {this.props.status == 1 ? "Status: Fulfilled" : "Status: Unfulfilled"}<br /><br />
+          Status: {this.props.status === 1 ? "Status: Fulfilled" : "Status: Unfulfilled"}<br /><br />
           <Button type="submit" className="text-center" variant="outline-info" size="sm" onClick={() =>
             { if (window.confirm('Are you sure you wish to submit the request?'))
             this.onMarkerClick() } }>Submit The Request

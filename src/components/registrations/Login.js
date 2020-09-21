@@ -1,21 +1,7 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios'
 import {Link} from 'react-router-dom'
-import { Form, Button, Alert } from 'react-bootstrap'
-
-function AlertDismissibleExample() {
-const [show, setShow] = useState(true);
-
-if (show) {
-  return (
-    <Alert variant="danger" onClose={() => setShow(false)} dismissible>
-      <p>
-      </p>
-    </Alert>
-  );
-}
-return '';
-}
+import { Form, Button } from 'react-bootstrap'
 
 class Login extends Component {
   constructor(props) {
@@ -38,7 +24,7 @@ class Login extends Component {
   };
   handleSubmit = (event) => {
     event.preventDefault()
-    const {email, password, rememberMe} = this.state
+    const {email, password} = this.state
     localStorage.setItem('rememberMe', true);
     let user = {
       email: email,

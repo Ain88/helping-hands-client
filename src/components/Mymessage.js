@@ -1,8 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import _ from 'lodash';
 import * as moment from 'moment';
-import { Container, Row, Col, Button, Tab, Nav, Form, Tabs } from 'react-bootstrap'
+import { Button, Tab, Form, Tabs } from 'react-bootstrap'
 class Mymessage extends React.Component {
 
   constructor(props) {
@@ -13,7 +12,6 @@ class Mymessage extends React.Component {
       cur_user: '',
       showing: false,
       body: '',
-      errors: "",
       cur_id: '',
       send_id: '',
       rec_id: '',
@@ -53,13 +51,13 @@ class Mymessage extends React.Component {
     var arrayOfArrays2 = [];
 
     Object.keys(json).forEach(function(k){
-      if(json[k].receiver_id == cur_userr){
+      if(json[k].receiver_id === cur_userr){
       arrayOfArrays.push(json[k].sender);
     }else{}
     })
 
     Object.keys(json).forEach(function(k){
-      if(json[k].receiver_id == cur_userr){
+      if(json[k].receiver_id === cur_userr){
       arrayOfArrays2.push(json[k]);
     }else{}
     })
@@ -101,10 +99,10 @@ class Mymessage extends React.Component {
 
   functionTwo(name) {
     var myvalue = name;
-    {return this.state.check_rec2.map((check,i) => { return (
-       myvalue == check.id ? this.setState({ rec_id : check.owner_id }) : null
+    return this.state.check_rec2.map((check,i) => { return (
+       myvalue === check.id ? this.setState({ rec_id : check.owner_id }) : null
      )}
-      )}
+      )
   }
 
   handleSubmit = event => {
@@ -150,10 +148,10 @@ class Mymessage extends React.Component {
   Sonnet(id, rid, showing, cur_id){
     return (
       this.state.mes_list.map(function(mes, i){
-      if(mes.sender_id == id && mes.receiver_id == rid || mes.sender_id == rid && mes.receiver_id == id){
+      if((mes.sender_id === id && mes.receiver_id === rid) || (mes.sender_id === rid && mes.receiver_id === id)){
       return <span className="chat" key={i}>
-      {mes.sender_id == rid ?
-        <div className="chat__bubble chat__bubble--sent"><b>Me</b><br/>
+      {mes.sender_id === rid ?
+        <div className="chat__bubble chat__bubble--rcvd chat__bubble--stop clearfix"><b>Me</b><br/>
         <span className="font-08">[{mes.requests.title}]</span><br/>{mes.body}<br/>
         <span className="font-08">Sent at {moment(mes.created_at).format('MMMM Do YYYY, h:mm:ss a')}</span></div> :
         <div className="chat__bubble chat__bubble--rcvd chat__bubble--stop clearfix">
@@ -164,12 +162,13 @@ class Mymessage extends React.Component {
       }
        <hr/></span>
       } else {
+        return null
       }
     }))
   }
 
   render() {
-    const { mes_list, user_id, showing, body, cur_id, check_rec, check_rec2, send_id, errors } = this.state;
+    const { send_id } = this.state;
     return (
       <div className="container content">
       <h6><b>Click user name to view messages.</b></h6>
@@ -177,7 +176,7 @@ class Mymessage extends React.Component {
       <Tabs defaultActiveKey="" activeKey={this.state.check_rec.id} onSelect={this.handleSelect}>
               {
               this.state.check_rec.map((rec) => {
-                if(rec.id != this.props.user_no){
+                if(rec.id !== this.props.user_no){
                    return <Tab key={rec.id} eventKey={rec.id}
                    title={<span>{rec.f_name + ' '+ rec.l_name} <i className="far fa-comment"></i> </span>}>
                    <br /><div>{this.Sonnet(rec.id, this.props.user_no, this.state.showing, this.state.cur_id)}</div>
@@ -189,7 +188,7 @@ class Mymessage extends React.Component {
                          <Form.Control className="chat" as="select" name="send_id" value={send_id} onChange={this.handleMessage2} custom>
                            <option className="chat" key={0}>Choose a message topic</option>
                            {this.state.check_rec2.map((check, i) => {
-                             if(check.sender_id == rec.id || check.sender_id == rec.id){
+                             if(check.sender_id === rec.id || check.sender_id === rec.id){
                               return (<option key={i+1} value={check.requests_id} onChange={this.handleMessage2}>{check.requests.title}</option>
                             )}
                             return null;
@@ -212,7 +211,7 @@ class Mymessage extends React.Component {
                    </Tab>
                 }
                 else {
-
+                  return null;
                 }
               })
               }

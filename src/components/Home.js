@@ -2,8 +2,6 @@ import React from 'react';
 import { Carousel, Button } from 'react-bootstrap';
 import Img1 from '../img/bg1.jpg'
 import Img2 from '../img/bg2.jpg'
-import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
-import Header from './Header';
 
 class Home extends React.Component {
   constructor(props) {

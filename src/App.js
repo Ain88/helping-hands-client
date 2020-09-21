@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.scss';
 import axios from 'axios'
-import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
+import {BrowserRouter, Route, Redirect} from 'react-router-dom'
 import Home from './components/Home'
 import Tovolunteer from './components/Tovolunteer'
 import Needvolunteer from './components/Needvolunteer'
@@ -104,7 +104,7 @@ class App extends Component {
               <Route
               exact path='/Tovolunteer'
                 render={props => (
-                  localStorage.rememberMe == 'true' ? (
+                  localStorage.rememberMe === 'true' ? (
                 <Tovolunteer {...props} user_no={this.state.user_id} />
               ): (
                 window.confirm('Please login first'),

@@ -3,10 +3,8 @@ import { Form, Button } from 'react-bootstrap'
 import PlacesAutocomplete from 'react-places-autocomplete';
 import {
   geocodeByAddress,
-  geocodeByPlaceId,
   getLatLng,
 } from 'react-places-autocomplete';
-import axios from 'axios'
 
 class Needvolunteer extends React.Component {
   constructor(props) {
@@ -67,6 +65,8 @@ class Needvolunteer extends React.Component {
         location: this.state.address2,
         counter: this.state.counter,
         cur_counter: 0,
+        check_mark: 0,
+        fulfilled: 0,
         is_active: 1,
         owner_id: this.props.user_no,
         rep_date: new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString()
@@ -99,7 +99,7 @@ class Needvolunteer extends React.Component {
     }
 
   render() {
-    const {typev, title, description, address, address2, counter, errors} = this.state;
+    const {typev, title, description, counter} = this.state;
     return (
       <div className="container content">
       <h6><b>In need of volunteers? Please submit the form below.</b></h6>

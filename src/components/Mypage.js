@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import { Redirect } from 'react-router';
 import { Form } from 'react-bootstrap'
 
 class Mypage extends React.Component {
@@ -40,7 +39,7 @@ class Mypage extends React.Component {
     }
     })
     var change = ''
-    {ch == 0 ? change = 1 : change = 0}
+    ch === 0 ? change = 1 : change = 0
     console.log(ch)
     console.log(change)
     const updated = {
@@ -60,21 +59,21 @@ class Mypage extends React.Component {
 
   renderVolunteer(volunteer) {
     var mywork = volunteer;
-    {return this.state.data.map((item,i) => { return (
-       mywork == item.id ?
+    return this.state.data.map((item,i) => { return (
+       mywork === item.id ?
        <span key={item.id}>
        Title: {item.title}<br/>
-       Type: {item.typev== 1 ? "One time help" : "Material help"}<br />
+       Type: {item.typev=== 1 ? "One time help" : "Material help"}<br />
        Description: {item.description}
        </span>
      : null
      )}
-      )}
+      )
 
   }
 
   render() {
-    const { vol_list, user_id } = this.state;
+    const { vol_list } = this.state;
 
     return (
       <div className="container content">
@@ -83,9 +82,9 @@ class Mypage extends React.Component {
         <br /><hr /><br />
         {vol_list.map((req, index) => {
             return <span key={req.id}>
-              {req.user_id == this.props.user_no ? this.renderVolunteer(req.requests_id) : null}
-              {req.user_id == this.props.user_no ? <Form.Group controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" checked={req.check_mark == 1 ? true : false}
+              {req.user_id === this.props.user_no ? this.renderVolunteer(req.requests_id) : null}
+              {req.user_id === this.props.user_no ? <Form.Group controlId="formBasicCheckbox">
+                <Form.Check type="checkbox" checked={req.check_mark === 1 ? true : false}
                 label="Check once fulfilled"
                 onChange={this.onAddingItem(req.id, req.check_mark)} /></Form.Group> : null}
             </span>

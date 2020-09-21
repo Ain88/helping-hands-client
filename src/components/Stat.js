@@ -72,7 +72,6 @@ class Stat extends React.Component {
   }
 
   render() {
-    const { text, req_list, mes, countComment } = this.state
     return (<div>
       <h6>Total request: {this.state.countComment} (Fulfilled: {this.state.text}, Unfulfilled: {this.state.countComment-this.state.text} )</h6>
       </div>

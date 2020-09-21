@@ -7,7 +7,7 @@ import Myrequest from './Myrequest'
 import Mymarker from './Mymarker'
 import Mymessage from './Mymessage'
 import Stat from './Stat'
-import { Map, TileLayer, Marker } from 'react-leaflet';
+import { Map, TileLayer } from 'react-leaflet';
 
 const position = [49.2527, -122.9805]
 
@@ -30,7 +30,7 @@ var blueIcon = new L.Icon({
 });
 
 function groupBy(xs, f) {
-  return xs.reduce((r, v, i, a, k = f(v)) => ((r[k] || (r[k] = [])).push(v), r), {});
+  return xs.reduce((r, v, i, a, k = f(v)) => (((r[k] || (r[k] = [])).push(v), r)), {})
 }
 
 class Tovolunteer extends React.Component {
@@ -61,10 +61,16 @@ class Tovolunteer extends React.Component {
       Object.keys(json).forEach(function(k){
         arrayOfArrays.push(json[k]);
       });
-      this.state.result = groupBy(arrayOfArrays, (c) => c.requests_id);
+      this.setState({
+        result: groupBy(arrayOfArrays, (c) => c.requests_id)
+      })
+      // this.state.result = groupBy(arrayOfArrays, (c) => c.requests_id);
       console.log(this.state.result);
         this.check_count = Object.keys(json).length;
-        this.state.check_req = arrayOfArrays
+        this.setState({
+          check_req: arrayOfArrays
+        })
+        // this.state.check_req = arrayOfArrays
         console.log(this.state.check_req)
         this.checkWaiting()
       });
@@ -78,11 +84,11 @@ class Tovolunteer extends React.Component {
     var user_id = this.props.user_no
     var time_diff = new Date().getTime() - (30 * 24 *60 * 60 * 1000)
 
-    {return this.state.data.map((item,i) => { return (
-       user_id != item.owner_id && time_diff < new Date(item.rep_date).getTime() ?
+    return this.state.data.map((item,i) => { return (
+       item.fulfilled === 0 && user_id !== item.owner_id && time_diff < new Date(item.rep_date).getTime() ?
 
        <Mymarker
-       icon={item.typev == 1 ? blueIcon : greenIcon}
+       icon={item.typev === "1" ? blueIcon : greenIcon}
        key={item.id}
        title={item.title}
        typev={item.typev}
@@ -97,11 +103,10 @@ class Tovolunteer extends React.Component {
        onClick={this.onMarkerClick}
        /> : null
      )}
-      )}
+      )
   }
 
   render() {
-    const { renderMarkers, waiting, check_req, total_count } = this.state
     return (
       <div className ="center-col">
         <Container>
@@ -114,9 +119,9 @@ class Tovolunteer extends React.Component {
             url='https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWluODgiLCJhIjoiY2tkMGhkcXVmMHRxdzJ0cXJucHZvc2tuciJ9.PgKhmGn1K8y9BEVK2JW-og'
             attribution='Map data © <a href="http://osm.org/copyright">OpenStreetMap</a> contributors. Tiles from <a href="https://www.mapbox.com">Mapbox</a>.'
           />
-          {this.state.waiting == true && this.renderMarkers()}
+          {this.state.waiting === true && this.renderMarkers()}
         </Map>
-        <h6>✨ Stat ✨</h6>
+        <h6><span role="img" aria-label="shine">✨</span> Stat <span role="img" aria-label="shine">✨</span></h6>
         <Stat />
 
         </Col>
