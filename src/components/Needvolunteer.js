@@ -50,7 +50,6 @@ class Needvolunteer extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-
     fetch('http://localhost:3001/requests', {
       method: 'POST',
       headers:  {

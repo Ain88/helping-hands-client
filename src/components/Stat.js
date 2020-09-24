@@ -9,7 +9,6 @@ class Stat extends React.Component {
       req_list: [],
       text: "",
       mes: "",
-      stat: this.props.stat,
       countComment: ""
     };
   }

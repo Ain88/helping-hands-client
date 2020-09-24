@@ -1,65 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Form } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 
-class Mypage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      user_id: props.user_no,
-      vol_list: [],
-      data: []
-    };
-  }
+function Mypage(props){
+  const [vol_list, setVol_list] = useState({vol: [], req: []});
 
-  componentDidMount() {
+  const fetchData = async () => {
+    const res = await axios(
+      'http://localhost:3001/enrollments',
+    );
+    const res2 = await axios(
+      `http://localhost:3001/requests`
+    );
 
-  axios.get(`http://localhost:3001/enrollments`)
-    .then(res => {
-      const vol_list = res.data;
-      this.setState({ vol_list });
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    setVol_list({vol: res.data, req: res2.data});
+  };
 
-    fetch(`http://localhost:3001/requests`)
-      .then(res => res.json())
-      .then(json => this.setState({ data: json }))
-      .catch(function (error) {
-        console.log(error);
-      });;
-  }
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  onAddingItem = (i, ch) => (event) => {
-  this.setState((state, props) => {
-    state.vol_list[i-1].check_mark = !state.vol_list[i-1].check_mark;
-    return {
-      vol_list: state.vol_list
-    }
-    })
-    var change = ''
-    ch === 0 ? change = 1 : change = 0
-    console.log(ch)
-    console.log(change)
-    const updated = {
-        check_mark: change
-    }
-
-    axios.put(`http://localhost:3001/enrollments/${i}`, updated)
-      .then(function (response) {
-        setTimeout(() => {
-          alert("Your fulfillment status has been changed");
-        }, 100)
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-
-  renderVolunteer(volunteer) {
+  const renderVolunteer = (volunteer) => {
     var mywork = volunteer;
-    return this.state.data.map((item,i) => { return (
+    return vol_list.req.map((item,i) => { return (
        mywork === item.id ?
        <span key={item.id}>
        Title: {item.title}<br/>
@@ -69,29 +32,36 @@ class Mypage extends React.Component {
      : null
      )}
       )
-
   }
 
-  render() {
-    const { vol_list } = this.state;
+  const submitCancel = (enrid) => {
+      var enr_id = enrid
+      axios.delete(`http://localhost:3001/enrollments/${enr_id}`)
+      .then(function (response){
+        alert("Deleted");
+        fetchData();
+      }).catch(error=>console.log(error));
+  }
 
     return (
       <div className="container content">
 
         <h6><b>My volunteer list</b></h6>
         <br /><hr /><br />
-        {vol_list.map((req, index) => {
+
+        {vol_list.vol.map((req, index) => {
             return <span key={req.id}>
-              {req.user_id === this.props.user_no ? this.renderVolunteer(req.requests_id) : null}
-              {req.user_id === this.props.user_no ? <Form.Group controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" checked={req.check_mark === 1 ? true : false}
-                label="Check once fulfilled"
-                onChange={this.onAddingItem(req.id, req.check_mark)} /></Form.Group> : null}
+              {req.user_id === props.user_no ? renderVolunteer(req.requests_id) : null}
+              {req.user_id === props.user_no ?
+                <span>&nbsp;&nbsp;<Button type="submit" variant="outline-info" size="sm"
+                onClick={() =>
+                  { if (window.confirm('Are you sure you wish to cancel to volunteer'))
+                  submitCancel(req.id) }} >
+                  Cancel Volunteering</Button><br /><br /></span> : null}
             </span>
         })}
       </div>
     );
-  }
 }
 
 export default Mypage;

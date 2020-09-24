@@ -1,56 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Form } from 'react-bootstrap'
+import { Button, Form, Badge } from 'react-bootstrap'
+import {BrowserRouter, Route, Redirect} from 'react-router-dom'
 
-class Myrequest extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      user_id: props.user_no,
-      enr_list: [],
-      req_list: []
-    };
-  }
+function Myrequest(props){
 
-  componentDidMount() {
+  const [vol_list, setVol_list] = useState({req: [], enr: []});
+  var time_diff = new Date().getTime() - (30 * 24 * 60 * 60 * 1000)
 
-  axios.get(`http://localhost:3001/requests`, {withCredentials: true})
-    .then(res => {
-      const req_list = res.data;
-      this.setState({ req_list });
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
+  const fetchData = async () => {
+    const res = await axios(
+      `http://localhost:3001/requests`
+    );
+    const res2 = await axios(
+      `http://localhost:3001/enrollments`
+    );
+    setVol_list({req: res.data, enr: res2.data});
+  };
 
-  onAddingItem = (i, ch) => (event) => {
-  this.setState((state, props) => {
-    state.req_list[i-1].check_mark = !state.req_list[i-1].check_mark;
-    return {
-      req_list: state.req_list
-    }
-    })
-    var change = ''
-    ch === 0 ? change = 1 : change = 0
-    console.log(ch)
-    console.log(change)
-    const updated = {
-        check_mark: change
-    }
+  useEffect(() => {
+    fetchData()
+  }, []);
 
-    axios.put(`http://localhost:3001/requests/${i}`, updated)
-      .then(function (response) {
-        setTimeout(() => {
-          alert("Your request mark has been changed");
-        }, 100)
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-
-  submitRepublish(req){
+  const submitRepublish = (req) => {
     var req_id = req
     console.log(req_id)
     const updated = {
@@ -65,39 +37,38 @@ class Myrequest extends React.Component {
       });
   }
 
-  redirect = () => {
-    this.props.history.push('/')
-  }
-
-  render() {
-    const { req_list } = this.state;
-    var time_diff = new Date().getTime() - (30 * 24 * 60 * 60 * 1000)
-
     return (
       <div className="container content">
         <h6><b>My request list</b></h6>
         <br /><hr /><br />
-        {req_list.map((req, index) => {
-          if(req.owner_id === this.props.user_no){
-            return <div key={req.id}>
-              Title: {req.title}<br />
-              {req.typev === 1 ? 'Type: One time help': 'Type: Material need'}<br />
-              Description: {req.description}&nbsp;&nbsp;
-              { time_diff > new Date(req.rep_date).getTime() && req_list.fulfilled === 0 ?
-                <Button type="submit" variant="outline-info" size="sm"
-                onClick={this.submitRepublish.bind(this, req.id)}>Republish</Button> : null }
-                <Form.Group controlId="formBasicCheckbox">
-                  <Form.Check type="checkbox" checked={req.check_mark === 1 ? true : false} label="Check once fulfilled"
-                  onChange={this.onAddingItem(req.id, req.check_mark)} />
-                </Form.Group>
-            </div>
-          } else {
-            return null;
-          }
-        })}
+        {vol_list.req.map((req, index) => {
+        if(req.owner_id === props.user_no){
+          return <span key={req.id}>
+            <h6>{req.title}&nbsp;&nbsp;
+            <Badge variant="secondary">{req.typev === "1" ? 'One time': 'Material need'}</Badge>
+            </h6>
+            Duties: {req.description}&nbsp;&nbsp;
+            { time_diff > new Date(req.rep_date).getTime() && req.fulfilled === 0 ?
+             <Button type="submit" variant="outline-info" size="sm"
+             onClick={this.submitRepublish.bind(this, req.id)}>Republish</Button> : null }
+
+            {vol_list.enr.map((enr, index) => {
+            if(enr.requests_id === req.id){
+              return <span key={enr.id}>
+                {enr.user_id}&nbsp;&nbsp;
+              </span>
+            } else {
+              return null;
+            }
+          })}
+          </span>
+        } else {
+          return null;
+        }
+      })}
+
       </div>
     );
   }
-}
 
 export default Myrequest;

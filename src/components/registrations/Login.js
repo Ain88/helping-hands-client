@@ -47,6 +47,8 @@ class Login extends Component {
   redirect = () => {
     this.props.history.push('/')
   }
+
+
   handleErrors = () => {
     return (
       <div>

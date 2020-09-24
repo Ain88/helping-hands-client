@@ -70,8 +70,8 @@ class Mymarker extends React.Component {
           Location: {this.props.address}<br />
           Status: {this.props.status === 1 ? "Status: Fulfilled" : "Status: Unfulfilled"}<br /><br />
           <Button type="submit" className="text-center" variant="outline-info" size="sm" onClick={() =>
-            { if (window.confirm('Are you sure you wish to submit the request?'))
-            this.onMarkerClick() } }>Submit The Request
+            { if (window.confirm('Are you sure you wish to fulfill request?'))
+            this.onMarkerClick() } }>Fulfill This Request
           </Button>
         </Popup>
       </Marker>
