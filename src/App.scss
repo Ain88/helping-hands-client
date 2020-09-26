@@ -260,6 +260,30 @@ a.nav-link {
     font-weight: 500;
 }
 
+.title {
+  font-weight: bold;
+}
+
+.card-body {
+    padding: 0 0.5rem;
+}
+
+.space {
+  padding-bottom: 0.5rem;
+}
+
+.close {
+  float: none;
+  font-size: 1.5em;
+}
+
+.button-pad {
+    padding: 0.25rem 0.25rem;
+    font-size: 0.7rem;
+    line-height: 1;
+    border-radius: 0.2rem;
+}
+
 /************************ footer ********************/
 
 .footer-area {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Form, Badge } from 'react-bootstrap'
+import { Button, Form, Badge, Card } from 'react-bootstrap'
 import {BrowserRouter, Route, Redirect} from 'react-router-dom'
 
 function Myrequest(props){
@@ -43,25 +43,34 @@ function Myrequest(props){
         <br /><hr /><br />
         {vol_list.req.map((req, index) => {
         if(req.owner_id === props.user_no){
-          return <span key={req.id}>
-            <h6>{req.title}&nbsp;&nbsp;
-            <Badge variant="secondary">{req.typev === "1" ? 'One time': 'Material need'}</Badge>
+          return <div key={req.id}>
+            <h6 className="title">{req.title}&nbsp;&nbsp;
+            <Badge variant="secondary">{req.typev === "1" ? 'One time': 'Material need'}</Badge>&nbsp;
+            { time_diff > new Date(req.rep_date).getTime() && req.fulfilled === 0 ?
+             <Button className="button-pad" type="submit" variant="outline-info" size="sm"
+             onClick={this.submitRepublish.bind(this, req.id)}>Republish</Button> :
+             <Button className="button-pad" type="submit" variant="outline-info" size="sm" disabled>Republish</Button> }
             </h6>
             Duties: {req.description}&nbsp;&nbsp;
-            { time_diff > new Date(req.rep_date).getTime() && req.fulfilled === 0 ?
-             <Button type="submit" variant="outline-info" size="sm"
-             onClick={this.submitRepublish.bind(this, req.id)}>Republish</Button> : null }
+             <br /><div className="space"></div>
+             <Card>
+              <Card.Body className="title space">List of Volunteers ({req.cur_counter}/{req.counter})</Card.Body>
+              {vol_list.enr.map((enr, index) => {
+              if(enr.requests_id === req.id){
+                return <span key={enr.id}>
+                  <Card.Body>{enr.users.f_name}&nbsp;{enr.users.l_name}&nbsp;({enr.users.email})&nbsp;
+                  <button type="button" className="close" aria-label="Close">
+                    <span>&times;</span>
+                  </button>&nbsp;
+                  </Card.Body>
+                </span>
+              } else {
+                return null;
+              }
+              })}
 
-            {vol_list.enr.map((enr, index) => {
-            if(enr.requests_id === req.id){
-              return <span key={enr.id}>
-                {enr.user_id}&nbsp;&nbsp;
-              </span>
-            } else {
-              return null;
-            }
-          })}
-          </span>
+            </Card>
+          <div><br /><br /></div></div>
         } else {
           return null;
         }

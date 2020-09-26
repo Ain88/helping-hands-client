@@ -44,7 +44,8 @@ class Tovolunteer extends React.Component {
       waiting: false,
       check_req: [],
       result: [],
-      total_count: ''
+      total_count: '',
+      enr_check: ''
     };
   }
 
@@ -58,6 +59,16 @@ class Tovolunteer extends React.Component {
       .then(json => { this.setState({ data2: json });
       var arrayOfArrays = [];
 
+      var op = json.map(function(item) {
+        return item.requests_id;
+      });
+      this.setState({
+        enr_check: op
+      })
+
+      console.log(op)
+
+      console.log(op.indexOf(5))
       Object.keys(json).forEach(function(k){
         arrayOfArrays.push(json[k]);
       });
@@ -65,7 +76,9 @@ class Tovolunteer extends React.Component {
         result: groupBy(arrayOfArrays, (c) => c.requests_id)
       })
       // this.state.result = groupBy(arrayOfArrays, (c) => c.requests_id);
+      console.log("hi");
       console.log(this.state.result);
+      console.log(this.state.data);
         this.check_count = Object.keys(json).length;
         this.setState({
           check_req: arrayOfArrays
@@ -85,6 +98,7 @@ class Tovolunteer extends React.Component {
     var time_diff = new Date().getTime() - (30 * 24 *60 * 60 * 1000)
 
     return this.state.data.map((item,i) => { return (
+       this.state.enr_check.indexOf(item.id) &&
        item.fulfilled === 0 && user_id !== item.owner_id && time_diff < new Date(item.rep_date).getTime() ?
 
        <Mymarker

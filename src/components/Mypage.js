@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, Badge } from 'react-bootstrap'
 
 function Mypage(props){
   const [vol_list, setVol_list] = useState({vol: [], req: []});
@@ -25,9 +25,10 @@ function Mypage(props){
     return vol_list.req.map((item,i) => { return (
        mywork === item.id ?
        <span key={item.id}>
-       Title: {item.title}<br/>
-       Type: {item.typev=== 1 ? "One time help" : "Material help"}<br />
-       Description: {item.description}
+       <h6 className="title">{item.title}&nbsp;&nbsp;
+       <Badge variant="secondary">{item.typev === "1" ? 'One time': 'Material need'}</Badge>
+       </h6>
+       Duties: {item.description}
        </span>
      : null
      )}
