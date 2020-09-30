@@ -35,9 +35,13 @@ function Mypage(props){
       )
   }
 
-  const submitCancel = (enrid) => {
-      var enr_id = enrid
-      axios.delete(`http://localhost:3001/enrollments/${enr_id}`)
+  const submitCancel = (enrid, rid) => {
+    console.log(rid)
+    const enrollment = {
+      requests_id: rid
+    };
+
+      axios.delete(`http://localhost:3001/enrollments/${enrid}`, {enrollment})
       .then(function (response){
         alert("Deleted");
         fetchData();
@@ -52,12 +56,12 @@ function Mypage(props){
 
         {vol_list.vol.map((req, index) => {
             return <span key={req.id}>
-              {req.user_id === props.user_no ? renderVolunteer(req.requests_id) : null}
-              {req.user_id === props.user_no ?
+              {req.users_id === props.user_no ? renderVolunteer(req.requests_id) : null}
+              {req.users_id === props.user_no ?
                 <span>&nbsp;&nbsp;<Button type="submit" variant="outline-info" size="sm"
                 onClick={() =>
                   { if (window.confirm('Are you sure you wish to cancel to volunteer'))
-                  submitCancel(req.id) }} >
+                  submitCancel(req.id, req.requests_id) }} >
                   Cancel Volunteering</Button><br /><br /></span> : null}
             </span>
         })}

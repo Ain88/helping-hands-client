@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Button, Form, Badge, Card } from 'react-bootstrap'
 import {BrowserRouter, Route, Redirect} from 'react-router-dom'
@@ -19,7 +19,7 @@ function Myrequest(props){
   };
 
   useEffect(() => {
-    fetchData()
+    fetchData();
   }, []);
 
   const submitRepublish = (req) => {
@@ -37,6 +37,29 @@ function Myrequest(props){
       });
   }
 
+  const submitDelete = (enr, rid, usrid, title) => {
+      const enrollment = {
+        requests_id: rid
+      };
+
+      const message = {
+        body: 'Hi, owner of [' + title + '] has cancelled your volunteer request',
+        requests_id: rid,
+        sender_id: props.user_no,
+        receiver_id: usrid
+      }
+
+      axios.all([
+        axios.delete(`http://localhost:3001/enrollments/${enr}`, {enrollment}, {withCredentials: true}),
+        axios.post(`http://localhost:3001/messages`, { message }, {withCredentials: true})
+      ])
+      .then(axios.spread((data2) => {
+          alert("Selected enrollment has been deleted!");
+          console.log('data2', data2);
+          this.redirect()
+      })).catch(error=>console.log(error));
+  }
+
     return (
       <div className="container content">
         <h6><b>My request list</b></h6>
@@ -46,9 +69,9 @@ function Myrequest(props){
           return <div key={req.id}>
             <h6 className="title">{req.title}&nbsp;&nbsp;
             <Badge variant="secondary">{req.typev === "1" ? 'One time': 'Material need'}</Badge>&nbsp;
-            { time_diff > new Date(req.rep_date).getTime() && req.fulfilled === 0 ?
+            { time_diff > new Date(req.rep_date).getTime() && req.cur_counter <  req.counter === 0 ?
              <Button className="button-pad" type="submit" variant="outline-info" size="sm"
-             onClick={this.submitRepublish.bind(this, req.id)}>Republish</Button> :
+             onClick={submitRepublish.bind(this, req.id)}>Republish</Button> :
              <Button className="button-pad" type="submit" variant="outline-info" size="sm" disabled>Republish</Button> }
             </h6>
             Duties: {req.description}&nbsp;&nbsp;
@@ -59,7 +82,10 @@ function Myrequest(props){
               if(enr.requests_id === req.id){
                 return <span key={enr.id}>
                   <Card.Body>{enr.users.f_name}&nbsp;{enr.users.l_name}&nbsp;({enr.users.email})&nbsp;
-                  <button type="button" className="close" aria-label="Close">
+                  <button type="submit" className="close" aria-label="Close"
+                  onClick={() =>
+                    { if (window.confirm('Are you sure you wish to remove this volunteer?'))
+                    submitDelete.bind(this, enr.id, enr.requests_id, enr.users_id, enr.requests.title) }}>
                     <span>&times;</span>
                   </button>&nbsp;
                   </Card.Body>

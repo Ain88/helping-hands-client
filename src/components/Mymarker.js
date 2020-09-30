@@ -19,7 +19,7 @@ class Mymarker extends React.Component {
   onMarkerClick () {
     const enrollment = {
       requests_id: this.props.req_id,
-      user_id: this.props.user_id,
+      users_id: this.props.user_id,
       finished: 0,
       check_mark: 0
     };

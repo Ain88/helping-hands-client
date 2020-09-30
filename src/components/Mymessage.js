@@ -53,17 +53,21 @@ class Mymessage extends React.Component {
     Object.keys(json).forEach(function(k){
       if(json[k].receiver_id === cur_userr){
       arrayOfArrays.push(json[k].sender);
-    }else{}
+    } else if (json[k].sender_id === cur_userr){
+      arrayOfArrays.push(json[k].receiver);
+    }
+      else{}
     })
 
     Object.keys(json).forEach(function(k){
-      if(json[k].receiver_id === cur_userr){
+      if(json[k].receiver_id === cur_userr || json[k].sender_id === cur_userr){
       arrayOfArrays2.push(json[k]);
     }else{}
     })
 
     this.setState({ check_rec: this.getUnique(arrayOfArrays, 'id') })
     this.setState({ check_rec2: this.getUnique(arrayOfArrays2, 'requests_id') })
+    console.log("checkchkeck");
     console.log(this.state.check_rec);
     console.log(this.state.check_rec2);
     });
@@ -188,7 +192,7 @@ class Mymessage extends React.Component {
                          <Form.Control className="chat" as="select" name="send_id" value={send_id} onChange={this.handleMessage2} custom>
                            <option className="chat" key={0}>Choose a message topic</option>
                            {this.state.check_rec2.map((check, i) => {
-                             if(check.sender_id === rec.id || check.sender_id === rec.id){
+                             if(check.sender_id === rec.id || check.receiver_id === rec.id){
                               return (<option key={i+1} value={check.requests_id} onChange={this.handleMessage2}>{check.requests.title}</option>
                             )}
                             return null;
