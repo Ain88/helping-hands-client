@@ -1,13 +1,15 @@
 import React from 'react';
 import L from "leaflet";
-import { Container, Row, Col, Tabs, Tab } from 'react-bootstrap'
+import { Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap'
 import Needvolunteer from './Needvolunteer'
 import Mypage from './Mypage'
 import Myrequest from './Myrequest'
 import Mymarker from './Mymarker'
 import Mymessage from './Mymessage'
 import Stat from './Stat'
+import Stat2 from './Stat2'
 import { Map, TileLayer } from 'react-leaflet';
+import ActionCable from 'actioncable'
 
 const position = [49.2527, -122.9805]
 
@@ -45,7 +47,8 @@ class Tovolunteer extends React.Component {
       check_req: [],
       result: [],
       total_count: '',
-      enr_check: ''
+      enr_check: '',
+      req_channel: []
     };
   }
 
@@ -95,6 +98,7 @@ class Tovolunteer extends React.Component {
       });
   }
 
+
   checkWaiting(){
     this.setState({ waiting: true})
   }
@@ -143,7 +147,7 @@ class Tovolunteer extends React.Component {
         </Map>
         <h6><span role="img" aria-label="shine">✨</span> Stat <span role="img" aria-label="shine">✨</span></h6>
         <Stat />
-
+        <Stat2 />
         </Col>
 
         <Col xs={12} md={6}>

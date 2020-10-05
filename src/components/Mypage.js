@@ -4,6 +4,7 @@ import { Form, Button, Badge } from 'react-bootstrap'
 
 function Mypage(props){
   const [vol_list, setVol_list] = useState({vol: [], req: []});
+  const [test, setTest] = useState("");
 
   const fetchData = async () => {
     const res = await axios(
@@ -50,7 +51,6 @@ function Mypage(props){
 
     return (
       <div className="container content">
-
         <h6><b>My volunteer list</b></h6>
         <br /><hr /><br />
 

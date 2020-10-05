@@ -175,6 +175,7 @@ class Mymessage extends React.Component {
     const { send_id } = this.state;
     return (
       <div className="container content">
+      <h6>{this.props.mytest}</h6>
       <h6><b>Click user name to view messages.</b></h6>
 
       <Tabs defaultActiveKey="" activeKey={this.state.check_rec.id} onSelect={this.handleSelect}>
