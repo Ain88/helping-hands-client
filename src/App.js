@@ -65,6 +65,8 @@ class App extends Component {
       })
     }
   handleLogout = () => {
+      console.log("logging out")
+      localStorage.removeItem('rememberMe');
       localStorage.setItem('rememberMe', false);
       this.setState({
       isLoggedIn: false,
@@ -73,7 +75,7 @@ class App extends Component {
       this.redirect();
     }
   redirect = () => {
-    this.props.history.push('/')
+    // this.props.history.push('/')
   }
 
   render() {
@@ -82,7 +84,7 @@ class App extends Component {
           <BrowserRouter>
           <Route
             render={props => (
-            <Header {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn}/>
+            <Header {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn} handleLogout={this.handleLogout}/>
           )} />
               <Route
                 exact path='/'

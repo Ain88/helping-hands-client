@@ -7,7 +7,6 @@ import Myrequest from './Myrequest'
 import Mymarker from './Mymarker'
 import Mymessage from './Mymessage'
 import Stat from './Stat'
-import Stat2 from './Stat2'
 import { Map, TileLayer } from 'react-leaflet';
 import ActionCable from 'actioncable'
 
@@ -147,7 +146,6 @@ class Tovolunteer extends React.Component {
         </Map>
         <h6><span role="img" aria-label="shine">✨</span> Stat <span role="img" aria-label="shine">✨</span></h6>
         <Stat />
-        <Stat2 />
         </Col>
 
         <Col xs={12} md={6}>

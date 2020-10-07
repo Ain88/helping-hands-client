@@ -6,7 +6,7 @@ class Stat2 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      req_channel: []
+      enr_channel: []
     };
   }
   componentDidMount() {
@@ -15,7 +15,7 @@ class Stat2 extends React.Component {
     'Accept': 'application/json'
   }}).then(data => {
       data.json().then(res => {
-        this.setState({ req_channel: res })
+        this.setState({ enr_channel: res })
     })
   })
   const cable = ActionCable.createConsumer('ws://localhost:3001/cable')
@@ -46,8 +46,12 @@ class Stat2 extends React.Component {
 updateApp = (data) => {
   console.log("update start")
   console.log(data)
-  this.setState({
-    req_chnnnel: data
+  axios.get('http://localhost:3001/enrollments')
+  .then(res => {
+    this.setState({
+      enr_channel: res.data
+    })
+    console.log(this.state.enr_channel)
   })
 }
 
@@ -58,7 +62,7 @@ updateApp = (data) => {
   render() {
     return (
       <div>
-      {this.state.req_channel.map((req,index)=>
+      {this.state.enr_channel.map((req,index)=>
       <span key={req.id}>
       {req.requests.title}</span>)}</div>
     )
