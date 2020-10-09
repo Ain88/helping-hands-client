@@ -36,7 +36,6 @@ class Mypage extends React.Component {
       axios.delete(`http://localhost:3001/enrollments/${enrid}`, {enrollment})
       .then(function (response){
         alert("Deleted");
-        this.props.renderMarkers();
       }).catch(error=>console.log(error));
   }
 

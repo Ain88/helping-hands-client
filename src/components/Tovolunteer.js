@@ -104,12 +104,13 @@ class Tovolunteer extends React.Component {
   this.sub = cable.subscriptions.create('EnrollmentsChannel', {
     connected: function() {
       // this.send({ id: 1, text: new Date() });
-      setTimeout(() => this.update(), 1000 );
+      setTimeout(() => this.update(), 10000000 );
     },
 
     disconnected: function() {
       // Called when the subscription has been terminated by the server
       console.log('Notification Channel disconnected.');
+      this.connected()
     },
 
     received: (data2) => {

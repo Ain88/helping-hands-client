@@ -40,7 +40,7 @@ class Stat extends React.Component {
   this.sub = cable.subscriptions.create('NotesChannel', {
     connected: function() {
       // this.send({ id: 1, text: new Date() });
-      this.update()
+      setTimeout(() => this.update(), 10000000 );
     },
 
     disconnected: function() {
