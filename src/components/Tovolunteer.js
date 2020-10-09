@@ -9,6 +9,7 @@ import Mymessage from './Mymessage'
 import Stat from './Stat'
 import { Map, TileLayer } from 'react-leaflet';
 import ActionCable from 'actioncable'
+import axios from 'axios';
 
 const position = [49.2527, -122.9805]
 
@@ -41,6 +42,7 @@ class Tovolunteer extends React.Component {
       marker_data: [],
       data: [],
       data2: [],
+      data3: [],
       check_count: '',
       waiting: false,
       check_req: [],
@@ -56,6 +58,77 @@ class Tovolunteer extends React.Component {
       .then(res => res.json())
       .then(json => this.setState({ data: json }));
 
+    fetch(`http://localhost:3001/requests`)
+      .then(res => res.json())
+      .then(json => this.setState({ data3: json }));
+
+    window.fetch('http://localhost:3001/enrollments', {headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }}).then(data => { data.json().
+      then(res => { this.setState({ data2: res })
+
+      var arrayOfArrays = [];
+
+      var ops = res.map((item,i) => { return (
+         item.users_id == this.props.user_no ?
+         item.requests_id : null
+       )}
+        )
+
+      var op = res.map(function(item) {
+        return item.requests_id, item.users_id;
+      });
+      this.setState({
+        enr_check: ops
+      })
+
+      Object.keys(res).forEach(function(k){
+        arrayOfArrays.push(res[k]);
+      });
+      this.setState({
+        result: groupBy(arrayOfArrays, (c) => c.requests_id)
+      })
+      // this.state.result = groupBy(arrayOfArrays, (c) => c.requests_id);
+
+        this.check_count = Object.keys(res).length;
+        this.setState({
+          check_req: arrayOfArrays
+        })
+        // this.state.check_req = arrayOfArrays
+        this.checkWaiting()
+      })
+    })
+
+  const cable = ActionCable.createConsumer('ws://localhost:3001/cable')
+  this.sub = cable.subscriptions.create('EnrollmentsChannel', {
+    connected: function() {
+      // this.send({ id: 1, text: new Date() });
+      setTimeout(() => this.update(), 1000 );
+    },
+
+    disconnected: function() {
+      // Called when the subscription has been terminated by the server
+      console.log('Notification Channel disconnected.');
+    },
+
+    received: (data2) => {
+       this.updateApp(data2)
+    },
+
+    update() {
+      this.perform("away2")
+    },
+
+  })
+}
+
+  updateApp = (data2) => {
+    console.log("update start")
+    fetch(`http://localhost:3001/requests`)
+      .then(res => res.json())
+      .then(json => this.setState({ data: json }));
+
     fetch(`http://localhost:3001/enrollments`)
       .then(res => res.json())
       .then(json => { this.setState({ data2: json });
@@ -66,9 +139,6 @@ class Tovolunteer extends React.Component {
          item.requests_id : null
        )}
         )
-
-      console.log("ops test")
-      console.log(ops)
 
       var op = json.map(function(item) {
         return item.requests_id, item.users_id;
@@ -84,19 +154,15 @@ class Tovolunteer extends React.Component {
         result: groupBy(arrayOfArrays, (c) => c.requests_id)
       })
       // this.state.result = groupBy(arrayOfArrays, (c) => c.requests_id);
-      console.log("hi");
-      console.log(this.state.result);
-      console.log(this.state.data);
         this.check_count = Object.keys(json).length;
         this.setState({
           check_req: arrayOfArrays
         })
         // this.state.check_req = arrayOfArrays
-        console.log(this.state.check_req)
         this.checkWaiting()
       });
+    this.renderMarkers();
   }
-
 
   checkWaiting(){
     this.setState({ waiting: true})
@@ -104,13 +170,13 @@ class Tovolunteer extends React.Component {
 
   renderMarkers() {
     var user_id = this.props.user_no
-    var time_diff = new Date().getTime() - (30 * 24 *60 * 60 * 1000)
+    var time_diff = new Date().getTime() - (40 * 24 *60 * 60 * 1000)
 
     return this.state.data.map((item,i) => { return (
        this.state.enr_check.indexOf(item.id) === -1 &&
        item.fulfilled === 0 && user_id !== item.owner_id && time_diff < new Date(item.rep_date).getTime() ?
 
-       <Mymarker
+       <Mymarker renderMarkers={this.renderMarkers}
        icon={item.typev === "1" ? blueIcon : greenIcon}
        key={item.id}
        title={item.title}
@@ -151,16 +217,16 @@ class Tovolunteer extends React.Component {
         <Col xs={12} md={6}>
         <Tabs defaultActiveKey="myVolunteer" transition={false} id="noanim-tab-example">
           <Tab eventKey="myVolunteer" title="My Volunteer">
-            <Mypage user_no={this.props.user_no}/>
+            <Mypage user_no={this.props.user_no} renderMarkers={this.renderMarkers} data={this.state.data} data2={this.state.data2} data3={this.state.data3}/>
           </Tab>
           <Tab eventKey={'/myRequest'} title="My Request">
-            <Myrequest user_no={this.props.user_no}/>
+            <Myrequest user_no={this.props.user_no} data={this.state.data} data2={this.state.data2} data3={this.state.data3}/>
           </Tab>
           <Tab eventKey="request" title="Request Form">
-            <Needvolunteer user_no={this.props.user_no}/>
+            <Needvolunteer user_no={this.props.user_no} data={this.state.data} data2={this.state.data2} data3={this.state.data3}/>
           </Tab>
           <Tab eventKey="message" title="Message">
-            <Mymessage user_no={this.props.user_no}/>
+            <Mymessage user_no={this.props.user_no} data={this.state.data} data2={this.state.data2} data3={this.state.data3}/>
           </Tab>
         </Tabs>
 

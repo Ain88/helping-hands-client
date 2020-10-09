@@ -38,7 +38,6 @@ class Mymarker extends React.Component {
     .then(axios.spread((data1, data2) => {
         alert("Your enrollment has been added!");
         console.log('data1', data1, 'data2', data2);
-        this.redirect()
     })).catch(error=>console.log(error));
 
   }

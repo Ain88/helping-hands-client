@@ -1,29 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Form, Button, Badge } from 'react-bootstrap'
+import ActionCable from 'actioncable'
 
-function Mypage(props){
-  const [vol_list, setVol_list] = useState({vol: [], req: []});
-  const [test, setTest] = useState("");
+class Mypage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+  }
+  componentDidMount() {
+  }
 
-  const fetchData = async () => {
-    const res = await axios(
-      'http://localhost:3001/enrollments',
-    );
-    const res2 = await axios(
-      `http://localhost:3001/requests`
-    );
-
-    setVol_list({vol: res.data, req: res2.data});
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const renderVolunteer = (volunteer) => {
+  renderVolunteer = (volunteer) => {
     var mywork = volunteer;
-    return vol_list.req.map((item,i) => { return (
+    return this.props.data.map((item,i) => { return (
        mywork === item.id ?
        <span key={item.id}>
        <h6 className="title">{item.title}&nbsp;&nbsp;
@@ -36,7 +27,7 @@ function Mypage(props){
       )
   }
 
-  const submitCancel = (enrid, rid) => {
+  submitCancel = (enrid, rid) => {
     console.log(rid)
     const enrollment = {
       requests_id: rid
@@ -45,28 +36,29 @@ function Mypage(props){
       axios.delete(`http://localhost:3001/enrollments/${enrid}`, {enrollment})
       .then(function (response){
         alert("Deleted");
-        fetchData();
+        this.props.renderMarkers();
       }).catch(error=>console.log(error));
   }
 
+  render() {
     return (
       <div className="container content">
         <h6><b>My volunteer list</b></h6>
         <br /><hr /><br />
 
-        {vol_list.vol.map((req, index) => {
+        {this.props.data2.map((req, index) => {
             return <span key={req.id}>
-              {req.users_id === props.user_no ? renderVolunteer(req.requests_id) : null}
-              {req.users_id === props.user_no ?
+              {req.users_id === this.props.user_no ? this.renderVolunteer(req.requests_id) : null}
+              {req.users_id === this.props.user_no ?
                 <span>&nbsp;&nbsp;<Button type="submit" variant="outline-info" size="sm"
                 onClick={() =>
                   { if (window.confirm('Are you sure you wish to cancel to volunteer'))
-                  submitCancel(req.id, req.requests_id) }} >
+                  this.submitCancel(req.id, req.requests_id) }} >
                   Cancel Volunteering</Button><br /><br /></span> : null}
             </span>
         })}
       </div>
     );
-}
+}}
 
 export default Mypage;
