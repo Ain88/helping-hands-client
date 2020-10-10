@@ -67,7 +67,6 @@ class Mymessage extends React.Component {
 
     this.setState({ check_rec: this.getUnique(arrayOfArrays, 'id') })
     this.setState({ check_rec2: this.getUnique(arrayOfArrays2, 'requests_id') })
-    console.log("checkchkeck");
     console.log(this.state.check_rec);
     console.log(this.state.check_rec2);
     });

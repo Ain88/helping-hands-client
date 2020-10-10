@@ -6,9 +6,7 @@ import Mypage from './Mypage'
 import Myrequest from './Myrequest'
 import Mymarker from './Mymarker'
 import Mymessage from './Mymessage'
-import Stat from './Stat'
 import { Map, TileLayer } from 'react-leaflet';
-import ActionCable from 'actioncable'
 import axios from 'axios';
 
 const position = [49.2527, -122.9805]
@@ -58,15 +56,13 @@ class Tovolunteer extends React.Component {
       .then(res => res.json())
       .then(json => this.setState({ data: json }));
 
-    fetch(`http://localhost:3001/requests`)
+    fetch(`http://localhost:3001/messages`)
       .then(res => res.json())
       .then(json => this.setState({ data3: json }));
 
-    window.fetch('http://localhost:3001/enrollments', {headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  }}).then(data => { data.json().
-      then(res => { this.setState({ data2: res })
+    fetch(`http://localhost:3001/enrollments`)
+      .then(res => res.json())
+      .then(res => { this.setState({ data2: res })
 
       var arrayOfArrays = [];
 
@@ -98,72 +94,12 @@ class Tovolunteer extends React.Component {
         // this.state.check_req = arrayOfArrays
         this.checkWaiting()
       })
-    })
-
-  const cable = ActionCable.createConsumer('ws://localhost:3001/cable')
-  this.sub = cable.subscriptions.create('EnrollmentsChannel', {
-    connected: function() {
-      // this.send({ id: 1, text: new Date() });
-      setTimeout(() => this.update(), 10000000 );
-    },
-
-    disconnected: function() {
-      // Called when the subscription has been terminated by the server
-      console.log('Notification Channel disconnected.');
-      this.connected()
-    },
-
-    received: (data2) => {
-       this.updateApp(data2)
-    },
-
-    update() {
-      this.perform("away2")
-    },
-
-  })
-}
-
-  updateApp = (data2) => {
-    console.log("update start")
-    fetch(`http://localhost:3001/requests`)
-      .then(res => res.json())
-      .then(json => this.setState({ data: json }));
-
-    fetch(`http://localhost:3001/enrollments`)
-      .then(res => res.json())
-      .then(json => { this.setState({ data2: json });
-      var arrayOfArrays = [];
-
-      var ops = json.map((item,i) => { return (
-         item.users_id == this.props.user_no ?
-         item.requests_id : null
-       )}
-        )
-
-      var op = json.map(function(item) {
-        return item.requests_id, item.users_id;
-      });
-      this.setState({
-        enr_check: ops
-      })
-
-      Object.keys(json).forEach(function(k){
-        arrayOfArrays.push(json[k]);
-      });
-      this.setState({
-        result: groupBy(arrayOfArrays, (c) => c.requests_id)
-      })
-      // this.state.result = groupBy(arrayOfArrays, (c) => c.requests_id);
-        this.check_count = Object.keys(json).length;
-        this.setState({
-          check_req: arrayOfArrays
-        })
-        // this.state.check_req = arrayOfArrays
-        this.checkWaiting()
-      });
-    this.renderMarkers();
   }
+
+  shouldComponentUpdate(nextStates) {
+     const differentTitle = this.state.data2 !== nextStates.data2;
+     return differentTitle
+ }
 
   checkWaiting(){
     this.setState({ waiting: true})
@@ -177,7 +113,7 @@ class Tovolunteer extends React.Component {
        this.state.enr_check.indexOf(item.id) === -1 &&
        item.fulfilled === 0 && user_id !== item.owner_id && time_diff < new Date(item.rep_date).getTime() ?
 
-       <Mymarker renderMarkers={this.renderMarkers}
+       <Mymarker
        icon={item.typev === "1" ? blueIcon : greenIcon}
        key={item.id}
        title={item.title}
@@ -212,7 +148,6 @@ class Tovolunteer extends React.Component {
           {this.state.waiting === true && this.renderMarkers()}
         </Map>
         <h6><span role="img" aria-label="shine">✨</span> Stat <span role="img" aria-label="shine">✨</span></h6>
-        <Stat />
         </Col>
 
         <Col xs={12} md={6}>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Form, Button, Badge } from 'react-bootstrap'
-import ActionCable from 'actioncable'
 
 class Mypage extends React.Component {
   constructor(props) {
@@ -27,7 +26,7 @@ class Mypage extends React.Component {
       )
   }
 
-  submitCancel = (enrid, rid) => {
+  submitCancel(enrid, rid){
     console.log(rid)
     const enrollment = {
       requests_id: rid
