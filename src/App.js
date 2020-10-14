@@ -25,7 +25,8 @@ class App extends Component {
       user_id : "",
       stat: "",
       req_list: [],
-      req: ""
+      req: "",
+      rememberMe : 'false'
      };
   }
 
@@ -107,7 +108,7 @@ class App extends Component {
               <Route
               exact path='/Tovolunteer'
                 render={props => (
-                  localStorage.rememberMe === 'true' ? (
+                  window.localStorage.rememberMe === 'true' ? (
                 <Tovolunteer {...props} user_no={this.state.user_id} />
               ): (
                 window.confirm('Please login first'),
