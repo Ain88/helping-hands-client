@@ -25,7 +25,7 @@ class Login extends Component {
   handleSubmit = (event) => {
     event.preventDefault()
     const {email, password} = this.state
-    localStorage.setItem('rememberMe', true);
+    window.localStorage.setItem('rememberMe', true);
     let user = {
       email: email,
       password: password

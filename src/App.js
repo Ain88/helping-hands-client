@@ -66,8 +66,8 @@ class App extends Component {
     }
   handleLogout = () => {
       console.log("logging out")
-      localStorage.removeItem('rememberMe');
-      localStorage.setItem('rememberMe', false);
+      window.localStorage.removeItem('rememberMe');
+      window.localStorage.setItem('rememberMe', false);
       this.setState({
       isLoggedIn: false,
       user: {}

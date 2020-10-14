@@ -34,10 +34,10 @@ class Header extends React.Component {
               <NavLink href="tovolunteer">Volunteer Today</NavLink>
 
               {
-                localStorage.rememberMe === 'true' ? <NavLink href="/" onClick={this.handleClick}>Log Out</NavLink>: null
+                window.localStorage.rememberMe === 'true' ? <NavLink href="/" onClick={this.handleClick}>Log Out</NavLink>: null
               }
               {
-                localStorage.rememberMe === 'false' ?
+                window.localStorage.rememberMe === 'false' ?
                 <><NavLink href="signup">Sign Up</NavLink><NavLink href="login">Log In</NavLink></> : null
               }
               </Nav>
