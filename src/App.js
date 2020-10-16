@@ -75,7 +75,7 @@ class App extends Component {
     }
 
   componentDidMount(){
-    axios.get(`http://localhost:3001/requests`, {withCredentials: true})
+    axios.get(`https://help-van.herokuapp.com/requests`, {withCredentials: true})
       .then(res => {
         const req_list = res.data;
         this.setState({ req_list });
@@ -87,11 +87,11 @@ class App extends Component {
         .then(res => res.json())
         .then(json => this.setState({ data: json }));
 
-      fetch(`http://localhost:3001/requests`)
+      fetch(`https://help-van.herokuapp.com/messages`)
         .then(res => res.json())
         .then(json => this.setState({ data3: json }));
 
-      window.fetch('http://localhost:3001/enrollments', {headers: {
+      window.fetch('https://help-van.herokuapp.com/enrollments', {headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     }}).then(data => { data.json().
@@ -129,7 +129,7 @@ class App extends Component {
         })
       })
 
-    const cable = ActionCable.createConsumer('ws://localhost:3001/cable')
+    const cable = ActionCable.createConsumer('https://help-van.herokuapp.com/cable')
     this.sub = cable.subscriptions.create('EnrollmentsChannel', {
       connected: function() {
         // this.send({ id: 1, text: new Date() });
@@ -155,7 +155,7 @@ class App extends Component {
   }
 
   loginStatus = () => {
-      axios.get('http://localhost:3001/logged_in', {withCredentials: true})
+      axios.get('https://help-van.herokuapp.com/logged_in', {withCredentials: true})
       .then(response => {
         if (response.data.logged_in) {
           this.setState({
@@ -190,11 +190,11 @@ class App extends Component {
 
   updateApp = (data2) => {
     console.log("update start")
-    fetch(`http://localhost:3001/requests`)
+    fetch(`https://help-van.herokuapp.com/requests`)
       .then(res => res.json())
       .then(json => this.setState({ data: json }));
 
-    fetch(`http://localhost:3001/enrollments`)
+    fetch(`https://help-van.herokuapp.com/enrollments`)
       .then(res => res.json())
       .then(json => { this.setState({ data2: json });
       var arrayOfArrays = [];

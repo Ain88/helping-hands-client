@@ -173,7 +173,7 @@ class Mymessage extends React.Component {
   render() {
     const { send_id } = this.state;
     return (
-      <div className="container content">
+      <div>
       <h6>{this.props.mytest}</h6>
       <h6><b>Click user name to view messages.</b></h6>
 

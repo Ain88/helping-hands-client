@@ -40,7 +40,7 @@ handleSubmit = (event) => {
   formData.append('password_confirmation', this.state.password_confirmation);
   formData.append('photo', this.state.photo);
 
-  fetch('http://localhost:3001/users', {
+  fetch('https://help-van.herokuapp.com/users', {
     method: 'POST',
     body: formData,
     withCredentials: true

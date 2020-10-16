@@ -36,7 +36,7 @@ class Mypage extends React.Component {
       requests_id: rid
     };
 
-      axios.delete(`http://localhost:3001/enrollments/${enrid}`, {enrollment})
+      axios.delete(`https://help-van.herokuapp.com/enrollments/${enrid}`, {enrollment})
       .then(function (response){
         alert("Deleted");
       }).catch(error=>console.log(error));
@@ -44,7 +44,7 @@ class Mypage extends React.Component {
 
   render() {
     return (
-      <div className="container content">
+      <div>
         <h6><b>My volunteer list</b></h6>
         <br /><hr /><br />
 

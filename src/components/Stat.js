@@ -13,7 +13,7 @@ class Stat extends React.Component {
     };
   }
   componentDidMount() {
-    axios.get(`http://localhost:3001/requests`, {withCredentials: true})
+    axios.get(`https://help-van.herokuapp.com/requests`, {withCredentials: true})
       .then(res => {
         let commentCount = 0
         res.data.forEach(data => {
@@ -28,7 +28,7 @@ class Stat extends React.Component {
         console.log(error);
       });
 
-    window.fetch('http://localhost:3001/notes/2', {headers: {
+    window.fetch('https://help-van.herokuapp.com/notes/2', {headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   }}).then(data => {
@@ -36,7 +36,7 @@ class Stat extends React.Component {
         this.setState({ text: res.text })
     })
   })
-  const cable = ActionCable.createConsumer('ws://localhost:3001/cable')
+  const cable = ActionCable.createConsumer('https://help-van.herokuapp.com/cable')
   this.sub = cable.subscriptions.create('NotesChannel', {
     connected: function() {
       // this.send({ id: 1, text: new Date() });

@@ -50,7 +50,7 @@ class Needvolunteer extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch('http://localhost:3001/requests', {
+    fetch('https://help-van.herokuapp.com/requests', {
       method: 'POST',
       headers:  {
         "Content-Type": "application/json",
@@ -100,7 +100,7 @@ class Needvolunteer extends React.Component {
   render() {
     const {typev, title, description, counter} = this.state;
     return (
-      <div className="container content">
+      <div>
       <h6><b>In need of volunteers? Please submit the form below.</b></h6>
       <br />
 

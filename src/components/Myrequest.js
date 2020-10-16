@@ -18,7 +18,7 @@ class Myrequest extends React.Component {
     const updated = {
         rep_date: new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString()
     }
-    axios.put(`http://localhost:3001/requests/${req}`, updated)
+    axios.put(`https://help-van.herokuapp.com/requests/${req}`, updated)
       .then(function (response) {
         alert("Your request has been added!");
       })
@@ -40,8 +40,8 @@ class Myrequest extends React.Component {
       }
 
       axios.all([
-        axios.delete(`http://localhost:3001/enrollments/${enr}`, {enrollment}, {withCredentials: true}),
-        axios.post(`http://localhost:3001/messages`, { message }, {withCredentials: true})
+        axios.delete(`https://help-van.herokuapp.com/enrollments/${enr}`, {enrollment}, {withCredentials: true}),
+        axios.post(`https://help-van.herokuapp.com/messages`, { message }, {withCredentials: true})
       ])
       .then(axios.spread((data2) => {
           alert("Selected enrollment has been deleted!");
@@ -52,7 +52,7 @@ class Myrequest extends React.Component {
 
   render() {
     return (
-      <div className="container content">
+      <div>
         <h6><b>My request list</b></h6>
         <br /><hr /><br />
         {this.props.data.map((req, index) => {
