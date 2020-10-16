@@ -32,14 +32,14 @@ class Header extends React.Component {
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ml-auto">
               {
-                window.localStorage.rememberMe === 'false' ?
-                <><NavLink href="signup">Sign Up</NavLink><NavLink href="login">Log In</NavLink></> :
-                <>
-                <NavLink href="mypage">My Volunteer</NavLink>
+                window.localStorage.rememberMe === 'true' ?
+                <><NavLink href="mypage">My Volunteer</NavLink>
                 <NavLink href="myrequest">My Request</NavLink>
                 <NavLink href="needvolunteer">Need Volunteer</NavLink>
                 <NavLink href="mymessage">Message</NavLink>
                 <NavLink href="/" onClick={this.handleClick}>Log Out</NavLink></>
+                :
+                <><NavLink href="signup">Sign Up</NavLink><NavLink href="login">Log In</NavLink></>
               }
               </Nav>
             </Navbar.Collapse>
