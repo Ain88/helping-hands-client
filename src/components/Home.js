@@ -22,19 +22,6 @@ class Home extends React.Component {
       <Carousel.Caption>
       <h2>Helping Hands in Vancity</h2>
       <h5>Helping Hands partners with individuals or<br />families and with groups, schools and companies</h5>
-      <br /><Button href="/tovolunteer" variant="info" size="lg">Volunteer Today</Button>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          className="d-block w-100"
-          src={Img2}
-          alt="Second Slide"
-        />
-      <Carousel.Caption>
-          <h2>Helping Hands in Vancity</h2>
-          <h5>Helping Hands partners with individuals or<br />families and with groups, schools and companies</h5>
-          <br /><Button href="/tovolunteer" variant="info" size="lg">Volunteer Today</Button>
       </Carousel.Caption>
       </Carousel.Item>
     </Carousel>

@@ -16,6 +16,7 @@ class Header extends React.Component {
     const response = await axios.delete('http://localhost:3001/logout', {withCredentials: true})
     // .then(response => {
       this.props.handleLogout()
+      window.location.assign('/')
       // this.props.history.push('/')
     // })
     // .catch(error => console.log(error))
@@ -30,12 +31,15 @@ class Header extends React.Component {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ml-auto">
-
-              <NavLink href="tovolunteer">Volunteer Today</NavLink>
-
               {
                 window.localStorage.rememberMe === 'false' ?
-                <><NavLink href="signup">Sign Up</NavLink><NavLink href="login">Log In</NavLink></> : <NavLink href="/" onClick={this.handleClick}>Log Out</NavLink>
+                <><NavLink href="signup">Sign Up</NavLink><NavLink href="login">Log In</NavLink></> :
+                <>
+                <NavLink href="mypage">My Volunteer</NavLink>
+                <NavLink href="myrequest">My Request</NavLink>
+                <NavLink href="needvolunteer">Need Volunteer</NavLink>
+                <NavLink href="mymessage">Message</NavLink>
+                <NavLink href="/" onClick={this.handleClick}>Log Out</NavLink></>
               }
               </Nav>
             </Navbar.Collapse>

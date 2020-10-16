@@ -1,4 +1,3 @@
-
 import React from 'react';
 import axios from 'axios';
 import ActionCable from 'actioncable'
@@ -41,7 +40,8 @@ class Stat extends React.Component {
   this.sub = cable.subscriptions.create('NotesChannel', {
     connected: function() {
       // this.send({ id: 1, text: new Date() });
-      setTimeout(() => this.update(), 10000000 );
+      setTimeout(() => this.update(), 1000 );
+      console.log('stat channel')
     },
 
     disconnected: function() {
@@ -51,10 +51,12 @@ class Stat extends React.Component {
 
     received: (data) => {
        console.log(data)
+       console.log('stat channel2')
        this.updateApp(data)
     },
 
     update() {
+      console.log('stat channel3')
       this.perform("away")
     },
 

@@ -16,7 +16,7 @@ class Mymarker extends React.Component {
   componentDidMount() {
   }
 
-  onMarkerClick () {
+  onMarkerClick() {
     const enrollment = {
       requests_id: this.props.req_id,
       users_id: this.props.user_id,

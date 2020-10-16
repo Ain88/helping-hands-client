@@ -104,7 +104,7 @@ class Tovolunteer extends React.Component {
   this.sub = cable.subscriptions.create('EnrollmentsChannel', {
     connected: function() {
       // this.send({ id: 1, text: new Date() });
-      setTimeout(() => this.update(), 10000000 );
+      setTimeout(() => this.update(), 1000 );
     },
 
     disconnected: function() {
@@ -177,7 +177,7 @@ class Tovolunteer extends React.Component {
        this.state.enr_check.indexOf(item.id) === -1 &&
        item.fulfilled === null && user_id !== item.owner_id && time_diff < new Date(item.rep_date).getTime() ?
 
-       <Mymarker renderMarkers={this.renderMarkers}
+       <Mymarker
        icon={item.typev === "1" ? blueIcon : greenIcon}
        key={item.id}
        title={item.title}
@@ -198,10 +198,7 @@ class Tovolunteer extends React.Component {
 
   render() {
     return (
-      <div className ="center-col">
-        <Container>
-        <Row>
-        <Col xs={12} md={6}>
+      <div>
         <Map
           center={position}
           zoom={10}>
@@ -213,27 +210,7 @@ class Tovolunteer extends React.Component {
         </Map>
         <h6><span role="img" aria-label="shine">✨</span> Stat <span role="img" aria-label="shine">✨</span></h6>
         <Stat />
-        </Col>
 
-        <Col xs={12} md={6}>
-        <Tabs defaultActiveKey="myVolunteer" transition={false} id="noanim-tab-example">
-          <Tab eventKey="myVolunteer" title="My Volunteer">
-            <Mypage user_no={this.props.user_no} renderMarkers={this.renderMarkers} data={this.state.data} data2={this.state.data2} data3={this.state.data3}/>
-          </Tab>
-          <Tab eventKey={'/myRequest'} title="My Request">
-            <Myrequest user_no={this.props.user_no} data={this.state.data} data2={this.state.data2} data3={this.state.data3}/>
-          </Tab>
-          <Tab eventKey="request" title="Request Form">
-            <Needvolunteer user_no={this.props.user_no} data={this.state.data} data2={this.state.data2} data3={this.state.data3}/>
-          </Tab>
-          <Tab eventKey="message" title="Message">
-            <Mymessage user_no={this.props.user_no} data={this.state.data} data2={this.state.data2} data3={this.state.data3}/>
-          </Tab>
-        </Tabs>
-
-        </Col>
-        </Row><br />
-        </Container>
         </div>
 
     )

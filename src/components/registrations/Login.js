@@ -35,7 +35,7 @@ class Login extends Component {
     .then(response => {
       if (response.data.logged_in) {
         this.props.handleLogin(response.data)
-        this.redirect()
+        window.location.assign('/mypage')
       } else {
         this.setState({
           errors: response.data.errors
@@ -45,7 +45,7 @@ class Login extends Component {
     .catch(error => console.log('api errors:', error))
   };
   redirect = () => {
-    this.props.history.push('/')
+    this.props.history.push('/mypage')
   }
 
 

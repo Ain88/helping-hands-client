@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.scss';
 import axios from 'axios'
-import {BrowserRouter, Route, Redirect} from 'react-router-dom'
+import {BrowserRouter, Route, Redirect, withRouter, useHistory} from 'react-router-dom'
 import { browserHistory } from 'react-router';
 import Home from './components/Home'
 import Tovolunteer from './components/Tovolunteer'
@@ -15,18 +15,58 @@ import Footer from './components/Footer'
 import Login from './components/registrations/Login'
 import Signup from './components/registrations/Signup'
 import Stat from './components/Stat'
+import ActionCable from 'actioncable'
+import { Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap'
+import L from "leaflet";
+import { Map, TileLayer } from 'react-leaflet';
+
+function groupBy(xs, f) {
+  return xs.reduce((r, v, i, a, k = f(v)) => (((r[k] || (r[k] = [])).push(v), r)), {})
+}
+
+const position = [49.2527, -122.9805]
+
+var greenIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+var blueIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoggedIn: false,
+      f_name: "",
+      l_name: "",
       user: {},
       user_id : "",
       stat: "",
       req_list: [],
       req: "",
-      rememberMe : 'false'
+      marker_data: [],
+      data: [],
+      data2: [],
+      data3: [],
+      check_count: '',
+      waiting: false,
+      check_req: [],
+      result: [],
+      total_count: '',
+      enr_check: '',
+      req_channel: []
      };
   }
 
@@ -43,6 +83,75 @@ class App extends Component {
       .catch(function (error) {
         console.log(error);
       });
+      fetch(`http://localhost:3001/requests`)
+        .then(res => res.json())
+        .then(json => this.setState({ data: json }));
+
+      fetch(`http://localhost:3001/requests`)
+        .then(res => res.json())
+        .then(json => this.setState({ data3: json }));
+
+      window.fetch('http://localhost:3001/enrollments', {headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }}).then(data => { data.json().
+        then(res => { this.setState({ data2: res })
+
+        var arrayOfArrays = [];
+
+        var ops = res.map((item,i) => { return (
+           item.users_id == this.props.user_no ?
+           item.requests_id : null
+         )}
+          )
+
+        var op = res.map(function(item) {
+          return item.requests_id, item.users_id;
+        });
+        this.setState({
+          enr_check: ops
+        })
+
+        Object.keys(res).forEach(function(k){
+          arrayOfArrays.push(res[k]);
+        });
+        this.setState({
+          result: groupBy(arrayOfArrays, (c) => c.requests_id)
+        })
+        // this.state.result = groupBy(arrayOfArrays, (c) => c.requests_id);
+
+          this.check_count = Object.keys(res).length;
+          this.setState({
+            check_req: arrayOfArrays
+          })
+          // this.state.check_req = arrayOfArrays
+          this.checkWaiting()
+        })
+      })
+
+    const cable = ActionCable.createConsumer('ws://localhost:3001/cable')
+    this.sub = cable.subscriptions.create('EnrollmentsChannel', {
+      connected: function() {
+        // this.send({ id: 1, text: new Date() });
+        setTimeout(() => this.update(), 1000 );
+      },
+
+      disconnected: function() {
+        // Called when the subscription has been terminated by the server
+        console.log('Notification Channel disconnected.');
+        this.connected()
+      },
+
+      received: (data2) => {
+         this.updateApp(data2)
+      },
+
+      update() {
+        this.perform("away2")
+      },
+
+    })
+
   }
 
   loginStatus = () => {
@@ -50,7 +159,9 @@ class App extends Component {
       .then(response => {
         if (response.data.logged_in) {
           this.setState({
-            user_id: response.data.user.id
+            user_id: response.data.user.id,
+            f_name: response.data.user.f_name,
+            l_name: response.data.user.l_name
           })
           this.handleLogin(response)
         } else {
@@ -73,24 +184,107 @@ class App extends Component {
       isLoggedIn: false,
       user: {}
       })
-      this.redirect();
     }
   redirect = () => {
-    // this.props.history.push('/')
+  }
+
+  updateApp = (data2) => {
+    console.log("update start")
+    fetch(`http://localhost:3001/requests`)
+      .then(res => res.json())
+      .then(json => this.setState({ data: json }));
+
+    fetch(`http://localhost:3001/enrollments`)
+      .then(res => res.json())
+      .then(json => { this.setState({ data2: json });
+      var arrayOfArrays = [];
+
+      var ops = json.map((item,i) => { return (
+         item.users_id == this.props.user_no ?
+         item.requests_id : null
+       )}
+        )
+
+      var op = json.map(function(item) {
+        return item.requests_id, item.users_id;
+      });
+      this.setState({
+        enr_check: ops
+      })
+
+      Object.keys(json).forEach(function(k){
+        arrayOfArrays.push(json[k]);
+      });
+      this.setState({
+        result: groupBy(arrayOfArrays, (c) => c.requests_id)
+      })
+      // this.state.result = groupBy(arrayOfArrays, (c) => c.requests_id);
+        this.check_count = Object.keys(json).length;
+        this.setState({
+          check_req: arrayOfArrays
+        })
+        // this.state.check_req = arrayOfArrays
+        this.checkWaiting()
+      });
+    this.renderMarkers();
+  }
+
+  checkWaiting(){
+    this.setState({ waiting: true})
+  }
+
+  renderMarkers() {
+    var user_id = this.state.user_id
+    var time_diff = new Date().getTime() - (40 * 24 *60 * 60 * 1000)
+
+    return this.state.data.map((item,i) => { return (
+       this.state.enr_check.indexOf(item.id) === -1 &&
+       item.fulfilled === null && user_id !== item.owner_id && time_diff < new Date(item.rep_date).getTime() ?
+
+       <Mymarker
+       icon={item.typev === "1" ? blueIcon : greenIcon}
+       key={item.id}
+       title={item.title}
+       typev={item.typev}
+       description={item.description}
+       created_at={time_diff}
+       owner_id={item.owner_id}
+       address={item.address}
+       req_id={item.id}
+       user_id={user_id}
+       status={item.fulfilled}
+       position={[item.location.split(',')[0],item.location.split(',')[1]]}
+       onClick={this.onMarkerClick}
+       /> : null
+     )}
+      )
   }
 
   render() {
       return (
         <div>
-          <BrowserRouter>
-          <Route
-            render={props => (
-            <Header {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn} handleLogout={this.handleLogout}/>
-          )} />
+        <BrowserRouter>
+        <Route
+          render={props => (
+          <Header {...props} user_no={this.state.user_id} f_name={this.state.f_name} l_name={this.state.l_name} loggedInStatus={this.state.isLoggedIn} handleLogout={this.handleLogout}/>
+        )} />
+        <div className ="center-col">
+          <Container>
+          <Row>
+          <Col xs={12} md={6}>
+          <Tovolunteer user_no={this.state.user_id}/>
+          </Col>
+
+          <Col xs={12} md={6}>
+
               <Route
                 exact path='/'
                 render={props => (
-                <Home {...props} />
+                  window.localStorage.rememberMe === 'true' ? (
+                <Mypage {...props} data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id} />
+              ): (
+                <Login {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
+              )
                 )}
               />
               <Route
@@ -111,7 +305,7 @@ class App extends Component {
                   window.localStorage.rememberMe === 'true' ? (
                 <Tovolunteer {...props} user_no={this.state.user_id} />
               ): (
-                window.confirm('Please login first'),
+                window.confirm('Logging out'),
                 <Redirect to={{ pathname: '/login', state: 'Please sign in first'}} {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
               )
                 )}
@@ -120,13 +314,13 @@ class App extends Component {
               <Route
                 exact path='/mypage'
                 render={props => (
-                <Mypage {...props} user_no={this.state.user_id} />
+                <Mypage {...props} data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id} />
                 )}
               />
               <Route
                 exact path='/myrequest'
                 render={props => (
-                <Myrequest {...props} user_no={this.state.user_id} />
+                <Myrequest {...props} data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id} />
                 )}
               />
               <Route
@@ -144,7 +338,7 @@ class App extends Component {
               <Route
                 exact path='/login'
                 render={props => (
-                <Login {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
+                <Login {...props} user_no={this.state.user_id} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
                 )}
               />
               <Route
@@ -153,8 +347,15 @@ class App extends Component {
                 <Signup {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
                 )}
               />
-            <Footer />
-          </BrowserRouter>
+
+          </Col>
+          </Row><br />
+          </Container>
+          </div>
+
+          <Footer />
+        </BrowserRouter>
+
         </div>
       );
     }
