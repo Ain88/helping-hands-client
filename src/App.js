@@ -83,7 +83,7 @@ class App extends Component {
       .catch(function (error) {
         console.log(error);
       });
-      fetch(`http://localhost:3001/requests`)
+      fetch(`https://help-van.herokuapp.com/requests`)
         .then(res => res.json())
         .then(json => this.setState({ data: json }));
 
