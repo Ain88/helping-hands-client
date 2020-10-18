@@ -4,11 +4,11 @@ import axios from "axios";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 const mainAxios = axios.create({
-    baseURL: 'http://localhost:3001/requests'
+    baseURL: 'https://help-van.herokuapp.com/requests'
 });
 
 const customAxios = axios.create({
-    baseURL: 'http://localhost:3001/enrollments'
+    baseURL: 'https://help-van.herokuapp.com/enrollments'
 });
 
 

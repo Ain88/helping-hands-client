@@ -129,7 +129,7 @@ class App extends Component {
         })
       })
 
-    const cable = ActionCable.createConsumer('https://help-van.herokuapp.com/cable')
+    const cable = ActionCable.createConsumer('wss://help-van.herokuapp.com/cable')
     this.sub = cable.subscriptions.create('EnrollmentsChannel', {
       connected: function() {
         // this.send({ id: 1, text: new Date() });
@@ -178,8 +178,8 @@ class App extends Component {
     }
   handleLogout = () => {
       console.log("logging out")
-      window.localStorage.removeItem('rememberMe');
-      window.localStorage.setItem('rememberMe', false);
+      localStorage.removeItem('rememberMe');
+      localStorage.setItem('rememberMe', false);
       this.setState({
       isLoggedIn: false,
       user: {}
@@ -280,7 +280,7 @@ class App extends Component {
               <Route
                 exact path='/'
                 render={props => (
-                  window.localStorage.rememberMe === 'true' ? (
+                  localStorage.rememberMe === 'true' ? (
                 <Mypage {...props} data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id} />
               ): (
                 <Login {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
@@ -302,7 +302,7 @@ class App extends Component {
               <Route
               exact path='/Tovolunteer'
                 render={props => (
-                  window.localStorage.rememberMe === 'true' ? (
+                  localStorage.rememberMe === 'true' ? (
                 <Tovolunteer {...props} user_no={this.state.user_id} />
               ): (
                 window.confirm('Logging out'),

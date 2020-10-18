@@ -36,7 +36,7 @@ class Stat extends React.Component {
         this.setState({ text: res.text })
     })
   })
-  const cable = ActionCable.createConsumer('https://help-van.herokuapp.com/cable')
+  const cable = ActionCable.createConsumer('wss://help-van.herokuapp.com/cable')
   this.sub = cable.subscriptions.create('NotesChannel', {
     connected: function() {
       // this.send({ id: 1, text: new Date() });

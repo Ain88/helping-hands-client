@@ -9,8 +9,7 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      errors: '',
-      rememberMe: false
+      errors: ''
      };
   }
   componentWillMount() {
@@ -26,6 +25,7 @@ class Login extends Component {
     event.preventDefault()
     const {email, password} = this.state
     window.localStorage.setItem('rememberMe', true);
+    localStorage.getItem('rememberMe');
     let user = {
       email: email,
       password: password
@@ -35,6 +35,7 @@ class Login extends Component {
     .then(response => {
       if (response.data.logged_in) {
         this.props.handleLogin(response.data)
+        window.location.assign('/mypage')
       } else {
         this.setState({
           errors: response.data.errors
