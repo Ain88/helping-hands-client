@@ -165,7 +165,7 @@ class App extends Component {
           })
           this.handleLogin(response)
         } else {
-          this.handleLogout()
+
         }
       })
       .catch(error => console.log('api errors:', error))
