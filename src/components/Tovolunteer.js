@@ -1,15 +1,9 @@
 import React from 'react';
 import L from "leaflet";
-import { Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap'
-import Needvolunteer from './Needvolunteer'
-import Mypage from './Mypage'
-import Myrequest from './Myrequest'
 import Mymarker from './Mymarker'
-import Mymessage from './Mymessage'
 import Stat from './Stat'
 import { Map, TileLayer } from 'react-leaflet';
 import ActionCable from 'actioncable'
-import axios from 'axios';
 
 const position = [49.2527, -122.9805]
 
@@ -54,31 +48,28 @@ class Tovolunteer extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`https://help-van.herokuapp.com/requests`)
+    fetch(`http://localhost:3001/requests`)
       .then(res => res.json())
       .then(json => this.setState({ data: json }));
 
-    fetch(`https://help-van.herokuapp.com/requests`)
+    fetch(`http://localhost:3001/requests`)
       .then(res => res.json())
       .then(json => this.setState({ data3: json }));
 
-    window.fetch('https://help-van.herokuapp.com/enrollments', {headers: {
+    window.fetch('http://localhost:3001/enrollments', {headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
-  }}).then(data => { data.json().
-      then(res => { this.setState({ data2: res })
+  }}).then(data => { data.json()
+      .then(res => { this.setState({ data2: res })
 
       var arrayOfArrays = [];
 
       var ops = res.map((item,i) => { return (
-         item.users_id == this.props.user_no ?
+         item.users_id === this.props.user_no ?
          item.requests_id : null
        )}
         )
 
-      var op = res.map(function(item) {
-        return item.requests_id, item.users_id;
-      });
       this.setState({
         enr_check: ops
       })
@@ -100,7 +91,7 @@ class Tovolunteer extends React.Component {
       })
     })
 
-  const cable = ActionCable.createConsumer('https://help-van.herokuapp.com/cable')
+  const cable = ActionCable.createConsumer('http://localhost:3001/cable')
   this.sub = cable.subscriptions.create('EnrollmentsChannel', {
     connected: function() {
       // this.send({ id: 1, text: new Date() });
@@ -126,24 +117,21 @@ class Tovolunteer extends React.Component {
 
   updateApp = (data2) => {
     console.log("update start")
-    fetch(`https://help-van.herokuapp.com/requests`)
+    fetch(`http://localhost:3001/requests`)
       .then(res => res.json())
       .then(json => this.setState({ data: json }));
 
-    fetch(`https://help-van.herokuapp.com/enrollments`)
+    fetch(`http://localhost:3001/enrollments`)
       .then(res => res.json())
       .then(json => { this.setState({ data2: json });
       var arrayOfArrays = [];
 
       var ops = json.map((item,i) => { return (
-         item.users_id == this.props.user_no ?
+         item.users_id === this.props.user_no ?
          item.requests_id : null
        )}
         )
 
-      var op = json.map(function(item) {
-        return item.requests_id, item.users_id;
-      });
       this.setState({
         enr_check: ops
       })

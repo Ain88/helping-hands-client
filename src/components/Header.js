@@ -13,13 +13,9 @@ class Header extends React.Component {
   handleClick = async (e) => {
     e.preventDefault()
     console.log("user loggin out")
-    const response = await axios.delete('https://help-van.herokuapp.com/logout', {withCredentials: true})
-    // .then(response => {
+    await axios.delete('http://localhost:3001/logout', {withCredentials: true})
       this.props.handleLogout()
       window.location.assign('/')
-      // this.props.history.push('/')
-    // })
-    // .catch(error => console.log(error))
   }
 
   render () {
@@ -32,7 +28,7 @@ class Header extends React.Component {
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ml-auto">
               {
-                window.localStorage.rememberMe === 'true' ?
+                localStorage.rememberMe === 'true' ?
                 <><NavLink href="mypage">My Volunteer</NavLink>
                 <NavLink href="myrequest">My Request</NavLink>
                 <NavLink href="needvolunteer">Need Volunteer</NavLink>

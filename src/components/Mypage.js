@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import axios from 'axios';
-import { Form, Button, Badge } from 'react-bootstrap'
-import ActionCable from 'actioncable'
+import { Button, Badge } from 'react-bootstrap'
 
 class Mypage extends React.Component {
   constructor(props) {
@@ -36,7 +35,7 @@ class Mypage extends React.Component {
       requests_id: rid
     };
 
-      axios.delete(`https://help-van.herokuapp.com/enrollments/${enrid}`, {enrollment})
+      axios.delete(`http://localhost:3001/enrollments/${enrid}`, {enrollment})
       .then(function (response){
         alert("Deleted");
       }).catch(error=>console.log(error));

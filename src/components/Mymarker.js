@@ -32,8 +32,8 @@ class Mymarker extends React.Component {
     }
 
     axios.all([
-      axios.post(`https://help-van.herokuapp.com/enrollments`, { enrollment }, {withCredentials: true}),
-      axios.post(`https://help-van.herokuapp.com/messages`, { message }, {withCredentials: true})
+      axios.post(`http://localhost:3001/enrollments`, { enrollment }, {withCredentials: true}),
+      axios.post(`http://localhost:3001/messages`, { message }, {withCredentials: true})
     ])
     .then(axios.spread((data1, data2) => {
         alert("Your enrollment has been added!");
@@ -68,10 +68,10 @@ class Mymarker extends React.Component {
           Description: {this.props.description}<br />
           Location: {this.props.address}<br />
           Status: {this.props.status === 1 ? "Status: Fulfilled" : "Status: Unfulfilled"}<br /><br />
-          <Button type="submit" className="text-center" variant="outline-info" size="sm" onClick={() =>
-            { if (window.confirm('Are you sure you wish to fulfill request?'))
-            this.onMarkerClick() } }>Fulfill This Request
-          </Button>
+          {localStorage.rememberMe === 'true' ? <Button type="submit" className="text-center" variant="outline-info" size="sm" onClick={() =>
+                      { if (window.confirm('Are you sure you wish to fulfill request?'))
+                      this.onMarkerClick() } }>Fulfill This Request
+                    </Button> : ""}
         </Popup>
       </Marker>
     );

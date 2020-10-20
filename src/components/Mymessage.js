@@ -24,7 +24,7 @@ class Mymessage extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('https://help-van.herokuapp.com/logged_in', {withCredentials: true})
+    axios.get('http://localhost:3001/logged_in', {withCredentials: true})
     .then(response => {
       if (response.data.logged_in) {
         this.setState({
@@ -36,14 +36,14 @@ class Mymessage extends React.Component {
     })
     .catch(error => console.log('api errors:', error))
 
-    fetch(`https://help-van.herokuapp.com/enrollments`)
+    fetch(`http://localhost:3001/enrollments`)
       .then(res => res.json())
       .then(json => { this.setState({ enr_list: json }); })
 
   }
 
   fetchNext(cur_userr){
-    fetch(`https://help-van.herokuapp.com/messages`)
+    fetch(`http://localhost:3001/messages`)
       .then(res => res.json())
       .then(json => { this.setState({ mes_list: json });
 
@@ -111,7 +111,7 @@ class Mymessage extends React.Component {
   handleSubmit = event => {
   event.preventDefault();
 
-  axios.post(`https://help-van.herokuapp.com/messages`, {
+  axios.post(`http://localhost:3001/messages`, {
       requests_id: this.state.send_id,
       body: this.state.body,
       sender_id: this.props.user_no,

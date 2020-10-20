@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import './App.scss';
 import axios from 'axios'
-import {BrowserRouter, Route, Redirect, withRouter, useHistory} from 'react-router-dom'
-import { browserHistory } from 'react-router';
-import Home from './components/Home'
+import {BrowserRouter, Route, Redirect} from 'react-router-dom'
 import Tovolunteer from './components/Tovolunteer'
 import Needvolunteer from './components/Needvolunteer'
 import Mypage from './components/Mypage'
@@ -16,15 +14,12 @@ import Login from './components/registrations/Login'
 import Signup from './components/registrations/Signup'
 import Stat from './components/Stat'
 import ActionCable from 'actioncable'
-import { Container, Row, Col, Tabs, Tab, Button } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 import L from "leaflet";
-import { Map, TileLayer } from 'react-leaflet';
 
 function groupBy(xs, f) {
   return xs.reduce((r, v, i, a, k = f(v)) => (((r[k] || (r[k] = [])).push(v), r)), {})
 }
-
-const position = [49.2527, -122.9805]
 
 var greenIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
@@ -75,7 +70,7 @@ class App extends Component {
     }
 
   componentDidMount(){
-    axios.get(`https://help-van.herokuapp.com/requests`, {withCredentials: true})
+    axios.get(`http://localhost:3001/requests`, {withCredentials: true})
       .then(res => {
         const req_list = res.data;
         this.setState({ req_list });
@@ -83,31 +78,28 @@ class App extends Component {
       .catch(function (error) {
         console.log(error);
       });
-      fetch(`https://help-van.herokuapp.com/requests`)
+      fetch(`http://localhost:3001/requests`)
         .then(res => res.json())
         .then(json => this.setState({ data: json }));
 
-      fetch(`https://help-van.herokuapp.com/messages`)
+      fetch(`http://localhost:3001/messages`)
         .then(res => res.json())
         .then(json => this.setState({ data3: json }));
 
-      window.fetch('https://help-van.herokuapp.com/enrollments', {headers: {
+      window.fetch('http://localhost:3001/enrollments', {headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
-    }}).then(data => { data.json().
-        then(res => { this.setState({ data2: res })
+    }}).then(data => { data.json()
+        .then(res => { this.setState({ data2: res })
 
         var arrayOfArrays = [];
 
         var ops = res.map((item,i) => { return (
-           item.users_id == this.props.user_no ?
+           item.users_id === this.props.user_no ?
            item.requests_id : null
          )}
           )
 
-        var op = res.map(function(item) {
-          return item.requests_id, item.users_id;
-        });
         this.setState({
           enr_check: ops
         })
@@ -129,7 +121,7 @@ class App extends Component {
         })
       })
 
-    const cable = ActionCable.createConsumer('wss://help-van.herokuapp.com/cable')
+    const cable = ActionCable.createConsumer('ws://localhost:3001/cable')
     this.sub = cable.subscriptions.create('EnrollmentsChannel', {
       connected: function() {
         // this.send({ id: 1, text: new Date() });
@@ -155,7 +147,7 @@ class App extends Component {
   }
 
   loginStatus = () => {
-      axios.get('https://help-van.herokuapp.com/logged_in', {withCredentials: true})
+      axios.get('http://localhost:3001/logged_in', {withCredentials: true})
       .then(response => {
         if (response.data.logged_in) {
           this.setState({
@@ -190,24 +182,21 @@ class App extends Component {
 
   updateApp = (data2) => {
     console.log("update start")
-    fetch(`https://help-van.herokuapp.com/requests`)
+    fetch(`http://localhost:3001/requests`)
       .then(res => res.json())
       .then(json => this.setState({ data: json }));
 
-    fetch(`https://help-van.herokuapp.com/enrollments`)
+    fetch(`http://localhost:3001/enrollments`)
       .then(res => res.json())
       .then(json => { this.setState({ data2: json });
       var arrayOfArrays = [];
 
       var ops = json.map((item,i) => { return (
-         item.users_id == this.props.user_no ?
+         item.users_id === this.props.user_no ?
          item.requests_id : null
        )}
         )
 
-      var op = json.map(function(item) {
-        return item.requests_id, item.users_id;
-      });
       this.setState({
         enr_check: ops
       })
