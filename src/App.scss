@@ -109,6 +109,24 @@ a.nav-link {
 }
 
 /************************ pages ********************/
+.nav-tabs {
+    white-space: nowrap;
+    display: block!important;
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.nav-tabs .nav-item {
+    display: inline-block;
+    border-bottom: none;
+}
+
+.custom-height {
+  height: auto;
+}
+
 .content {
   padding-bottom: 3rem;
   overflow-y: scroll;
@@ -201,8 +219,30 @@ a.nav-link {
   font-size: 0.9rem;
 }
 
+.tab-content {
+  display: flex;
+  flex-direction: row;
+  max-height: 600px;
+}
+
 .chat-right {
   float: right;
+}
+
+.tab-content > .tab-pane {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.custom-content {
+  display: flex;
+  flex-direction: row;
+  max-height: 600px;
+}
+
+.custom-overflow {
+  flex: 1;
+  overflow-y: auto;
 }
 
 .chat__bubble {
@@ -296,6 +336,10 @@ a.nav-link {
     background-image: none;
 }
 
+.some-padding {
+  padding-top: 5px
+}
+
 /************************ footer ********************/
 
 .footer-area {
@@ -387,5 +431,17 @@ a.nav-link {
     font-weight: 400;
     font-size: 1.5rem;
     text-shadow: 2px 2px 4px #000000;
+  }
+}
+
+@media only screen and (max-width: 540px) {
+  .center-col {
+    padding: 1rem;
+  }
+}
+
+@media only screen and (max-width: 413px) {
+  .leaflet-container {
+    max-height: 300px;
   }
 }

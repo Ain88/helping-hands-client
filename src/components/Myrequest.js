@@ -17,13 +17,20 @@ class Myrequest extends React.Component {
     const updated = {
         rep_date: new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString()
     }
-    axios.put(`http://localhost:3001/requests/${req}`, updated)
+    axios.put(`https://help-van.herokuapp.com/requests/${req}`, updated)
       .then(function (response) {
         alert("Your request has been added!");
       })
       .catch(function (error) {
         console.log(error);
       });
+  }
+
+  submitReqDelete = (id) => {
+    axios.delete(`https://help-van.herokuapp.com/requests/${id}`)
+    .then(res => {
+      alert("Selected request has been deleted!");
+    })
   }
 
   submitDelete = (enr, rid, usrid, title) => {
@@ -39,8 +46,8 @@ class Myrequest extends React.Component {
       }
 
       axios.all([
-        axios.delete(`http://localhost:3001/enrollments/${enr}`, {enrollment}, {withCredentials: true}),
-        axios.post(`http://localhost:3001/messages`, { message }, {withCredentials: true})
+        axios.delete(`https://help-van.herokuapp.com/enrollments/${enr}`, {enrollment}, {withCredentials: true}),
+        axios.post(`https://help-van.herokuapp.com/messages`, { message }, {withCredentials: true})
       ])
       .then(axios.spread((data2) => {
           alert("Selected enrollment has been deleted!");
@@ -51,19 +58,21 @@ class Myrequest extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="custom-content">
+      <div className="custom-overflow">
         <h6><b>My request list</b></h6>
         <br /><hr /><br />
         {this.props.data.map((req, index) => {
-        var time_diff = new Date().getTime() - (40 * 24 * 60 * 60 * 1000)
+        var time_diff = new Date().getTime() - (4 * 24 * 60 * 60 * 1000)
         if(req.owner_id === this.props.user_no){
           return <div key={req.id}>
             <h6 className="title">{req.title}&nbsp;&nbsp;
             <Badge variant="secondary">{req.typev === "1" ? 'One time': 'Material need'}</Badge>&nbsp;
-            { (time_diff > new Date(req.rep_date).getTime()) && ((req.cur_counter <  req.counter) === 0) ?
+            { (time_diff > new Date(req.rep_date).getTime()) && (req.cur_counter <  req.counter) ?
              <Button className="button-pad" type="submit" variant="outline-info" size="sm"
              onClick={this.submitRepublish.bind(this, req.id)}>Republish</Button> :
-             <Button className="button-pad" type="submit" variant="outline-info" size="sm" disabled>Republish</Button> }
+             <Button className="button-pad" type="submit" variant="outline-info" size="sm" disabled>Republish</Button>
+             }
             </h6>
             Duties: {req.description}&nbsp;&nbsp;
              <br /><div className="space"></div>
@@ -76,7 +85,7 @@ class Myrequest extends React.Component {
                   <button type="submit" className="close" aria-label="Close"
                   onClick={() =>
                     { if (window.confirm('Are you sure you wish to remove this volunteer?'))
-                    this.submitDelete.bind(this, enr.id, enr.requests_id, enr.users_id, enr.requests.title) }}>
+                    this.submitDelete(enr.id, enr.requests_id, enr.users_id, enr.requests.title) }}>
                     <span>&times;</span>
                   </button>&nbsp;
                   </Card.Body>
@@ -92,7 +101,7 @@ class Myrequest extends React.Component {
           return null;
         }
       })}
-
+      </div>
       </div>
     );
   }}

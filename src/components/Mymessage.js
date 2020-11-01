@@ -2,6 +2,12 @@ import React from 'react';
 import axios from 'axios';
 import * as moment from 'moment';
 import { Button, Tab, Form, Tabs } from 'react-bootstrap'
+import ActionCable from 'actioncable'
+
+function custom_sort(a, b) {
+    return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+}
+
 class Mymessage extends React.Component {
 
   constructor(props) {
@@ -24,7 +30,7 @@ class Mymessage extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:3001/logged_in', {withCredentials: true})
+    axios.get('https://help-van.herokuapp.com/logged_in', {withCredentials: true})
     .then(response => {
       if (response.data.logged_in) {
         this.setState({
@@ -36,16 +42,51 @@ class Mymessage extends React.Component {
     })
     .catch(error => console.log('api errors:', error))
 
-    fetch(`http://localhost:3001/enrollments`)
+    fetch(`https://help-van.herokuapp.com/enrollments`)
       .then(res => res.json())
       .then(json => { this.setState({ enr_list: json }); })
 
+    window.fetch('https://help-van.herokuapp.com/messages', {headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }}).then(data => { data.json()
+        .then(res => { this.setState({ mes_list: res })
+     }) })
+
+    const cable = ActionCable.createConsumer('wss://help-van.herokuapp.com/cable')
+    this.sub = cable.subscriptions.create('MessagesChannel', {
+      connected: function() {
+        // this.send({ id: 1, text: new Date() });
+        setTimeout(() => this.update(), 1000 );
+      },
+
+      disconnected: function() {
+        // Called when the subscription has been terminated by the server
+        this.connected()
+      },
+
+      received: (data2) => {
+         this.updateApp(data2)
+      },
+
+      update() {
+        this.perform("away4")
+      }
+    })
+
+  }
+
+  updateApp = (data2) => {
+    console.log("update start")
+    this.fetchNext(this.props.user_no)
   }
 
   fetchNext(cur_userr){
-    fetch(`http://localhost:3001/messages`)
+    fetch(`https://help-van.herokuapp.com/messages`)
       .then(res => res.json())
       .then(json => { this.setState({ mes_list: json });
+
+    this.state.mes_list.sort(custom_sort)
 
     var arrayOfArrays = [];
     var arrayOfArrays2 = [];
@@ -111,7 +152,7 @@ class Mymessage extends React.Component {
   handleSubmit = event => {
   event.preventDefault();
 
-  axios.post(`http://localhost:3001/messages`, {
+  axios.post(`https://help-van.herokuapp.com/messages`, {
       requests_id: this.state.send_id,
       body: this.state.body,
       sender_id: this.props.user_no,
@@ -120,7 +161,9 @@ class Mymessage extends React.Component {
       if (res.data.status === 'created') {
         console.log(res.data);
         alert("Your message has been sent!");
-        this.redirect()
+        this.setState({
+          body: ""
+        })
       } else {
         this.setState({
           errors: res.data.errors
@@ -180,7 +223,7 @@ class Mymessage extends React.Component {
       <Tabs defaultActiveKey="" activeKey={this.state.check_rec.id} onSelect={this.handleSelect}>
               {
               this.state.check_rec.map((rec) => {
-                if(rec.id !== this.props.user_no){
+                if(rec.id === this.props.user_no || rec.id !== this.props.user_no){
                    return <Tab key={rec.id} eventKey={rec.id}
                    title={<span>{rec.f_name + ' '+ rec.l_name} <i className="far fa-comment"></i> </span>}>
                    <br /><div>{this.Sonnet(rec.id, this.props.user_no, this.state.showing, this.state.cur_id)}</div>

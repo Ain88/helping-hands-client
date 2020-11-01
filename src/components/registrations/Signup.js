@@ -49,7 +49,7 @@ handleSubmit = (event) => {
           if (data.status === 'created') {
             alert("Signed up successfully");
             this.props.handleLogin(data)
-            this.redirect()
+            window.location.assign('/login')
           } else {
             this.setState({
               errors: data.errors

@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Button, Badge } from 'react-bootstrap'
 
-class Mypage extends React.Component {
+class Myaccount extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,7 +35,7 @@ class Mypage extends React.Component {
       requests_id: rid
     };
 
-      axios.delete(`https://help-van.herokuapp.com/enrollments/${enrid}`, {enrollment})
+      axios.delete(`http://localhost:3001/enrollments/${enrid}`, {enrollment})
       .then(function (response){
         alert("Deleted");
       }).catch(error=>console.log(error));
@@ -64,4 +64,4 @@ class Mypage extends React.Component {
     );
 }}
 
-export default Mypage;
+export default Myaccount;

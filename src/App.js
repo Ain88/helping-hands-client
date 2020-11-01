@@ -12,6 +12,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import Login from './components/registrations/Login'
 import Signup from './components/registrations/Signup'
+import Myaccount from './components/Myaccount'
 import Stat from './components/Stat'
 import ActionCable from 'actioncable'
 import { Container, Row, Col } from 'react-bootstrap'
@@ -70,7 +71,7 @@ class App extends Component {
     }
 
   componentDidMount(){
-    axios.get(`http://localhost:3001/requests`, {withCredentials: true})
+    axios.get(`https://help-van.herokuapp.com/requests`, {withCredentials: true})
       .then(res => {
         const req_list = res.data;
         this.setState({ req_list });
@@ -78,15 +79,15 @@ class App extends Component {
       .catch(function (error) {
         console.log(error);
       });
-      fetch(`http://localhost:3001/requests`)
+      fetch(`https://help-van.herokuapp.com/requests`)
         .then(res => res.json())
         .then(json => this.setState({ data: json }));
 
-      fetch(`http://localhost:3001/messages`)
+      fetch(`https://help-van.herokuapp.com/messages`)
         .then(res => res.json())
         .then(json => this.setState({ data3: json }));
 
-      window.fetch('http://localhost:3001/enrollments', {headers: {
+      window.fetch('https://help-van.herokuapp.com/enrollments', {headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     }}).then(data => { data.json()
@@ -130,7 +131,6 @@ class App extends Component {
 
       disconnected: function() {
         // Called when the subscription has been terminated by the server
-        console.log('Notification Channel disconnected.');
         this.connected()
       },
 
@@ -147,7 +147,7 @@ class App extends Component {
   }
 
   loginStatus = () => {
-      axios.get('http://localhost:3001/logged_in', {withCredentials: true})
+      axios.get('https://help-van.herokuapp.com/logged_in', {withCredentials: true})
       .then(response => {
         if (response.data.logged_in) {
           this.setState({
@@ -181,12 +181,11 @@ class App extends Component {
   }
 
   updateApp = (data2) => {
-    console.log("update start")
-    fetch(`http://localhost:3001/requests`)
+    fetch(`https://help-van.herokuapp.com/requests`)
       .then(res => res.json())
       .then(json => this.setState({ data: json }));
 
-    fetch(`http://localhost:3001/enrollments`)
+    fetch(`https://help-van.herokuapp.com/enrollments`)
       .then(res => res.json())
       .then(json => { this.setState({ data2: json });
       var arrayOfArrays = [];
@@ -262,9 +261,10 @@ class App extends Component {
           <Row>
           <Col xs={12} md={6}>
           <Tovolunteer user_no={this.state.user_id}/>
+          <br /><br />
           </Col>
 
-          <Col xs={12} md={6}>
+          <Col xs={12} md={6} className="custom-height">
 
               <Route
                 exact path='/'
@@ -325,15 +325,26 @@ class App extends Component {
                 )}
               />
               <Route
+                exact path='/myaccount'
+                render={props => (
+                <Mymarker {...props} user_no={this.state.user_id} />
+                )}
+              />
+              <Route
                 exact path='/login'
                 render={props => (
                 <Login {...props} user_no={this.state.user_id} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
                 )}
               />
               <Route
-                exact path='/signup'
+                exact path='/myaccount'
                 render={props => (
-                <Signup {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
+                  localStorage.rememberMe === 'true' ? (
+                    <Redirect to={{ pathname: '/myaccount'}} {...props} data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id}/>
+                ): (
+                window.confirm('Please login first'),
+                <Login {...props} user_no={this.state.user_id} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
+                )
                 )}
               />
 

@@ -48,15 +48,16 @@ class Tovolunteer extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`http://localhost:3001/requests`)
+
+    fetch(`https://help-van.herokuapp.com/requests`)
       .then(res => res.json())
       .then(json => this.setState({ data: json }));
 
-    fetch(`http://localhost:3001/requests`)
+    fetch(`https://help-van.herokuapp.com/requests`)
       .then(res => res.json())
       .then(json => this.setState({ data3: json }));
 
-    window.fetch('http://localhost:3001/enrollments', {headers: {
+    window.fetch('https://help-van.herokuapp.com/enrollments', {headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   }}).then(data => { data.json()
@@ -91,7 +92,7 @@ class Tovolunteer extends React.Component {
       })
     })
 
-  const cable = ActionCable.createConsumer('http://localhost:3001/cable')
+  const cable = ActionCable.createConsumer('wss://help-van.herokuapp.com/cable')
   this.sub = cable.subscriptions.create('EnrollmentsChannel', {
     connected: function() {
       // this.send({ id: 1, text: new Date() });
@@ -100,7 +101,6 @@ class Tovolunteer extends React.Component {
 
     disconnected: function() {
       // Called when the subscription has been terminated by the server
-      console.log('Notification Channel disconnected.');
       this.connected()
     },
 
@@ -116,12 +116,11 @@ class Tovolunteer extends React.Component {
 }
 
   updateApp = (data2) => {
-    console.log("update start")
-    fetch(`http://localhost:3001/requests`)
+    fetch(`https://help-van.herokuapp.com/requests`)
       .then(res => res.json())
       .then(json => this.setState({ data: json }));
 
-    fetch(`http://localhost:3001/enrollments`)
+    fetch(`https://help-van.herokuapp.com/enrollments`)
       .then(res => res.json())
       .then(json => { this.setState({ data2: json });
       var arrayOfArrays = [];
@@ -159,7 +158,7 @@ class Tovolunteer extends React.Component {
 
   renderMarkers() {
     var user_id = this.props.user_no
-    var time_diff = new Date().getTime() - (40 * 24 *60 * 60 * 1000)
+    var time_diff = new Date().getTime() - (4 * 24 *60 * 60 * 1000)
 
     return this.state.data.map((item,i) => { return (
        this.state.enr_check.indexOf(item.id) === -1 &&
@@ -196,7 +195,6 @@ class Tovolunteer extends React.Component {
           />
           {this.state.waiting === true && this.renderMarkers()}
         </Map>
-        <h6><span role="img" aria-label="shine">✨</span> Stat <span role="img" aria-label="shine">✨</span></h6>
         <Stat />
 
         </div>

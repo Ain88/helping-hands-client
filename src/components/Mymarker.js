@@ -32,8 +32,8 @@ class Mymarker extends React.Component {
     }
 
     axios.all([
-      axios.post(`http://localhost:3001/enrollments`, { enrollment }, {withCredentials: true}),
-      axios.post(`http://localhost:3001/messages`, { message }, {withCredentials: true})
+      axios.post(`https://help-van.herokuapp.com/enrollments`, { enrollment }, {withCredentials: true}),
+      axios.post(`https://help-van.herokuapp.com/messages`, { message }, {withCredentials: true})
     ])
     .then(axios.spread((data1, data2) => {
         alert("Your enrollment has been added!");
