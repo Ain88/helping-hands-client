@@ -12,7 +12,6 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import Login from './components/registrations/Login'
 import Signup from './components/registrations/Signup'
-import Myaccount from './components/Myaccount'
 import Stat from './components/Stat'
 import ActionCable from 'actioncable'
 import { Container, Row, Col } from 'react-bootstrap'
@@ -325,28 +324,25 @@ class App extends Component {
                 )}
               />
               <Route
-                exact path='/myaccount'
-                render={props => (
-                <Mymarker {...props} user_no={this.state.user_id} />
-                )}
-              />
-              <Route
-                exact path='/login'
-                render={props => (
-                <Login {...props} user_no={this.state.user_id} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
-                )}
-              />
-              <Route
-                exact path='/myaccount'
+              exact path='/login'
                 render={props => (
                   localStorage.rememberMe === 'true' ? (
-                    <Redirect to={{ pathname: '/myaccount'}} {...props} data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id}/>
-                ): (
-                window.confirm('Please login first'),
+                <Mypage {...props} data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id} />
+              ): (
                 <Login {...props} user_no={this.state.user_id} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
-                )
+              )
                 )}
               />
+               <Route
+               exact path='/signup'
+                 render={props => (
+                   localStorage.rememberMe === 'true' ? (
+                 <Mypage {...props} data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id} />
+               ): (
+                 <Signup {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
+               )
+                 )}
+               />
 
           </Col>
           </Row><br />
