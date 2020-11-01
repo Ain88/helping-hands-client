@@ -122,7 +122,7 @@ class App extends Component {
         })
       })
 
-    const cable = ActionCable.createConsumer('ws://localhost:3001/cable')
+    const cable = ActionCable.createConsumer('wss://help-van.herokuapp.com/cable')
     this.sub = cable.subscriptions.create('EnrollmentsChannel', {
       connected: function() {
         // this.send({ id: 1, text: new Date() });
