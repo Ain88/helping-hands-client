@@ -70,6 +70,8 @@ class App extends Component {
     }
 
   componentDidMount(){
+    this.loginStatus();
+
     axios.get(`https://help-van.herokuapp.com/requests`, {withCredentials: true})
       .then(res => {
         const req_list = res.data;
