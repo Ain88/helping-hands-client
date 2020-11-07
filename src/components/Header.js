@@ -13,7 +13,7 @@ class Header extends React.Component {
   handleClick = async (e) => {
     e.preventDefault()
     console.log("user loggin out")
-    await axios.delete('https://help-van.herokuapp.com/logout', {withCredentials: true})
+    await axios.delete(`https://help-van.herokuapp.com/logout`, {withCredentials: true})
       this.props.handleLogout()
       window.location.assign('/')
   }

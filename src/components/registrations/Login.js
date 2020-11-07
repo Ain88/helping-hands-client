@@ -21,20 +21,20 @@ class Login extends Component {
       [name]: value
     })
   };
+
   handleSubmit = (event) => {
     event.preventDefault()
     const {email, password} = this.state
-    localStorage.setItem('rememberMe', true);
     let user = {
       email: email,
       password: password
     }
 
-    axios.post('https://help-van.herokuapp.com/login', {user}, {withCredentials: true})
+    axios.post(`https://help-van.herokuapp.com/login`, {user}, {withCredentials: true})
     .then(response => {
       if (response.data.logged_in) {
         this.props.handleLogin(response.data)
-
+        this.props.history.push('/mypage')
       } else {
         this.setState({
           errors: response.data.errors

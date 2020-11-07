@@ -9,7 +9,8 @@ class Stat extends React.Component {
       req_list: [],
       text: "",
       mes: "",
-      countComment: ""
+      countComment: "",
+      dev_server: props.dev_server
     };
   }
   componentDidMount() {
@@ -28,7 +29,7 @@ class Stat extends React.Component {
         console.log(error);
       });
 
-    window.fetch('https://help-van.herokuapp.com/notes/1', {headers: {
+    window.fetch(`https://help-van.herokuapp.com/notes/1`, {headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   }}).then(data => {
@@ -36,7 +37,7 @@ class Stat extends React.Component {
         this.setState({ text: res.text })
     })
   })
-  const cable = ActionCable.createConsumer('wss://help-van.herokuapp.com/cable')
+  const cable = ActionCable.createConsumer(`wss://help-van.herokuapp.com/cable`)
   this.sub = cable.subscriptions.create('NotesChannel', {
     connected: function() {
       // this.send({ id: 1, text: new Date() });

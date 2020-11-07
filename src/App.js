@@ -65,6 +65,11 @@ class App extends Component {
      };
   }
 
+//'http://localhost:3001'
+//'https://help-van.herokuapp.com'
+//'ws://localhost:3001/cable'
+//'wss://help-van.herokuapp.com/cable'
+
   UNSAFE_componentWillMount() {
       this.loginStatus()
     }
@@ -88,7 +93,7 @@ class App extends Component {
         .then(res => res.json())
         .then(json => this.setState({ data3: json }));
 
-      window.fetch('https://help-van.herokuapp.com/enrollments', {headers: {
+      window.fetch(`https://help-van.herokuapp.com/enrollments`, {headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     }}).then(data => { data.json()
@@ -123,7 +128,7 @@ class App extends Component {
         })
       })
 
-    const cable = ActionCable.createConsumer('wss://help-van.herokuapp.com/cable')
+    const cable = ActionCable.createConsumer(`wss://help-van.herokuapp.com/cable`)
     this.sub = cable.subscriptions.create('EnrollmentsChannel', {
       connected: function() {
         // this.send({ id: 1, text: new Date() });
@@ -148,7 +153,7 @@ class App extends Component {
   }
 
   loginStatus = () => {
-      axios.get('https://help-van.herokuapp.com/logged_in', {withCredentials: true})
+      axios.get(`https://help-van.herokuapp.com/logged_in`, {withCredentials: true})
       .then(response => {
         if (response.data.logged_in) {
           this.setState({
@@ -168,11 +173,15 @@ class App extends Component {
         isLoggedIn: true,
         user: response.user
       })
+      console.log(response.user.id)
+      localStorage.setItem('rememberMe', true);
+      localStorage.setItem('usersid', response.user.id);
     }
   handleLogout = () => {
       console.log("logging out")
       localStorage.removeItem('rememberMe');
       localStorage.setItem('rememberMe', false);
+      localStorage.removeItem('usersid');
       this.setState({
       isLoggedIn: false,
       user: {}
@@ -255,7 +264,8 @@ class App extends Component {
         <BrowserRouter>
         <Route
           render={props => (
-          <Header {...props} user_no={this.state.user_id} f_name={this.state.f_name} l_name={this.state.l_name} loggedInStatus={this.state.isLoggedIn} handleLogout={this.handleLogout}/>
+          <Header {...props}
+          user_no={this.state.user_id} f_name={this.state.f_name} l_name={this.state.l_name} loggedInStatus={this.state.isLoggedIn} handleLogout={this.handleLogout}/>
         )} />
         <div className ="center-col">
           <Container>
@@ -271,7 +281,8 @@ class App extends Component {
                 exact path='/'
                 render={props => (
                   localStorage.rememberMe === 'true' ? (
-                <Mypage {...props} data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id} />
+                <Mypage {...props}
+                data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id} />
               ): (
                 <Login {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
               )
@@ -280,13 +291,15 @@ class App extends Component {
               <Route
               exact path='/Stat'
               render={props => (
-                <Stat {...props} stat={this.state.stat} user_no={this.state.user_id} req={this.state.req_list.count}/>
+                <Stat {...props}
+                stat={this.state.stat} user_no={this.state.user_id} req={this.state.req_list.count}/>
                )}
               />
               <Route
                 exact path='/Needvolunteer'
                 render={props => (
-                <Needvolunteer {...props} user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn}/>
+                <Needvolunteer {...props}
+                user_no={this.state.user_id} loggedInStatus={this.state.isLoggedIn}/>
                 )}
               />
               <Route
@@ -296,7 +309,8 @@ class App extends Component {
                 <Tovolunteer {...props} user_no={this.state.user_id} />
               ): (
                 window.confirm('Logging out'),
-                <Redirect to={{ pathname: '/login', state: 'Please sign in first'}} {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
+                <Redirect to={{ pathname: '/login', state: 'Please sign in first'}} {...props}
+                handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
               )
                 )}
               />
@@ -304,13 +318,15 @@ class App extends Component {
               <Route
                 exact path='/mypage'
                 render={props => (
-                <Mypage {...props} data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id} />
+                <Mypage {...props}
+                data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id} />
                 )}
               />
               <Route
                 exact path='/myrequest'
                 render={props => (
-                <Myrequest {...props} data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id} />
+                <Myrequest {...props}
+                data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id} />
                 )}
               />
               <Route
@@ -331,7 +347,8 @@ class App extends Component {
                   localStorage.rememberMe === 'true' ? (
                 <Mypage {...props} data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id} />
               ): (
-                <Login {...props} user_no={this.state.user_id} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
+                <Login {...props}
+                user_no={this.state.user_id} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
               )
                 )}
               />
@@ -339,7 +356,8 @@ class App extends Component {
                exact path='/signup'
                  render={props => (
                    localStorage.rememberMe === 'true' ? (
-                 <Mypage {...props} data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id} />
+                 <Mypage {...props}
+                 data={this.state.data} data2={this.state.data2} data3={this.state.data3} user_no={this.state.user_id} />
                ): (
                  <Signup {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>
                )

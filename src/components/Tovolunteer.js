@@ -53,11 +53,11 @@ class Tovolunteer extends React.Component {
       .then(res => res.json())
       .then(json => this.setState({ data: json }));
 
-    fetch(`https://help-van.herokuapp.com/requests`)
+    fetch(this.props.dev_server+`/requests`)
       .then(res => res.json())
       .then(json => this.setState({ data3: json }));
 
-    window.fetch('https://help-van.herokuapp.com/enrollments', {headers: {
+    window.fetch(`https://help-van.herokuapp.com/enrollments`, {headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   }}).then(data => { data.json()
@@ -92,7 +92,7 @@ class Tovolunteer extends React.Component {
       })
     })
 
-  const cable = ActionCable.createConsumer('wss://help-van.herokuapp.com/cable')
+  const cable = ActionCable.createConsumer(`wss://help-van.herokuapp.com/cable`)
   this.sub = cable.subscriptions.create('EnrollmentsChannel', {
     connected: function() {
       // this.send({ id: 1, text: new Date() });

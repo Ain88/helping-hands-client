@@ -30,7 +30,7 @@ class Mymessage extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('https://help-van.herokuapp.com/logged_in', {withCredentials: true})
+    axios.get(`https://help-van.herokuapp.com/logged_in`, {withCredentials: true})
     .then(response => {
       if (response.data.logged_in) {
         this.setState({
@@ -42,18 +42,18 @@ class Mymessage extends React.Component {
     })
     .catch(error => console.log('api errors:', error))
 
-    fetch(`https://help-van.herokuapp.com/enrollments`)
+    fetch(this.props.dev_server+`/enrollments`)
       .then(res => res.json())
       .then(json => { this.setState({ enr_list: json }); })
 
-    window.fetch('https://help-van.herokuapp.com/messages', {headers: {
+    window.fetch(`https://help-van.herokuapp.com/messages`, {headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     }}).then(data => { data.json()
         .then(res => { this.setState({ mes_list: res })
      }) })
 
-    const cable = ActionCable.createConsumer('wss://help-van.herokuapp.com/cable')
+    const cable = ActionCable.createConsumer(`wss://help-van.herokuapp.com/cable`)
     this.sub = cable.subscriptions.create('MessagesChannel', {
       connected: function() {
         // this.send({ id: 1, text: new Date() });
@@ -82,7 +82,7 @@ class Mymessage extends React.Component {
   }
 
   fetchNext(cur_userr){
-    fetch(`https://help-van.herokuapp.com/messages`)
+    fetch(this.props.dev_server+`/messages`)
       .then(res => res.json())
       .then(json => { this.setState({ mes_list: json });
 
