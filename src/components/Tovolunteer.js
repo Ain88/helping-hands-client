@@ -66,7 +66,7 @@ class Tovolunteer extends React.Component {
       var arrayOfArrays = [];
 
       var ops = res.map((item,i) => { return (
-         item.users_id === this.props.user_no ?
+         item.users_id === localStorage.usersid ?
          item.requests_id : null
        )}
         )
@@ -126,7 +126,7 @@ class Tovolunteer extends React.Component {
       var arrayOfArrays = [];
 
       var ops = json.map((item,i) => { return (
-         item.users_id === this.props.user_no ?
+         item.users_id === localStorage.usersid ?
          item.requests_id : null
        )}
         )
@@ -157,12 +157,12 @@ class Tovolunteer extends React.Component {
   }
 
   renderMarkers() {
-    var user_id = this.props.user_no
+    var user_id = localStorage.usersid
     var time_diff = new Date().getTime() - (4 * 24 *60 * 60 * 1000)
 
     return this.state.data.map((item,i) => { return (
        this.state.enr_check.indexOf(item.id) === -1 &&
-       item.fulfilled === null && user_id !== item.owner_id && time_diff < new Date(item.rep_date).getTime() ?
+       item.counter > item.cur_counter && localStorage.usersid !== item.owner_id && time_diff < new Date(item.rep_date).getTime() ?
 
        <Mymarker
        icon={item.typev === "1" ? blueIcon : greenIcon}

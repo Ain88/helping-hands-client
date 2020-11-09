@@ -50,8 +50,8 @@ class Mypage extends React.Component {
 
         {this.props.data2.map((req, index) => {
             return <span key={req.id}>
-              {req.users_id === this.props.user_no ? this.renderVolunteer(req.requests_id) : null}
-              {req.users_id === this.props.user_no ?
+              {req.users_id == localStorage.usersid ? this.renderVolunteer(req.requests_id) : null}
+              {req.users_id == localStorage.usersid ?
                 <span>&nbsp;&nbsp;<Button type="submit" variant="outline-info" size="sm"
                 onClick={() =>
                   { if (window.confirm('Are you sure you wish to cancel to volunteer'))

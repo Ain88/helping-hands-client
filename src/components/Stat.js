@@ -9,8 +9,7 @@ class Stat extends React.Component {
       req_list: [],
       text: "",
       mes: "",
-      countComment: "",
-      dev_server: props.dev_server
+      countComment: ""
     };
   }
   componentDidMount() {

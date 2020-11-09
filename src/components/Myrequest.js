@@ -41,7 +41,7 @@ class Myrequest extends React.Component {
       const message = {
         body: 'Hi, owner of [' + title + '] has cancelled your volunteer request',
         requests_id: rid,
-        sender_id: this.props.user_no,
+        sender_id: localStorage.usersid,
         receiver_id: usrid
       }
 
@@ -64,7 +64,7 @@ class Myrequest extends React.Component {
         <br /><hr /><br />
         {this.props.data.map((req, index) => {
         var time_diff = new Date().getTime() - (4 * 24 * 60 * 60 * 1000)
-        if(req.owner_id === this.props.user_no){
+        if(req.owner_id == localStorage.usersid){
           return <div key={req.id}>
             <h6 className="title">{req.title}&nbsp;&nbsp;
             <Badge variant="secondary">{req.typev === "1" ? 'One time': 'Material need'}</Badge>&nbsp;

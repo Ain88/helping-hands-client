@@ -67,7 +67,7 @@ class Needvolunteer extends React.Component {
         check_mark: 0,
         fulfilled: 0,
         is_active: 1,
-        owner_id: this.props.user_no,
+        owner_id: localStorage.usersid,
         rep_date: new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString()
       })
     }).then(response => response.json()).then(

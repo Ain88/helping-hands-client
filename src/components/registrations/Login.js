@@ -33,8 +33,7 @@ class Login extends Component {
     axios.post(`https://help-van.herokuapp.com/login`, {user}, {withCredentials: true})
     .then(response => {
       if (response.data.logged_in) {
-        this.props.handleLogin(response.data)
-        this.props.history.push('/mypage')
+        this.handleLogin(response.data)
       } else {
         this.setState({
           errors: response.data.errors
@@ -47,6 +46,16 @@ class Login extends Component {
     this.props.history.push('/mypage')
   }
 
+  handleLogin = (response) => {
+      this.setState({
+        isLoggedIn: true,
+        user: response.user
+      })
+      console.log(response.user)
+      localStorage.setItem('rememberMe', true);
+      localStorage.setItem('usersid', response.user.id);
+      window.location.reload();
+    }
 
   handleErrors = () => {
     return (

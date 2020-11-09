@@ -30,19 +30,24 @@ class Mymessage extends React.Component {
   }
 
   componentDidMount() {
-    axios.get(`https://help-van.herokuapp.com/logged_in`, {withCredentials: true})
-    .then(response => {
-      if (response.data.logged_in) {
-        this.setState({
-          cur_user: response.data.user.id
-        })
-        this.fetchNext(this.state.cur_user)
-      } else {
-      }
-    })
-    .catch(error => console.log('api errors:', error))
+    // axios.get(`https://help-van.herokuapp.com/logged_in`, {withCredentials: true})
+    // .then(response => {
+    //   if (response.data.logged_in) {
+    //     this.setState({
+    //       cur_user: response.data.user.id
+    //     })
+    //     this.fetchNext(this.state.cur_user)
+    //   } else {
+    //   }
+    // })
+    // .catch(error => console.log('api errors:', error))
 
-    fetch(this.props.dev_server+`/enrollments`)
+    this.setState({
+      cur_user: localStorage.usersid
+    })
+    this.fetchNext(localStorage.usersid)
+
+    fetch(`https://help-van.herokuapp.com/enrollments`)
       .then(res => res.json())
       .then(json => { this.setState({ enr_list: json }); })
 
@@ -78,7 +83,7 @@ class Mymessage extends React.Component {
 
   updateApp = (data2) => {
     console.log("update start")
-    this.fetchNext(this.props.user_no)
+    this.fetchNext(localStorage.usersid)
   }
 
   fetchNext(cur_userr){
@@ -155,7 +160,7 @@ class Mymessage extends React.Component {
   axios.post(`https://help-van.herokuapp.com/messages`, {
       requests_id: this.state.send_id,
       body: this.state.body,
-      sender_id: this.props.user_no,
+      sender_id: localStorage.usersid,
       receiver_id: this.state.cur_sender })
     .then(res => {
       if (res.data.status === 'created') {
@@ -223,10 +228,10 @@ class Mymessage extends React.Component {
       <Tabs defaultActiveKey="" activeKey={this.state.check_rec.id} onSelect={this.handleSelect}>
               {
               this.state.check_rec.map((rec) => {
-                if(rec.id === this.props.user_no || rec.id !== this.props.user_no){
+                if(rec.id == localStorage.usersid  || rec.id != localStorage.usersid ){
                    return <Tab key={rec.id} eventKey={rec.id}
                    title={<span>{rec.f_name + ' '+ rec.l_name} <i className="far fa-comment"></i> </span>}>
-                   <br /><div>{this.Sonnet(rec.id, this.props.user_no, this.state.showing, this.state.cur_id)}</div>
+                   <br /><div>{this.Sonnet(rec.id, localStorage.usersid , this.state.showing, this.state.cur_id)}</div>
                    <div>
 
                    <Form className="chat" onSubmit={this.handleSubmit}>

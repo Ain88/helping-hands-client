@@ -19,7 +19,7 @@ class Mymarker extends React.Component {
   onMarkerClick() {
     const enrollment = {
       requests_id: this.props.req_id,
-      users_id: this.props.user_id,
+      users_id: localStorage.usersid,
       finished: 0,
       check_mark: 0
     };
@@ -28,7 +28,7 @@ class Mymarker extends React.Component {
       body: 'Thank you for volunteering for [' +this.props.title + ']: Please reply to this message to confirm your attendance',
       requests_id: this.props.req_id,
       sender_id: this.props.owner_id,
-      receiver_id: this.props.user_id
+      receiver_id: localStorage.usersid
     }
 
     axios.all([
@@ -61,14 +61,14 @@ class Mymarker extends React.Component {
       icon={this.props.icon}
       position={this.props.position}>
       req_id={this.props.req_id}
-      user_id={this.props.user_id}
+      user_id={localStorage.usersid}
         <Popup>
           Title: {this.props.title}<br />
           Type: {this.props.typev === "1" ? "One time help" : "Material help"}<br />
           Description: {this.props.description}<br />
           Location: {this.props.address}<br />
           Status: {this.props.status === 1 ? "Status: Fulfilled" : "Status: Unfulfilled"}<br /><br />
-          {localStorage.rememberMe === 'true' ? <Button type="submit" className="text-center" variant="outline-info" size="sm" onClick={() =>
+          {localStorage.usersid ? <Button type="submit" className="text-center" variant="outline-info" size="sm" onClick={() =>
                       { if (window.confirm('Are you sure you wish to fulfill request?'))
                       this.onMarkerClick() } }>Fulfill This Request
                     </Button> : ""}

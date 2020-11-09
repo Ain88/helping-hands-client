@@ -102,7 +102,7 @@ class App extends Component {
         var arrayOfArrays = [];
 
         var ops = res.map((item,i) => { return (
-           item.users_id === this.props.user_no ?
+           item.users_id === localStorage.usersid ?
            item.requests_id : null
          )}
           )
@@ -173,9 +173,9 @@ class App extends Component {
         isLoggedIn: true,
         user: response.user
       })
-      console.log(response.user.id)
       localStorage.setItem('rememberMe', true);
       localStorage.setItem('usersid', response.user.id);
+      this.props.history.push('/mypage');
     }
   handleLogout = () => {
       console.log("logging out")
@@ -201,7 +201,7 @@ class App extends Component {
       var arrayOfArrays = [];
 
       var ops = json.map((item,i) => { return (
-         item.users_id === this.props.user_no ?
+         item.users_id === localStorage.usersid ?
          item.requests_id : null
        )}
         )
@@ -232,7 +232,7 @@ class App extends Component {
   }
 
   renderMarkers() {
-    var user_id = this.state.user_id
+    var user_id = localStorage.usersid
     var time_diff = new Date().getTime() - (40 * 24 *60 * 60 * 1000)
 
     return this.state.data.map((item,i) => { return (
