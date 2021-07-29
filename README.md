@@ -10,4 +10,4 @@ Help those in need by building a platform that links people needing help with vo
 - Ruby on Rails
 
 ## Link
-Link -> hhttps://jolly-benz-c2004d.netlify.app
+Link -> https://jolly-benz-c2004d.netlify.app
